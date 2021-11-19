@@ -1,5 +1,5 @@
 # This Python file uses the following encoding: utf-8
-
+import math
 import os
 import sys
 
@@ -8,9 +8,19 @@ from PySide6.QtCore import QSize, QFile, Qt, QPoint
 from PySide6.QtGui import QPainter, QBrush, QPen
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWidgets import QPushButton, QMainWindow, QWidget
+
+
 # from ..elements.button import Button
 
 # https://coderedirect.com/questions/167455/pyside2-qmainwindow-loaded-from-ui-file-not-triggering-window-events
+
+
+class MainWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.form_widget = Joystick(self)
+        self.setCentralWidget(self.form_widget)
+        self.show()
 
 class Joystick(QWidget):
     def __init__(self, parent=None):
@@ -25,28 +35,72 @@ class Joystick(QWidget):
 
             # self.defineButtons()
 
-            self.show()
+            # self.show()
 
     def paintEvent(self, event):
-        # print("paint")
         painter = QPainter(self)
         painter.setPen(QPen(Qt.black, 5, Qt.SolidLine))
 
+        self.paintJoystickBoundary(painter)
+        self.paintJoystick(painter)
+
+    def paintJoystickBoundary(self, painter):
+        width = self.width()
+        height = self.height()
+        x = int(width * 0.05)
+        y = int(height * 0.05)
+        rx = int(0.9 * width)
+        ry = int(0.9 * height)
+        painter.setPen(QPen(Qt.black, 5, Qt.SolidLine))
         painter.setBrush(QBrush(Qt.red, Qt.SolidPattern))
-        width=self.width()
-        height=self.height()
-        painter.drawEllipse(width*0.05, height*0.05, 0.9*width, 0.9*height)
+        painter.drawEllipse(x, y, rx, ry)
+
+    def paintJoystick(self, painter):
+        width = self.width()
+        height = self.height()
+        rx = int(0.2 * width)
+        ry = int(0.2 * height)
+        x = int(self.joystickPosition.x() - 0.5 * rx)
+        y = int(self.joystickPosition.y() - 0.5 * ry)
         painter.setBrush(QBrush(Qt.cyan, Qt.SolidPattern))
-        painter.drawEllipse(self.joystickPosition.x(),self.joystickPosition.y(),10,10)
+        painter.drawEllipse(x, y, rx, ry)
+
+    def mouseReleaseEvent(self,event):
+        self.joystickPosition = QPoint(self.width() * 0.5, self.height() * 0.5)
+        self.update()
 
 
     def mouseMoveEvent(self, event):
-        self.joystickPosition=event.position()
-        if 0 < self.joystickPosition.x() < self.width() and 0 < self.joystickPosition.y() < self.height():
-                # print('aaaaaaaaaaaaa')
+        print("mouseMoveEvent")
+        self.joystickPosition = event.position()
+        print(self.joystickPosition)
+        # if (self.width()*0.15) < self.joystickPosition.x() < (self.width()*0.85) and (self.height()*0.15) < self.joystickPosition.y() < (self.height()*0.85):
+        x = self.joystickPosition.x()
+        y = self.joystickPosition.y()
+        h = self.width() * 0.5
+        k = self.height() * 0.5
+        rx = self.width() * 0.45 - 0.1 * self.width()
+        ry = self.height() * 0.45 - 0.1 * self.height()
+        # print("(x-h)**2/rx**2+(y-k)**2/ry**2")
+        # print((x-h)**2/rx**2+(y-k)**2/ry**2)
+        if ((x - h) ** 2 / rx ** 2 + (y - k) ** 2 / ry ** 2 <= 1):
             self.update()
-        # self.update()
 
+
+    def resizeEvent(self, event):
+        # print("event")
+        self.joystickPosition = QPoint(self.width() * 0.5, self.height() * 0.5)
+
+        # print(event.oldSize())
+        # print(event.size())
+        # if (event.oldSize().height() == -1):
+        #     return
+        # x = event.size().width() / event.oldSize().width() * self.joystickPosition.x()
+        # y = event.size().height() / event.oldSize().height() * self.joystickPosition.y()
+        # print(x, y)
+        # self.joystickPosition.setX((x))
+        # self.joystickPosition.setY((y))
+        # print(self.joystickPosition)
 
     def keyPressEvent(self, event):
         if event.isAutoRepeat():
@@ -108,5 +162,6 @@ class Joystick(QWidget):
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
-    mainWindow = Joystick()
+    # mainWindow = Joystick()
+    mainWindow = MainWindow()
     sys.exit(app.exec())
