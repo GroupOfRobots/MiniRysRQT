@@ -10,7 +10,7 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
-        ('share/' + package_name + '/resource', ['resource/MyPlugin.ui']),
+        ('share/' + package_name + '/resource', ['resource/joystick.ui']),
         ('share/' + package_name, ['plugin.xml']),
     ],
     install_requires=['setuptools'],

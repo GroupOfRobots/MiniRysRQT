@@ -8,14 +8,13 @@ class Joystick(Plugin):
     def __init__(self, context):
         super(Joystick, self).__init__(context)
         self._node = context.node
-        self._logger = self._node.get_logger().get_child('rqt_rt_preempt.ros_rt_preempt.RosRtpreempt')
+        # self._logger = self._node.get_logger().get_child('rqt_rt_preempt.ros_rt_preempt.RosRtpreempt')
 
         super(Joystick, self).__init__(context)
         self.setObjectName('RosRtpreempt')
 
         self._widget = Joystick1(context.node, self)
 
-        self._widget.start()
         if context.serial_number() > 1:
             self._widget.setWindowTitle(
                 self._widget.windowTitle() + (' (%d)' % context.serial_number()))

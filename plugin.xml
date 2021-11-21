@@ -1,5 +1,5 @@
-<library path="src">
-  <class name="MyPlugin" type="control_panel.joystick.Joystick" base_class_type="rqt_gui_py::Plugin">
+<library path="lib">
+  <class name="Joystick" type="control_panel.joystick.Joystick" base_class_type="rqt_gui_py::Plugin">
     <description>
       An example Python GUI plugin to create a great user interface.
     </description>
@@ -12,9 +12,9 @@
         <label>Subgroup</label>
       </group>
       -->
-      <label>My first Python Plugin</label>
-      <icon type="theme">system-help</icon>
-      <statustip>Great user interface to provide real value.</statustip>
+      <label>Joystick</label>
+      <icon type="theme">face-monkey</icon>
+      <statustip>Joystick interface</statustip>
     </qtgui>
   </class>
 </library>
