@@ -14,12 +14,12 @@ from python_qt_binding.QtWidgets import QPushButton, QMainWindow, QWidget
 from ament_index_python import get_resource
 from python_qt_binding import loadUi
 
-class Joystick1(QWidget):
+class JoystickWidget(QWidget):
     def __init__(self,node, plugin=None):
-        super(Joystick1, self).__init__()
+        super(JoystickWidget, self).__init__()
 
-        _, package_path = get_resource('packages', 'control_panel')
-        ui_file = os.path.join(package_path, 'share', 'control_panel', 'resource', 'joystick.ui')
+        _, package_path = get_resource('packages', 'joystick')
+        ui_file = os.path.join(package_path, 'share', 'joystick', 'resource', 'joystick.ui')
         loadUi(ui_file, self)
 
         self.setFocusPolicy(Qt.ClickFocus)

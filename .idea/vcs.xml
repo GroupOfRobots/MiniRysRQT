@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="VcsDirectoryMappings">
-    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/control_panel" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/joystick" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ros-perception/image_common" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ros-perception/vision_opencv" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ros2_galactic_rqt_rt_preempt" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/rqt_camera_gazebo" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/rqt_dotgraph" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/rqt_rys" vcs="Git" />
   </component>
 </project>

@@ -1,0 +1,20 @@
+<library path="lib">
+  <class name="ControlPanel" type="control_panel.control_panel.ControlPanel" base_class_type="rqt_gui_py::Plugin">
+    <description>
+      Control panel control gui
+    </description>
+    <qtgui>
+<!--      &lt;!&ndash; optional grouping...-->
+<!--      <group>-->
+<!--        <label>Group</label>-->
+<!--      </group>-->
+<!--      <group>-->
+<!--        <label>Subgroup</label>-->
+<!--      </group>-->
+<!--      &ndash;&gt;-->
+      <label>Control panel</label>
+      <icon type="theme">face-cool</icon>
+      <statustip>Control panel interface</statustip>
+    </qtgui>
+  </class>
+</library>

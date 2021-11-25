@@ -1,5 +1,5 @@
 <library path="lib">
-  <class name="Joystick" type="control_panel.joystick.Joystick" base_class_type="rqt_gui_py::Plugin">
+  <class name="Joystick" type="joystick.joystick.Joystick" base_class_type="rqt_gui_py::Plugin">
     <description>
       Joystick control gui
     </description>
