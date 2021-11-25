@@ -101,7 +101,8 @@ class Joystick1(QWidget):
                 self.update()
                 time.sleep(0.001)
             else:
-                break
+                time.sleep(0.1)
+
 
 
     def keyPressEvent(self, event):
@@ -120,6 +121,8 @@ class Joystick1(QWidget):
         elif event.key() == QtCore.Qt.Key_A:
             self.pressedKeys.append(KeyDirections.LEFT)
             self.xMove = -1
+        elif event.key() == QtCore.Qt.Key_Q:
+            self.pressedKeys.append(KeyDirections.STABLE)
         else:
             event.accept()
             return
@@ -134,16 +137,30 @@ class Joystick1(QWidget):
         key = event.key()
         if key == QtCore.Qt.Key_W:
             self.pressedKeys.remove(KeyDirections.FORWARD)
-            self.yMove = 0
+            if KeyDirections.BACKWARD in self.pressedKeys:
+                self.yMove = 1
+            else:
+                self.yMove = 0
         elif event.key() == QtCore.Qt.Key_D:
             self.pressedKeys.remove(KeyDirections.RIGHT)
-            self.xMove = 0
+            if KeyDirections.LEFT in self.pressedKeys:
+                self.xMove = -1
+            else:
+                self.xMove = 0
         elif event.key() == QtCore.Qt.Key_S:
             self.pressedKeys.remove(KeyDirections.BACKWARD)
-            self.yMove = 0
+            if KeyDirections.FORWARD in self.pressedKeys:
+                self.yMove = -1
+            else:
+                self.yMove = 0
         elif event.key() == QtCore.Qt.Key_A:
             self.pressedKeys.remove(KeyDirections.LEFT)
-            self.xMove = 0
+            if KeyDirections.RIGHT in self.pressedKeys:
+                self.xMove = 1
+            else:
+                self.xMove = 0
+        elif event.key() == QtCore.Qt.Key_Q:
+            self.pressedKeys.remove(KeyDirections.STABLE)
         else:
             event.accept()
             return
@@ -153,12 +170,15 @@ class Joystick1(QWidget):
             self.keyPressedThread.join()
             self.returnToCenter()
 
+        event.accept()
+
 
 class KeyDirections(Enum):
     FORWARD='FORWARD'
     RIGHT='RIGHT'
     BACKWARD='BACKWARD'
     LEFT='LEFT'
+    STABLE='STABLE'
 
  #
  # if key == QtCore.Qt.Key_W:
