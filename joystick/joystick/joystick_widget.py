@@ -103,8 +103,6 @@ class JoystickWidget(QWidget):
             else:
                 time.sleep(0.1)
 
-
-
     def keyPressEvent(self, event):
         if event.isAutoRepeat():
             return
