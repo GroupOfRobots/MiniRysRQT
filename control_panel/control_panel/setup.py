@@ -28,9 +28,9 @@ class SetupWidget(QWidget):
         # self.defineButtons()
 
         # self.show()
-        self.settingsButton.clicked.connect(self.settingsClicked)
+        self.backButton.clicked.connect(self.backClicked)
 
-    def settingsClicked(self):
+    def backClicked(self):
         parent=self.parent()
         parent.setCurrentIndex(0)
 
