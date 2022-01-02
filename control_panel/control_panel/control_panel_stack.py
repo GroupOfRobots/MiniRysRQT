@@ -2,8 +2,9 @@
 from python_qt_binding.QtWidgets import QWidget, QStackedWidget,QHBoxLayout,QListWidget,QGridLayout,QLayout
 
 # from elements.button import Button
+from setup_panel.setup_panel.setup import SetupWidget
 from .control_panel_widget import ControlPanelWidget
-from .setup import SetupWidget
+# from .setup import SetupWidget
 
 
 class ControlPanelStack(QWidget):

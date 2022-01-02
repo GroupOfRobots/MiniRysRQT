@@ -15,7 +15,6 @@ from python_qt_binding import loadUi
 # from elements.button import Button
 
 # from .elements.button import Button
-from . import button
 from .elements.button import Button
 
 
@@ -45,13 +44,13 @@ class ControlPanelWidget(QWidget):
             return
         key = event.key()
         if key == QtCore.Qt.Key_W:
-            self.forwardButton.pressedKeyState()
+            self.forwardButtonElement.pressedKeyState()
         elif event.key() == QtCore.Qt.Key_D:
-            self.rightButton.pressedKeyState()
+            self.rightButtonElement.pressedKeyState()
         elif event.key() == QtCore.Qt.Key_S:
-            self.backwardButton.pressedKeyState()
+            self.backwardButtonElement.pressedKeyState()
         elif event.key() == QtCore.Qt.Key_A:
-            self.leftButton.pressedKeyState()
+            self.leftButtonElement.pressedKeyState()
         event.accept()
 
     def keyReleaseEvent(self, event):
@@ -59,13 +58,13 @@ class ControlPanelWidget(QWidget):
             return
         key = event.key()
         if key == QtCore.Qt.Key_W:
-            self.forwardButton.releasedKeyState()
+            self.forwardButtonElement.releasedKeyState()
         elif event.key() == QtCore.Qt.Key_D:
-            self.rightButton.releasedKeyState()
+            self.rightButtonElement.releasedKeyState()
         elif event.key() == QtCore.Qt.Key_S:
-            self.backwardButton.releasedKeyState()
+            self.backwardButtonElement.releasedKeyState()
         elif event.key() == QtCore.Qt.Key_A:
-            self.leftButton.releasedKeyState()
+            self.leftButtonElement.releasedKeyState()
         event.accept()
 
     def settingsClicked(self):

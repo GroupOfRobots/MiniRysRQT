@@ -1,0 +1,20 @@
+<library path="lib">
+  <class name="SetupPanel" type="setup_panel.setup_panel.SetupPanel" base_class_type="rqt_gui_py::Plugin">
+    <description>
+      Control panel control gui
+    </description>
+    <qtgui>
+<!--      &lt;!&ndash; optional grouping...-->
+<!--      <group>-->
+<!--        <label>Group</label>-->
+<!--      </group>-->
+<!--      <group>-->
+<!--        <label>Subgroup</label>-->
+<!--      </group>-->
+<!--      &ndash;&gt;-->
+      <label>Setup panel</label>
+      <icon type="theme">emblem-system</icon>
+      <statustip>Setup panel interface</statustip>
+    </qtgui>
+  </class>
+</library>
