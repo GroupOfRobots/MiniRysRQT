@@ -1,11 +1,8 @@
 # This Python file uses the following encoding: utf-8
 from python_qt_binding.QtWidgets import QWidget, QStackedWidget,QHBoxLayout,QListWidget,QGridLayout,QLayout
 
-# from elements.button import Button
-from setup_panel.setup_panel.setup import SetupWidget
+from setup_panel.setup import SetupWidget
 from .control_panel_widget import ControlPanelWidget
-# from .setup import SetupWidget
-
 
 class ControlPanelStack(QWidget):
     def __init__(self, node, plugin=None):
@@ -18,7 +15,6 @@ class ControlPanelStack(QWidget):
 
         self.stack.addWidget(self.controlPanelWidget)
         self.stack.addWidget(self.controlPanelWidget3)
-
 
         hbox = QGridLayout(self)
         hbox.addWidget(self.stack)

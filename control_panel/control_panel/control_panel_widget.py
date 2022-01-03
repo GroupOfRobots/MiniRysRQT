@@ -2,7 +2,6 @@
 import os
 
 import rclpy
-from rclpy.node import Node
 
 from std_msgs.msg import String
 
@@ -12,9 +11,6 @@ from python_qt_binding.QtWidgets import QPushButton, QWidget
 from ament_index_python import get_resource
 from python_qt_binding import loadUi
 
-# from elements.button import Button
-
-# from .elements.button import Button
 from .elements.button import Button
 
 
@@ -79,19 +75,13 @@ class ControlPanelWidget(QWidget):
         self.rightButtonElement = Button(self.findChild(QPushButton, 'rightButton'))
         self.backwardButtonElement = Button(self.findChild(QPushButton, 'backwardButton'))
         self.leftButtonElement = Button(self.findChild(QPushButton, 'leftButton'))
-        # self.settingsButton = Button(self.findChild(QPushButton,'settingsButton'))
-        # self.settingsButton = Button(self.findChild(QPushButton,'settingsButton1111'))
-        # print(self.settingsButton)
 
-        # self.forwardButton.clicked.connect(self.settingsClicked)
         self.settingsButton.clicked.connect(self.settingsClicked)
         self.forwardButton.clicked.connect(self.buttonClicked)
 
 
 
     def resizeEvent(self, event):
-        print("resize")
-        # print(self.backwardButton.size().width())
         self.setIconSize()
 
     def setIconSize(self):

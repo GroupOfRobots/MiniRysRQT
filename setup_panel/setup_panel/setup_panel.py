@@ -1,7 +1,6 @@
 from rqt_gui_py.plugin import Plugin
 from .setup import SetupWidget
 
-
 class SetupPanel(Plugin):
 
     def __init__(self, context):

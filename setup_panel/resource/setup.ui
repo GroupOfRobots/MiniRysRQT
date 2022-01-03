@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>772</width>
-    <height>773</height>
+    <height>815</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -112,7 +112,7 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QLineEdit" name="lineEdit">
+           <widget class="QLineEdit" name="robotNameInput">
             <property name="maximumSize">
              <size>
               <width>200</width>
@@ -226,22 +226,27 @@
       </widget>
      </item>
      <item>
-      <widget class="QTableWidget" name="tableWidget">
+      <widget class="QTableWidget" name="dynamicTable">
        <property name="minimumSize">
         <size>
          <width>300</width>
-         <height>200</height>
+         <height>210</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
          <width>450</width>
-         <height>200</height>
+         <height>210</height>
         </size>
        </property>
        <row>
         <property name="text">
          <string>FORWARD</string>
+        </property>
+       </row>
+       <row>
+        <property name="text">
+         <string>FORWARD+LEFT</string>
         </property>
        </row>
        <row>
