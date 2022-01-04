@@ -37,5 +37,23 @@
       "rightEngine": 100,
       "inertia": 1
     }
+  },
+  "joystick": {
+    "forward": {
+      "leftEngine": 90,
+      "rightEngine": 90
+    },
+    "right": {
+      "leftEngine": 90,
+      "rightEngine": 90
+    },
+     "backward": {
+      "leftEngine": 90,
+      "rightEngine": 90
+    },
+     "left": {
+      "leftEngine": 90,
+      "rightEngine": 90
+    }
   }
 }
