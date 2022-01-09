@@ -1,0 +1,59 @@
+{
+  "robotName": "rysqwe",
+  "controlKeys": {
+    "forward": "w",
+    "right": "d",
+    "backward": "s",
+    "left": "a"
+  },
+  "dynamic": {
+    "forward": {
+      "leftEngine": 100,
+      "rightEngine": 100,
+      "inertia": 1
+    },
+    "forwardLeft": {
+      "leftEngine": 100,
+      "rightEngine": 100,
+      "inertia": 1
+    },
+    "forwardRight": {
+      "leftEngine": 100,
+      "rightEngine": 100,
+      "inertia": 1
+    },
+    "backward": {
+      "leftEngine": 100,
+      "rightEngine": 100,
+      "inertia": 1
+    },
+   "backwardLeft": {
+      "leftEngine": 100,
+      "rightEngine": 100,
+      "inertia": 1
+    },
+    "backwardRight": {
+      "leftEngine": 100,
+      "rightEngine": 100,
+      "inertia": 1
+    }
+  },
+  "joystick": {
+    "forward": {
+      "leftEngine": 90,
+      "rightEngine": 90
+    },
+    "right": {
+      "leftEngine": 90,
+      "rightEngine": 90
+    },
+     "backward": {
+      "leftEngine": 90,
+      "rightEngine": 90
+    },
+     "left": {
+      "leftEngine": 90,
+      "rightEngine": 90
+    }
+  }
+}

@@ -1,6 +1,7 @@
 from rqt_gui_py.plugin import Plugin
 from .setup import SetupWidget
 from .setup_dashboard import SetupDashboardWidget
+from .setup_dashboard_stack import SetupDashboardStackWidget
 
 
 class SetupPanel(Plugin):
@@ -10,9 +11,7 @@ class SetupPanel(Plugin):
         self._node = context.node
         self.setObjectName('Test')
 
-        # self._widget = ControlPanelWidget(context.node, self)
-        # self._widget = SetupWidget(context.node, self)
-        self._widget = SetupDashboardWidget(context.node, self)
+        self._widget = SetupDashboardStackWidget(context.node, self)
 
         if context.serial_number() > 1:
             self._widget.setWindowTitle(
