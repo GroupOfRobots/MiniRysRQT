@@ -11,14 +11,16 @@ import json
 from setup_panel.dashboard_element import DashboardElementWidget
 
 
-# import rclpy
-# from rclpy.node import Node
-#
-# from std_msgs.msg import String
+import rclpy
+from rclpy.node import Node
+
+from std_msgs.msg import String
 
 class SetupWidget(QWidget):
     def __init__(self, node, plugin=None, fileName=None):
         super(SetupWidget, self).__init__()
+
+        self.node = node
 
         _, self.package_path = get_resource('packages', 'setup_panel')
         ui_file =os.path.join(self.package_path, 'share', 'setup_panel', 'resource', 'setup.ui')
@@ -50,17 +52,30 @@ class SetupWidget(QWidget):
         self.backButton.clicked.connect(self.backClicked)
         self.saveButton.clicked.connect(self.saveClicked)
 
-    #     self.publisher_ = self.create_publisher(String, 'topic', 10)
-    #     timer_period = 0.5  # seconds
-    #     self.timer = self.create_timer(timer_period, self.timer_callback)
-    #     self.i = 0
-    #
-    # def timer_callback(self):
-    #     msg = String()
-    #     msg.data = 'Hello World: %d' % self.i
-    #     self.publisher_.publish(msg)
-    #     self.get_logger().info('Publishing: "%s"' % msg.data)
-    #     self.i += 1
+        print('wwwwwwwwwwwws')
+        print(self.node)
+        print(        self.node)
+
+
+        # self._context.node
+
+        self.publisher_ = self.node.create_publisher(String, 'topic', 10)
+        timer_period = 0.5  # seconds
+        self.timer = self.node.create_timer(timer_period, self.timer_callback)
+        self.i = 0
+
+    def __del__(self):
+        print('eeeeeeeeeeennnnnnnnnnnndddddddd')
+        # rclpy.shutdown()
+
+
+    def timer_callback(self):
+        msg = String()
+        msg.data = 'Hello World: %d' % self.i
+        msg.data += self.fileName
+        self.publisher_.publish(msg)
+        # self.get_logger().info('Publishing: "%s"' % msg.data)
+        self.i += 1
 
     def goBack(self):
         parent = self.parent()

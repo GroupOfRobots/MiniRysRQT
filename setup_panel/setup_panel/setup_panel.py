@@ -9,6 +9,7 @@ class SetupPanel(Plugin):
     def __init__(self, context):
         super(SetupPanel, self).__init__(context)
         self._node = context.node
+        self._node123 = context.node
         self.setObjectName('Test')
 
         self._widget = SetupDashboardStackWidget(context.node, self)
@@ -17,3 +18,7 @@ class SetupPanel(Plugin):
             self._widget.setWindowTitle(
                 self._widget.windowTitle() + (' (%d)' % context.serial_number()))
         context.add_widget(self._widget)
+
+
+    def shutdown_plugin(self):
+        print("shuutdownaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")

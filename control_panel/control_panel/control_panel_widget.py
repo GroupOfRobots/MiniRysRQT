@@ -14,9 +14,17 @@ from python_qt_binding import loadUi
 from .elements.button import Button
 
 
+import rclpy
+from rclpy.node import Node
+
+from std_msgs.msg import String
+
+
 class ControlPanelWidget(QWidget):
     def __init__(self, node, plugin=None):
         super(ControlPanelWidget, self).__init__()
+
+        self.node = node
 
         _, package_path = get_resource('packages', 'control_panel')
         ui_file = os.path.join(package_path, 'share', 'control_panel', 'resource', 'control_panel.ui')
@@ -27,13 +35,24 @@ class ControlPanelWidget(QWidget):
 
         self.defineButtons()
 
-        node = rclpy.create_node('emulate_kobuki_node')
+        self.subscription = self.node.create_subscription(
+            String,
+            'topic',
+            self.listener_callback,
+            10)
+        # self.subscription  # prevent unused variable warning
 
-        self.pub  = node.create_publisher(String, 'topic', 10)
+    def listener_callback(self, msg):
+        print(msg.data)
+        # self.get_logger().info('I heard: "%s"' % msg.data)
 
-        self.hello_str = String()
-        self.hello_str.data = 'hello world'
-        self.pub.publish(self.hello_str)
+        # node = rclpy.create_node('emulate_kobuki_node')
+        #
+        # self.pub  = node.create_publisher(String, 'topic', 10)
+        #
+        # self.hello_str = String()
+        # self.hello_str.data = 'hello world'
+        # self.pub.publish(self.hello_str)
 
     def keyPressEvent(self, event):
         if event.isAutoRepeat():

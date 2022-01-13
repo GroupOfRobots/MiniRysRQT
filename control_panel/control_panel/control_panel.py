@@ -1,6 +1,9 @@
 from rqt_gui_py.plugin import Plugin
 from .control_panel_stack import ControlPanelStack
 
+import rclpy
+
+
 class ControlPanel(Plugin):
     def __init__(self, context):
         super(ControlPanel, self).__init__(context)
@@ -13,3 +16,9 @@ class ControlPanel(Plugin):
             self._widget.setWindowTitle(
                 self._widget.windowTitle() + (' (%d)' % context.serial_number()))
         context.add_widget(self._widget)
+
+    def shutdown_plugin(self):
+        print("shuutdownaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+        # rclpy.shutdown()
+        # self._node.destroy_node()
+        # super().shutdown_plugin()

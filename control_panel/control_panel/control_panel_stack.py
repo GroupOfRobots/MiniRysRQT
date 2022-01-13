@@ -11,7 +11,7 @@ class ControlPanelStack(QWidget):
         self.stack = QStackedWidget(self)
 
         self.controlPanelWidget = ControlPanelWidget(node, self)
-        self.controlPanelWidget3 = SetupWidget(node, self)
+        self.controlPanelWidget3 = SetupWidget(node,plugin= self)
 
         self.stack.addWidget(self.controlPanelWidget)
         self.stack.addWidget(self.controlPanelWidget3)

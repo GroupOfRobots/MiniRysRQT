@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>setup_panel</name>
+  <name>dashboard</name>
   <version>0.0.0</version>
-  <description>Setup panel for robot</description>
+  <description>Dashboard panel for robot</description>
   <maintainer email="pablo@todo.todo">pablo</maintainer>
   <license>Apache License 2.0</license>
 

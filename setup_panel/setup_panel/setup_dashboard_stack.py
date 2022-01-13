@@ -17,6 +17,12 @@ class SetupDashboardStackWidget(QWidget):
 
         self.stack = QStackedWidget(self)
 
+        print('SetupDashboardStackWidget')
+        print(self)
+        print(node)
+        print(plugin)
+        self.node =node
+
         self.controlPanelWidget = SetupDashboardWidget(node, self)
         # self.controlPanelWidget3 = SetupWidget(node, self)
 
@@ -35,6 +41,6 @@ class SetupDashboardStackWidget(QWidget):
         print(fileName)
         if hasattr(self,'setupWidget'):
             self.stack.removeWidget(self.setupWidget)
-        self.setupWidget = SetupWidget(self,fileName=fileName)
+        self.setupWidget = SetupWidget(self.node, fileName=fileName)
         self.stack.addWidget(self.setupWidget)
         self.stack.setCurrentIndex(1)

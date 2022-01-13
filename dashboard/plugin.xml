@@ -1,0 +1,20 @@
+<library path="lib">
+  <class name="Dashboard" type="dashboard.dashboard.Dashboard" base_class_type="rqt_gui_py::Plugin">
+    <description>
+      Control panel control gui
+    </description>
+    <qtgui>
+<!--      &lt;!&ndash; optional grouping...-->
+<!--      <group>-->
+<!--        <label>Group</label>-->
+<!--      </group>-->
+<!--      <group>-->
+<!--        <label>Subgroup</label>-->
+<!--      </group>-->
+<!--      &ndash;&gt;-->
+      <label>Dashboard panel</label>
+      <icon type="theme">accessories-calculator</icon>
+      <statustip>Dashboard panel interface</statustip>
+    </qtgui>
+  </class>
+</library>

@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>831</width>
+    <height>820</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">border:none</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>100</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"> QGroupBox {
+ background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                   stop: 0 #edb514, stop: 1 #ea4000);
+ border-bottom: 2px solid gray;
+ border-radius: 5px;
+ margin-top: 0; /* leave space at the top for the title */
+
+}</string>
+     </property>
+     <property name="title">
+      <string/>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QComboBox" name="comboBox"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <layout class="QGridLayout" name="gridLayout_2">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <property name="spacing">
+      <number>20</number>
+     </property>
+     <item row="2" column="0">
+      <widget class="QGroupBox" name="groupBox_4">
+       <property name="styleSheet">
+        <string notr="true"> QGroupBox {
+ background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                   stop: 0 #bbbbbb, stop: 1 #eeeeee);
+ border: 2px solid #222222;
+ border-radius: 5px;
+ margin-top: 0; /* leave space at the top for the title */
+
+}
+
+QGroupBox:title {
+	top: 10px;
+	left:10px;
+}</string>
+       </property>
+       <property name="title">
+        <string>MAP</string>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_10">
+        <item>
+         <widget class="QWidget" name="widget" native="true"/>
+        </item>
+        <item>
+         <widget class="Line" name="line_9">
+          <property name="styleSheet">
+           <string notr="true">border: 1px solid black</string>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_7">
+          <item>
+           <widget class="QCheckBox" name="checkBox_3">
+            <property name="text">
+             <string>POSITION</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBox_2">
+            <property name="text">
+             <string>PATH</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBox">
+            <property name="text">
+             <string>OBSTACLES</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton">
+            <property name="text">
+             <string>CLEAR MAP</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QGroupBox" name="groupBox_3">
+       <property name="styleSheet">
+        <string notr="true"> QGroupBox {
+ background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                   stop: 0 #bbbbbb, stop: 1 #eeeeee);
+ border: 2px solid #222222;
+ border-radius: 5px;
+ margin-top: 0; /* leave space at the top for the title */
+
+}
+
+QGroupBox:title {
+	top: 10px;
+	left:10px;
+}</string>
+       </property>
+       <property name="title">
+        <string>RANGE SENSORS</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0,0,0,0,0,0,0,0">
+        <item>
+         <widget class="Line" name="line_5">
+          <property name="styleSheet">
+           <string notr="true">margin:10px;</string>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,4">
+          <property name="topMargin">
+           <number>10</number>
+          </property>
+          <property name="bottomMargin">
+           <number>10</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>FRONT</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QProgressBar" name="progressBar">
+            <property name="value">
+             <number>24</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="Line" name="line">
+          <property name="styleSheet">
+           <string notr="true">border: 1px dashed black;</string>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="1,4">
+          <item>
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>BACK</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QProgressBar" name="progressBar_2">
+            <property name="value">
+             <number>24</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="Line" name="line_2">
+          <property name="styleSheet">
+           <string notr="true">border: 1px dashed black;</string>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="1,4">
+          <item>
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string>TOP  </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QProgressBar" name="progressBar_3">
+            <property name="value">
+             <number>24</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="Line" name="line_3">
+          <property name="styleSheet">
+           <string notr="true">border: 1px dashed black;</string>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,4">
+          <item>
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>LEFT</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QProgressBar" name="progressBar_4">
+            <property name="value">
+             <number>24</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="Line" name="line_4">
+          <property name="styleSheet">
+           <string notr="true">border: 1px dashed black;</string>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="1,4">
+          <item>
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>RIGHT</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QProgressBar" name="progressBar_5">
+            <property name="value">
+             <number>24</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <layout class="QVBoxLayout" name="verticalLayout_5" stretch="0">
+       <property name="sizeConstraint">
+        <enum>QLayout::SetDefaultConstraint</enum>
+       </property>
+       <item>
+        <widget class="QGroupBox" name="groupBox_6">
+         <property name="title">
+          <string/>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_9" stretch="0,0">
+          <item>
+           <widget class="QGroupBox" name="groupBox_2">
+            <property name="styleSheet">
+             <string notr="true"> QGroupBox {
+ background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                   stop: 0 #bbbbbb, stop: 1 #eeeeee);
+ border: 2px solid #222222;
+ border-radius: 5px;
+ margin-top: 0; /* leave space at the top for the title */
+
+}
+
+QGroupBox:title {
+	top: 10px;
+	left:10px;
+}</string>
+            </property>
+            <property name="title">
+             <string>BATTERY</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_4">
+             <item>
+              <widget class="Line" name="line_6">
+               <property name="styleSheet">
+                <string notr="true"/>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="1,4">
+               <item>
+                <widget class="QLabel" name="label_7">
+                 <property name="text">
+                  <string>CELL 1</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QProgressBar" name="progressBar_6">
+                 <property name="value">
+                  <number>24</number>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <widget class="Line" name="line_7">
+               <property name="styleSheet">
+                <string notr="true">border: 1px dashed black;</string>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="1,4">
+               <item>
+                <widget class="QLabel" name="label_8">
+                 <property name="text">
+                  <string>CELL 2</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QProgressBar" name="progressBar_7">
+                 <property name="value">
+                  <number>24</number>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <widget class="Line" name="line_8">
+               <property name="styleSheet">
+                <string notr="true">border: 1px dashed black;</string>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="1,4">
+               <item>
+                <widget class="QLabel" name="label_9">
+                 <property name="text">
+                  <string>CELL 3</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QProgressBar" name="progressBar_8">
+                 <property name="value">
+                  <number>24</number>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="groupBox_7">
+            <property name="styleSheet">
+             <string notr="true"> QGroupBox {
+ background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                   stop: 0 #bbbbbb, stop: 1 #eeeeee);
+ border: 2px solid #222222;
+ border-radius: 5px;
+ margin-top: 0; /* leave space at the top for the title */
+
+}
+
+QGroupBox:title {
+	top: 10px;
+	left:10px;
+}</string>
+            </property>
+            <property name="title">
+             <string>TEMPERATURE</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_6">
+             <item>
+              <widget class="QLCDNumber" name="lcdNumber"/>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="2" column="1">
+      <widget class="QGroupBox" name="groupBox_5">
+       <property name="styleSheet">
+        <string notr="true"> QGroupBox {
+ background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                   stop: 0 #bbbbbb, stop: 1 #eeeeee);
+ border: 2px solid #222222;
+ border-radius: 5px;
+ margin-top: 0; /* leave space at the top for the title */
+
+}
+
+QGroupBox:title {
+	top: 10px;
+	left:10px;
+}</string>
+       </property>
+       <property name="title">
+        <string>ANGLE</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_8">
+        <item>
+         <widget class="QWidget" name="widget_2" native="true"/>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
