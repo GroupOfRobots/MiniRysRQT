@@ -18,7 +18,4 @@ class ControlPanel(Plugin):
         context.add_widget(self._widget)
 
     def shutdown_plugin(self):
-        print("shuutdownaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-        # rclpy.shutdown()
-        # self._node.destroy_node()
-        # super().shutdown_plugin()
+        pass

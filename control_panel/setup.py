@@ -3,7 +3,6 @@ from glob import glob
 from setuptools import setup
 
 package_name = 'control_panel'
-setup_name = 'dashboard'
 
 setup(
     name=package_name,

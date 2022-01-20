@@ -20,5 +20,5 @@ class SetupPanel(Plugin):
         context.add_widget(self._widget)
 
 
-    def shutdown_plugin(self):
-        print("shuutdownaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+    # def shutdown_plugin(self):
+    #     print("shuutdownaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")

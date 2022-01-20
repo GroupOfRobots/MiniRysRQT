@@ -6,6 +6,7 @@ from ament_index_python import get_resource
 from python_qt_binding import loadUi
 
 import json
+import os
 
 class DashboardElementWidget(QWidget):
     def __init__(self, node, plugin=None, fileName=None):
@@ -49,6 +50,7 @@ class DashboardElementWidget(QWidget):
             print(self.parent().parent().parent().parent())
             # print(self.parent().parent().parent().mygroupbox)
             self.parent().parent().parent().parent().myForm.removeRow(self)
+            os.remove(self.dataFilePath)
 
             # self.r
 

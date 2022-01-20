@@ -2,13 +2,15 @@
 import os, os.path
 
 from python_qt_binding.QtCore import Qt
-from python_qt_binding.QtWidgets import QPushButton, QWidget,QLineEdit,QTableWidget,QHBoxLayout,QGroupBox,QFormLayout,QLabel,QComboBox
+from python_qt_binding.QtWidgets import QPushButton, QWidget,QLineEdit,QTableWidget, QHBoxLayout,QGroupBox,QFormLayout,QLabel,QComboBox
 from ament_index_python import get_resource
 from python_qt_binding import loadUi
 
 # from PyQt5.QtWidgets import QVBoxLayout
 
 from .dashboard_element import DashboardElementWidget
+# from .setup_dashboard_stack import SetupDashboardStackWidget
+
 
 class SetupDashboardWidget(QWidget):
     def __init__(self, node, plugin=None):
@@ -17,6 +19,8 @@ class SetupDashboardWidget(QWidget):
         print('SetupDashboardWidget')
         print(self)
         print(node)
+        print(plugin)
+        self.setupDashboardStackWidget = plugin
         # node.goToSettings('aa')
 
         _, package_path = get_resource('packages', 'setup_panel')
@@ -61,12 +65,16 @@ class SetupDashboardWidget(QWidget):
     #     self.update()
 
     def addNewRobot(self):
-        print('aaaaaaaaaaaaaaaaaaaaaa')
-        print(self.parentWidget())
-        print(self.parent())
-        print(self.parent().parent())
-        print(self.parent().parent().parent())
+        # print('aaaaaaaaaaaaaaaaaaaaaabbb')
+        # print(self.parentWidget())
+        # # from setup_panel.setup_panel.setup_dashboard_stack import SetupDashboardStackWidget
+        # print(self.findChild(QWidget, "aaa"))
+        # print(self.parent().parent())
+        # print(self.parent().parent())
+        # print(self.parent().parent().objectName())
+        # print(self.parent().parent().accessibleName())
+        # print(self.parent().parent().parent())
         # print(self.parent().parent().parent().parent().parent().parent())
-        self.parent().parent().goToSettings()
+        self.setupDashboardStackWidget.goToSettings()
 
 

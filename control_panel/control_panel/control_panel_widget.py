@@ -7,54 +7,103 @@ from std_msgs.msg import String
 
 from python_qt_binding import QtCore
 from python_qt_binding.QtCore import Qt
-from python_qt_binding.QtWidgets import QPushButton, QWidget
+from python_qt_binding.QtWidgets import QPushButton, QWidget, QComboBox
 from ament_index_python import get_resource
 from python_qt_binding import loadUi
 
 from .elements.button import Button
 
 
+import logging
+from watchdog.observers import Observer
+from watchdog.events import LoggingEventHandler
+
 import rclpy
 from rclpy.node import Node
 
 from std_msgs.msg import String
 
+import json
 
 class ControlPanelWidget(QWidget):
     def __init__(self, node, plugin=None):
         super(ControlPanelWidget, self).__init__()
 
         self.node = node
+        self.controlPanelStack =plugin
 
         _, package_path = get_resource('packages', 'control_panel')
         ui_file = os.path.join(package_path, 'share', 'control_panel', 'resource', 'control_panel.ui')
         loadUi(ui_file, self)
 
+        logging.basicConfig(level=logging.INFO,
+                            format='%(asctime)s - %(message)s',
+                            datefmt='%Y-%m-%d %H:%M:%S')
+
+        _, package_path1 = get_resource('packages', 'setup_panel')
+        self.dataFilePath =  os.path.join(package_path1, 'share', 'setup_panel', 'data', 'robots')
+
+        event_handler = LoggingEventHandler()
+        observer = Observer()
+        observer.schedule(event_handler, self.dataFilePath, recursive=True)
+        observer.start()
+
+
         self.setFocusPolicy(Qt.ClickFocus)
         self.setFocus()
 
         self.defineButtons()
+        self.initializeRobotOptions()
 
-        self.subscription = self.node.create_subscription(
-            String,
-            'topic',
-            self.listener_callback,
-            10)
-        # self.subscription  # prevent unused variable warning
+        print(self.comboBox.currentText())
+        self.comboBox.currentIndexChanged.connect(self.onChoosenRobotChange)
+        robotName=self.comboBox.currentText()
+        filePath = self.nameToFileDictionary[robotName]
+        self.initializeSettings(filePath)
 
-    def listener_callback(self, msg):
-        print(msg.data)
-        # self.get_logger().info('I heard: "%s"' % msg.data)
+    def initializeRobotOptions(self):
+        robotNamesList = []
+        self.nameToFileDictionary = {}
+        self.fileToNameDictionary = {}
 
-        # node = rclpy.create_node('emulate_kobuki_node')
-        #
-        # self.pub  = node.create_publisher(String, 'topic', 10)
-        #
-        # self.hello_str = String()
-        # self.hello_str.data = 'hello world'
-        # self.pub.publish(self.hello_str)
+        for index,fileName in enumerate(os.listdir(self.dataFilePath)):
+            filePath = self.dataFilePath+'/'+fileName
+            dataFile = open(filePath)
+            data = json.load(dataFile)
+            dataFile.close()
+            robotName = data['robotName']
+            robotNamesList.append(robotName)
+
+            self.fileToNameDictionary[filePath] = robotName
+            self.nameToFileDictionary[robotName] = filePath
+
+        self.comboBox.addItems(robotNamesList)
+
+    def initializeSettings(self, filePath):
+        dataFile = open(filePath)
+        data = json.load(dataFile)
+        dataFile.close()
+        self.controlKeys = data['controlKeys']
+
+        # print(self.controlKeys)
+
+
+    def onChoosenRobotChange(self,event):
+        print(event)
 
     def keyPressEvent(self, event):
+        print(event)
+        print(event.text())
+        # print(event.matches('W'))
+
+        print(QtCore.Qt.Key_W)
+        print((ord('W')))
+        print((ord("w")))
+        print(QtCore.Qt.Key(10))
+        print(QtCore.Qt.Key(ord('w')))
+        print(QtCore.Qt.Key_W== QtCore.Qt.Key(ord('w')))
+        print(QtCore.Qt.Key_W== QtCore.Qt.Key(ord('W')))
+
         if event.isAutoRepeat():
             return
         key = event.key()
@@ -83,11 +132,10 @@ class ControlPanelWidget(QWidget):
         event.accept()
 
     def settingsClicked(self):
-        parent=self.parent()
-        parent.setCurrentIndex(1)
+        self.controlPanelStack.goToSettings()
 
     def buttonClicked(self):
-        self.pub.publish(self.hello_str)
+        pass
 
     def defineButtons(self):
         self.forwardButtonElement = Button(self.findChild(QPushButton, 'forwardButton'))
@@ -97,8 +145,6 @@ class ControlPanelWidget(QWidget):
 
         self.settingsButton.clicked.connect(self.settingsClicked)
         self.forwardButton.clicked.connect(self.buttonClicked)
-
-
 
     def resizeEvent(self, event):
         self.setIconSize()

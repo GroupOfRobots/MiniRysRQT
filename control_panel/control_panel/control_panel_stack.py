@@ -8,13 +8,16 @@ class ControlPanelStack(QWidget):
     def __init__(self, node, plugin=None):
         super(ControlPanelStack, self).__init__()
 
+        self.node = node
+
         self.stack = QStackedWidget(self)
 
-        self.controlPanelWidget = ControlPanelWidget(node, self)
-        self.controlPanelWidget3 = SetupWidget(node,plugin= self)
+
+        self.controlPanelWidget = ControlPanelWidget(node, plugin=self)
+        self.setupWidget = SetupWidget(node,plugin= self)
 
         self.stack.addWidget(self.controlPanelWidget)
-        self.stack.addWidget(self.controlPanelWidget3)
+        # self.stack.addWidget(self.setupWidget)
 
         hbox = QGridLayout(self)
         hbox.addWidget(self.stack)
@@ -22,3 +25,10 @@ class ControlPanelStack(QWidget):
         self.stack.setCurrentIndex(0)
 
         self.setLayout(hbox)
+
+    def goToSettings(self, fileName=None):
+        if hasattr(self, 'setupWidget'):
+            self.stack.removeWidget(self.setupWidget)
+        self.setupWidget = SetupWidget(self.node, fileName=fileName)
+        self.stack.addWidget(self.setupWidget)
+        self.stack.setCurrentIndex(1)
