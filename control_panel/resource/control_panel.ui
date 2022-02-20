@@ -91,7 +91,7 @@ background-color:none;</string>
     </widget>
    </item>
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout_3">
+    <layout class="QVBoxLayout" name="buttonsWrapper">
      <item>
       <widget class="Line" name="line">
        <property name="sizeIncrement">

@@ -1,5 +1,5 @@
 from rqt_gui_py.plugin import Plugin
-from .setup import SetupWidget
+from .setup_widget import SetupWidget
 from .setup_dashboard import SetupDashboardWidget
 from .setup_dashboard_stack import SetupDashboardStackWidget
 
@@ -12,13 +12,12 @@ class SetupPanel(Plugin):
         self._node123 = context.node
         self.setObjectName('Test')
 
-        self._widget = SetupDashboardStackWidget(context.node, self)
+        self._widget = SetupDashboardStackWidget(context.node, self,context)
 
         if context.serial_number() > 1:
             self._widget.setWindowTitle(
                 self._widget.windowTitle() + (' (%d)' % context.serial_number()))
         context.add_widget(self._widget)
-
 
     # def shutdown_plugin(self):
     #     print("shuutdownaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")

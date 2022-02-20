@@ -1,8 +1,9 @@
 # This Python file uses the following encoding: utf-8
 from python_qt_binding.QtWidgets import QWidget, QStackedWidget,QHBoxLayout,QListWidget,QGridLayout,QLayout
 
-from setup_panel.setup import SetupWidget
+from setup_panel.setup_widget import SetupWidget
 from .control_panel_widget import ControlPanelWidget
+from shared.deleted_robot_screen.deleted_robot_screen import DeletedRobotScreenWidget
 
 class ControlPanelStack(QWidget):
     def __init__(self, node, plugin=None):
@@ -12,12 +13,10 @@ class ControlPanelStack(QWidget):
 
         self.stack = QStackedWidget(self)
 
-
         self.controlPanelWidget = ControlPanelWidget(node, plugin=self)
         self.setupWidget = SetupWidget(node,plugin= self)
 
         self.stack.addWidget(self.controlPanelWidget)
-        # self.stack.addWidget(self.setupWidget)
 
         hbox = QGridLayout(self)
         hbox.addWidget(self.stack)
@@ -29,6 +28,18 @@ class ControlPanelStack(QWidget):
     def goToSettings(self, fileName=None):
         if hasattr(self, 'setupWidget'):
             self.stack.removeWidget(self.setupWidget)
-        self.setupWidget = SetupWidget(self.node, fileName=fileName)
+        self.setupWidget = SetupWidget(self.node,plugin= self, fileName=fileName)
         self.stack.addWidget(self.setupWidget)
-        self.stack.setCurrentIndex(1)
+        self.stack.setCurrentWidget(self.setupWidget)
+
+    def goToDeletedRobotScreen(self):
+        print('goToDeletedRobotScreen')
+        self.deletedRobotScreenWidget = DeletedRobotScreenWidget(stackWidget =self)
+        self.stack.addWidget(self.deletedRobotScreenWidget)
+        self.stack.setCurrentWidget( self.deletedRobotScreenWidget)
+
+    def onDeletedRobotScreenReturn(self, data):
+        # self.controlPanelWidget.initializeRobotsOptions()
+        self.controlPanelWidget.setRobotOnScreen(data)
+        self.stack.setCurrentWidget(self.controlPanelWidget)
+        self.stack.removeWidget(self.deletedRobotScreenWidget)

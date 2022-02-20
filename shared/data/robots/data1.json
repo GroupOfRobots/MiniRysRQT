@@ -1,5 +1,6 @@
 {
-  "robotName": "rys",
+  "id": 1,
+  "robotName": "pawel",
   "controlKeys": {
     "forward": "w",
     "right": "d",

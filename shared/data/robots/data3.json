@@ -1,10 +1,11 @@
 {
-  "robotName": "rys",
+  "id": 3,
+  "robotName": "aaaa",
   "controlKeys": {
-    "forward": "w",
-    "right": "d",
-    "backward": "s",
-    "left": "a"
+    "forward": "I",
+    "right": "L",
+    "backward": "K",
+    "left": "J"
   },
   "dynamic": {
     "forward": {

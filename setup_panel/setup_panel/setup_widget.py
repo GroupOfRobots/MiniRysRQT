@@ -2,11 +2,14 @@
 import os
 
 # from PyQt5.QtWidgets import QMessageBox
-from python_qt_binding.QtWidgets import QPushButton, QWidget, QLineEdit, QTableWidget, QTableWidgetItem,QMessageBox
+from python_qt_binding.QtWidgets import QPushButton, QWidget, QLineEdit, QTableWidget, QTableWidgetItem, QMessageBox
 from ament_index_python import get_resource
 from python_qt_binding import loadUi
 
 import json
+
+from shared.enums import ControlKeyEnum
+from shared.inner_communication import innerCommunication
 
 # from setup_panel.dashboard_element import DashboardElementWidget
 
@@ -16,37 +19,34 @@ from rclpy.node import Node
 
 from std_msgs.msg import String
 
-from .dashboard_element import DashboardElementWidget\
-
-
-from enum import Enum
-
+from .dashboard_element import DashboardElementWidget \
 
 class SetupWidget(QWidget):
-    def __init__(self, node=None, plugin=None, fileName=None):
+    def __init__(self, node=None, plugin=None, fileName=None, context=None):
         super(SetupWidget, self).__init__()
 
         self.node = node
 
-        self.dashboardStack = plugin
+        self.stack = plugin
 
+        _, self.shared_path = get_resource('packages', 'shared')
         _, self.package_path = get_resource('packages', 'setup_panel')
-        ui_file =os.path.join(self.package_path, 'share', 'setup_panel', 'resource', 'setup.ui')
+        ui_file = os.path.join(self.package_path, 'share', 'setup_panel', 'resource', 'setup.ui')
         loadUi(ui_file, self)
 
-        self.defaultFilePath = os.path.join(self.package_path, 'share', 'setup_panel', 'data', 'default.json')
+        self.defaultFilePath = os.path.join(self.shared_path, 'share', 'shared', 'data', 'default.json')
 
         self.addMode = False
 
-        self.fileName =fileName
+        self.fileName = fileName
 
         if fileName:
-            self.dataFilePath = os.path.join(self.package_path, 'share', 'setup_panel', 'data', 'robots', fileName)
-            data = self.loadData(self.dataFilePath)
+            self.dataFilePath = os.path.join(self.shared_path, 'share', 'shared', 'data', 'robots', fileName)
+            self.data = self.loadData(self.dataFilePath)
         else:
             self.addMode = True
-            self.dataFilePath = os.path.join(self.package_path, 'share', 'setup_panel', 'data', 'robots')
-            data = self.loadData(self.defaultFilePath)
+            self.dataFilePath = os.path.join(self.shared_path, 'share', 'shared', 'data', 'robots')
+            self.data = self.loadData(self.defaultFilePath)
 
             currentFiles = os.listdir(self.dataFilePath)
             for index in range(len(os.listdir(self.dataFilePath)) + 1):
@@ -55,33 +55,23 @@ class SetupWidget(QWidget):
                     continue
                 else:
                     break
-            self.dataFilePath+='/'+self.fileName
+            self.dataFilePath += '/' + self.fileName
 
-        self.loadJson(data)
+        self.loadJson()
 
         self.backButton.clicked.connect(self.goBack)
         self.saveButton.clicked.connect(self.saveClicked)
 
         self.restoreDefaultButton.clicked.connect(self.restoreDefault)
 
-        # self._context.node
-
-        # self.publisher_ = self.node.create_publisher(String, 'topic', 10)
-        # timer_period = 0.5  # seconds
-        # self.timer = self.node.create_timer(timer_period, self.timer_callback)
-        # self.i = 0
-        #
-
         self.keyInputDictionary = {
             ControlKeyEnum.FORWARD: self.forwardKeyInput,
             ControlKeyEnum.RIGHT: self.rightKeyInput,
-            ControlKeyEnum.BACKWARD:self.backwardKeyInput,
+            ControlKeyEnum.BACKWARD: self.backwardKeyInput,
             ControlKeyEnum.LEFT: self.leftKeyInput,
         }
 
         self.addControlKeysValidators()
-
-
 
     def addControlKeysValidators(self):
         self.keyInputDictionary[ControlKeyEnum.FORWARD].textChanged.connect(
@@ -95,21 +85,21 @@ class SetupWidget(QWidget):
 
     def validator(self, event, key):
         button = self.keyInputDictionary[key]
-        newValue =event.upper()
+        newValue = event.upper()
         button.setText(newValue)
-        self.controlKeys[key]=newValue
+        self.controlKeys[key] = newValue
 
-        valuesMap={}
+        valuesMap = {}
 
         for key, value in self.controlKeys.items():
             if value in valuesMap:
                 valuesMap[value].append(key)
             else:
-                valuesMap[value] =[key]
+                valuesMap[value] = [key]
 
         disableSaveButton = False
         for _, buttonKeys in valuesMap.items():
-            if len(buttonKeys)>1:
+            if len(buttonKeys) > 1:
                 for inputKey in buttonKeys:
                     color = '#EB5535'  # red
                     self.keyInputDictionary[inputKey].setStyleSheet('QLineEdit { background-color: %s }' % color)
@@ -127,51 +117,38 @@ class SetupWidget(QWidget):
                                      QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
 
         if reply == QMessageBox.Yes:
-            data = self.loadData(self.defaultFilePath)
-            data['robotName']=self.robotNameInput.text()
-            self.loadJson(data)
-
+            self.data = self.loadData(self.defaultFilePath)
+            self.loadJson()
 
     def __del__(self):
         print('eeeeeeeeeeennnnnnnnnnnndddddddd')
         # rclpy.shutdown()
 
-
-    # def timer_callback(self):
-    #     msg = String()
-    #     msg.data = 'Hello World: %d' % self.i
-    #     msg.data += self.fileName
-    #     self.publisher_.publish(msg)
-    #     # self.get_logger().info('Publishing: "%s"' % msg.data)
-    #     self.i += 1
-
     def goBack(self):
-        self.dashboardStack.stack.setCurrentIndex(0)
+        self.stack.stack.setCurrentIndex(0)
 
     def saveClicked(self):
-        if(self.addMode):
+        if (self.addMode):
             self.addNewRobot()
             return
         self.updateRobotData()
 
     def addNewRobot(self):
-        defaultFile = open(self.defaultFilePath, 'r')
-        data = json.load(defaultFile)
-        defaultFile.close()
-        data['robotName'] = self.robotNameInput.text()
-        data['controlKeys']['forward'] = self.forwardKeyInput.text()
+        self.data['robotName'] = self.robotNameInput.text()
+        self.data['controlKeys']['forward'] = self.forwardKeyInput.text()
 
+        # save to new file
         dataFile = open(self.dataFilePath, 'x')
-        json.dump(data, dataFile)
+        json.dump(self.data, dataFile)
         dataFile.close()
 
         parent = self.parent()
         setupDashboard = parent.widget(0)
-        dashboardElement= DashboardElementWidget(self,fileName=self.fileName)
+        dashboardElement = DashboardElementWidget(self, fileName=self.fileName)
         setupDashboard.myForm.addRow(dashboardElement)
 
+        innerCommunication.addRobotSignal.emit()
         self.goBack()
-
 
     def updateRobotData(self):
         dataFile = open(self.dataFilePath, 'r')
@@ -182,7 +159,12 @@ class SetupWidget(QWidget):
         data['controlKeys']['forward'] = self.forwardKeyInput.text()
         json.dump(data, dataFile)
         dataFile.close()
+
+        innerCommunication.closeApp.emit()
         self.goBack()
+
+    def test1(self):
+        print('qqqqqqqqqqqqqqqwwwwwwwwwwwwwwwwwww aaaaaaaaaaaaa')
 
     def resizeEvent(self, event):
         pass
@@ -194,18 +176,18 @@ class SetupWidget(QWidget):
         dataFile.close()
         return data
 
-    def loadJson(self, data):
-        self.robotNameInput.setText(data['robotName'])
+    def loadJson(self):
+        self.robotNameInput.setText(self.data['robotName'])
 
         # CONTROL KEYS
-        self.controlKeys = data['controlKeys']
+        self.controlKeys = self.data['controlKeys']
         self.forwardKeyInput.setText(self.controlKeys[ControlKeyEnum.FORWARD])
         self.rightKeyInput.setText(self.controlKeys[ControlKeyEnum.RIGHT])
         self.backwardKeyInput.setText(self.controlKeys[ControlKeyEnum.BACKWARD])
         self.leftKeyInput.setText(self.controlKeys[ControlKeyEnum.LEFT])
 
         # DYNAMIC
-        dynamic = data['dynamic']
+        dynamic = self.data['dynamic']
         forwardDynamic = dynamic['forward']
         forwardLeftDynamic = dynamic['forwardLeft']
         forwardRightDynamic = dynamic['forwardRight']
@@ -241,7 +223,7 @@ class SetupWidget(QWidget):
         self.dynamicTable.setItem(5, 2, QTableWidgetItem(str(backwardRightDynamic['inertia'])))
 
         # JOYSTICK
-        joystick = data['joystick']
+        joystick = self.data['joystick']
 
         joystickForward = joystick['forward']
         joystickRight = joystick['right']
@@ -259,9 +241,3 @@ class SetupWidget(QWidget):
 
         self.joystickLeft.setItem(0, 0, QTableWidgetItem(str(joystickLeft['leftEngine'])))
         self.joystickLeft.setItem(0, 1, QTableWidgetItem(str(joystickLeft['rightEngine'])))
-
-class ControlKeyEnum(str, Enum):
-    FORWARD = 'forward'
-    RIGHT = 'right'
-    BACKWARD = 'backward'
-    LEFT = 'left'

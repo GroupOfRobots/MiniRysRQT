@@ -11,8 +11,8 @@ from python_qt_binding.QtWidgets import QPushButton, QWidget, QComboBox
 from ament_index_python import get_resource
 from python_qt_binding import loadUi
 
+from shared.enums import ControlKeyEnum
 from .elements.button import Button
-
 
 import logging
 from watchdog.observers import Observer
@@ -23,6 +23,10 @@ from rclpy.node import Node
 
 from std_msgs.msg import String
 
+from shared.inner_communication import innerCommunication
+from shared.utils.utils import initializeRobotsOptions
+
+
 import json
 
 class ControlPanelWidget(QWidget):
@@ -30,54 +34,51 @@ class ControlPanelWidget(QWidget):
         super(ControlPanelWidget, self).__init__()
 
         self.node = node
-        self.controlPanelStack =plugin
+        self.controlPanelStack = plugin
 
-        _, package_path = get_resource('packages', 'control_panel')
-        ui_file = os.path.join(package_path, 'share', 'control_panel', 'resource', 'control_panel.ui')
-        loadUi(ui_file, self)
+        self.loadUI()
 
-        logging.basicConfig(level=logging.INFO,
-                            format='%(asctime)s - %(message)s',
-                            datefmt='%Y-%m-%d %H:%M:%S')
+        _, shared_package_path = get_resource('packages', 'shared')
+        self.dataFilePath = os.path.join(shared_package_path, 'share', 'shared', 'data', 'robots')
 
-        _, package_path1 = get_resource('packages', 'setup_panel')
-        self.dataFilePath =  os.path.join(package_path1, 'share', 'setup_panel', 'data', 'robots')
-
-        event_handler = LoggingEventHandler()
-        observer = Observer()
-        observer.schedule(event_handler, self.dataFilePath, recursive=True)
-        observer.start()
-
+        innerCommunication.closeApp.connect(self.test1)
+        innerCommunication.addRobotSignal.connect(self.initializeRobotsOptions)
+        innerCommunication.deleteRobotSignal.connect(self.onDeleteRobotSignal)
 
         self.setFocusPolicy(Qt.ClickFocus)
         self.setFocus()
 
         self.defineButtons()
-        self.initializeRobotOptions()
+        initializeRobotsOptions(self.comboBox)
 
-        print(self.comboBox.currentText())
         self.comboBox.currentIndexChanged.connect(self.onChoosenRobotChange)
-        robotName=self.comboBox.currentText()
-        filePath = self.nameToFileDictionary[robotName]
+        currentData = self.comboBox.currentData()
+        filePath = currentData['filePath']
+
         self.initializeSettings(filePath)
 
-    def initializeRobotOptions(self):
-        robotNamesList = []
-        self.nameToFileDictionary = {}
-        self.fileToNameDictionary = {}
+    def loadUI(self):
+        _, package_path = get_resource('packages', 'control_panel')
+        ui_file = os.path.join(package_path, 'share', 'control_panel', 'resource', 'control_panel.ui')
+        loadUi(ui_file, self)
 
-        for index,fileName in enumerate(os.listdir(self.dataFilePath)):
-            filePath = self.dataFilePath+'/'+fileName
-            dataFile = open(filePath)
-            data = json.load(dataFile)
-            dataFile.close()
-            robotName = data['robotName']
-            robotNamesList.append(robotName)
+    def test1(self):
+        print('wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww aaaaaaaaaaaaa')
 
-            self.fileToNameDictionary[filePath] = robotName
-            self.nameToFileDictionary[robotName] = filePath
+    def onDeleteRobotSignal(self, data):
+        print('onDeleteRobotSignal')
 
-        self.comboBox.addItems(robotNamesList)
+        indexOfElementToBeRemoved = self.comboBox.findData(data)
+        print(indexOfElementToBeRemoved)
+        print(self.comboBox.currentIndex())
+
+        if indexOfElementToBeRemoved == self.comboBox.currentIndex():
+            self.controlPanelStack.goToDeletedRobotScreen()
+
+        self.comboBox.removeItem(indexOfElementToBeRemoved)
+
+    def initializeRobotsOptions(self):
+        initializeRobotsOptions(self.comboBox)
 
     def initializeSettings(self, filePath):
         dataFile = open(filePath)
@@ -85,35 +86,33 @@ class ControlPanelWidget(QWidget):
         dataFile.close()
         self.controlKeys = data['controlKeys']
 
-        # print(self.controlKeys)
+        for key in self.controlKeys:
+            controlValue = self.controlKeys[key].upper()
+            self.controlKeys[key] = QtCore.Qt.Key(ord(controlValue))
 
+    def onChoosenRobotChange(self, event):
+        print("control planel onChoosenRobotChange")
+        data = self.comboBox.currentData()
+        if data:
+            self.setRobotOnScreen(data)
 
-    def onChoosenRobotChange(self,event):
-        print(event)
+    def setRobotOnScreen(self, data):
+        filePath = data['filePath']
+        index=self.comboBox.findData(data)
+        self.comboBox.setCurrentIndex(index)
+        self.initializeSettings(filePath)
 
     def keyPressEvent(self, event):
-        print(event)
-        print(event.text())
-        # print(event.matches('W'))
-
-        print(QtCore.Qt.Key_W)
-        print((ord('W')))
-        print((ord("w")))
-        print(QtCore.Qt.Key(10))
-        print(QtCore.Qt.Key(ord('w')))
-        print(QtCore.Qt.Key_W== QtCore.Qt.Key(ord('w')))
-        print(QtCore.Qt.Key_W== QtCore.Qt.Key(ord('W')))
-
         if event.isAutoRepeat():
             return
-        key = event.key()
-        if key == QtCore.Qt.Key_W:
+        key = QtCore.Qt.Key(event.key())
+        if key == self.controlKeys[ControlKeyEnum.FORWARD]:
             self.forwardButtonElement.pressedKeyState()
-        elif event.key() == QtCore.Qt.Key_D:
+        elif event.key() == self.controlKeys[ControlKeyEnum.RIGHT]:
             self.rightButtonElement.pressedKeyState()
-        elif event.key() == QtCore.Qt.Key_S:
+        elif event.key() == self.controlKeys[ControlKeyEnum.BACKWARD]:
             self.backwardButtonElement.pressedKeyState()
-        elif event.key() == QtCore.Qt.Key_A:
+        elif event.key() == self.controlKeys[ControlKeyEnum.LEFT]:
             self.leftButtonElement.pressedKeyState()
         event.accept()
 
