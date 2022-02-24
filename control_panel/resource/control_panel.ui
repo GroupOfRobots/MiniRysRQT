@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>496</width>
-    <height>381</height>
+    <width>709</width>
+    <height>587</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -25,6 +25,12 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QGroupBox" name="groupBox">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>50</height>
+      </size>
+     </property>
      <property name="maximumSize">
       <size>
        <width>16777215</width>
@@ -93,20 +99,10 @@ background-color:none;</string>
    <item>
     <layout class="QVBoxLayout" name="buttonsWrapper">
      <item>
-      <widget class="Line" name="line">
-       <property name="sizeIncrement">
-        <size>
-         <width>0</width>
-         <height>1</height>
-        </size>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-     <item>
       <layout class="QHBoxLayout" name="firstRowButtonsWrapper">
+       <property name="spacing">
+        <number>0</number>
+       </property>
        <item>
         <widget class="QFrame" name="emptyFrameLeft">
          <property name="minimumSize">

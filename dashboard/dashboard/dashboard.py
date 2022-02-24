@@ -1,5 +1,5 @@
 from rqt_gui_py.plugin import Plugin
-from .dashboard_widget import DashboardWidget
+from .dashboard_stack import DashboardStack
 
 
 class Dashboard(Plugin):
@@ -8,9 +8,9 @@ class Dashboard(Plugin):
         self._node = context.node
         self.setObjectName('Test')
 
-        self._widget = DashboardWidget(context.node, self)
+        self._stack = DashboardStack(context.node, self)
 
         if context.serial_number() > 1:
-            self._widget.setWindowTitle(
-                self._widget.windowTitle() + (' (%d)' % context.serial_number()))
-        context.add_widget(self._widget)
+            self._stack.setWindowTitle(
+                self._stack.windowTitle() + (' (%d)' % context.serial_number()))
+        context.add_widget(self._stack)

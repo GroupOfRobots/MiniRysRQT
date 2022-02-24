@@ -53,9 +53,10 @@ class ControlPanelWidget(QWidget):
 
         self.comboBox.currentIndexChanged.connect(self.onChoosenRobotChange)
         currentData = self.comboBox.currentData()
-        filePath = currentData['filePath']
+        if currentData:
+            filePath = currentData['filePath']
 
-        self.initializeSettings(filePath)
+            self.initializeSettings(filePath)
 
     def loadUI(self):
         _, package_path = get_resource('packages', 'control_panel')

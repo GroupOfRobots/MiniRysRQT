@@ -7,6 +7,9 @@ from python_qt_binding import loadUi
 
 import json
 
+from shared.utils.utils import initializeRobotsOptions
+from shared.inner_communication import innerCommunication
+
 class DashboardWidget(QWidget):
     def __init__(self, node, plugin=None, fileName=None):
         super(DashboardWidget, self).__init__()
@@ -16,3 +19,8 @@ class DashboardWidget(QWidget):
         _, package_path = get_resource('packages', 'dashboard')
         ui_file = os.path.join(package_path, 'share', 'dashboard', 'resource', 'dashboard.ui')
         loadUi(ui_file, self)
+
+        print('wwwwwwwwwwwwww')
+
+        initializeRobotsOptions(self.comboBox)
+

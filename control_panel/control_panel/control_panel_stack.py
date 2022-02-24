@@ -14,11 +14,12 @@ class ControlPanelStack(QWidget):
         self.stack = QStackedWidget(self)
 
         self.controlPanelWidget = ControlPanelWidget(node, plugin=self)
-        self.setupWidget = SetupWidget(node,plugin= self)
+        # self.setupWidget = SetupWidget(node,plugin= self)
 
         self.stack.addWidget(self.controlPanelWidget)
 
         hbox = QGridLayout(self)
+        hbox.setContentsMargins(0, 0, 0, 0)
         hbox.addWidget(self.stack)
 
         self.stack.setCurrentIndex(0)
