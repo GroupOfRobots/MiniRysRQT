@@ -21,6 +21,4 @@ def initializeRobotsOptions(comboBox):
             "id": id,
         }
 
-        print(itemData)
-
         comboBox.addItem(robotName, itemData)

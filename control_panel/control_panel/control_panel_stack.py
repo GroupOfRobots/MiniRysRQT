@@ -33,7 +33,6 @@ class ControlPanelStack(QWidget):
         self.stack.setCurrentWidget(self.setupWidget)
 
     def goToDeletedRobotScreen(self):
-        print('goToDeletedRobotScreen')
         self.deletedRobotScreenWidget = DeletedRobotScreenWidget(stackWidget =self)
         self.stack.addWidget(self.deletedRobotScreenWidget)
         self.stack.setCurrentWidget( self.deletedRobotScreenWidget)
@@ -43,3 +42,5 @@ class ControlPanelStack(QWidget):
         self.controlPanelWidget.setRobotOnScreen(data)
         self.stack.setCurrentWidget(self.controlPanelWidget)
         self.stack.removeWidget(self.deletedRobotScreenWidget)
+        self.deletedRobotScreenWidget.deleteLater()
+        self.deletedRobotScreenWidget = None

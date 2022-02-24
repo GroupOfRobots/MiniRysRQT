@@ -66,16 +66,14 @@ class ControlPanelWidget(QWidget):
         print('wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww aaaaaaaaaaaaa')
 
     def onDeleteRobotSignal(self, data):
-        print('onDeleteRobotSignal')
-
         indexOfElementToBeRemoved = self.comboBox.findData(data)
-        print(indexOfElementToBeRemoved)
-        print(self.comboBox.currentIndex())
 
         if indexOfElementToBeRemoved == self.comboBox.currentIndex():
             self.controlPanelStack.goToDeletedRobotScreen()
 
         self.comboBox.removeItem(indexOfElementToBeRemoved)
+
+
 
     def initializeRobotsOptions(self):
         initializeRobotsOptions(self.comboBox)
@@ -91,7 +89,6 @@ class ControlPanelWidget(QWidget):
             self.controlKeys[key] = QtCore.Qt.Key(ord(controlValue))
 
     def onChoosenRobotChange(self, event):
-        print("control planel onChoosenRobotChange")
         data = self.comboBox.currentData()
         if data:
             self.setRobotOnScreen(data)

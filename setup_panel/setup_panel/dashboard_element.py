@@ -39,19 +39,12 @@ class DashboardElementWidget(QWidget):
 
 
     def deleteClicked(self):
-        print('deleteClicked')
 
         reply = QMessageBox.question(self, self.robotName, 'Are you sure to delete robot?',
         QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
 
-        # print(reply)
 
         if reply == QMessageBox.Yes:
-            # print(self.parent())
-            # print(self.parent().parent())
-            # print(self.parent().parent().parent())
-            # print(self.parent().parent().parent().parent())
-            # print(self.parent().parent().parent().mygroupbox)
             self.parent().parent().parent().parent().myForm.removeRow(self)
             os.remove(self.dataFilePath)
 
@@ -68,11 +61,6 @@ class DashboardElementWidget(QWidget):
         innerCommunication.deleteRobotSignal.emit(itemData)
 
     def modifyButtonClicked(self):
-        print('aaaaaaaaaaaaaaaaaaaaaa')
-        print(self.parentWidget())
-        print(self.parent())
-        print(self.parent().parent())
-        print(self.parent().parent().parent())
         print(self.parent().parent().parent().parent().parent().parent())
         self.parent().parent().parent().parent().parent().parent().goToSettings(self.fileName)
 

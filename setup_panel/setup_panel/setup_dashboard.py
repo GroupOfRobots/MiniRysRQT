@@ -32,9 +32,7 @@ class SetupDashboardWidget(QWidget):
 
         dataFilePath = os.path.join(shared_path, 'share', 'shared', 'data', 'robots')
 
-        print(dataFilePath)
         for index,fileName in enumerate(os.listdir(dataFilePath)):
-            print(fileName)
             combolist.append(DashboardElementWidget(self,fileName=fileName,context=context))
             self.myForm.addRow(combolist[index])
 
@@ -56,16 +54,6 @@ class SetupDashboardWidget(QWidget):
         self.addNewRobotButton.clicked.connect(self.addNewRobot)
 
     def addNewRobot(self):
-        # print('aaaaaaaaaaaaaaaaaaaaaabbb')
-        # print(self.parentWidget())
-        # # from setup_panel.setup_panel.setup_dashboard_stack import SetupDashboardStackWidget
-        # print(self.findChild(QWidget, "aaa"))
-        # print(self.parent().parent())
-        # print(self.parent().parent())
-        # print(self.parent().parent().objectName())
-        # print(self.parent().parent().accessibleName())
-        # print(self.parent().parent().parent())
-        # print(self.parent().parent().parent().parent().parent().parent())
         self.setupDashboardStackWidget.goToSettings()
 
 
