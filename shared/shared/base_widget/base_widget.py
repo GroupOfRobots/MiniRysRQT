@@ -1,18 +1,13 @@
 # This Python file uses the following encoding: utf-8
+import json
 import os
-import threading
-import time
+from abc import abstractmethod
 
 from ament_index_python import get_resource
-from python_qt_binding import QtCore
-from python_qt_binding import loadUi
-from python_qt_binding.QtCore import Qt, QPoint
+from python_qt_binding.QtCore import Qt
 from python_qt_binding.QtWidgets import QWidget
-from shared.enums import ControlKeyEnum
-
 from shared.inner_communication import innerCommunication
 
-import json
 
 class BaseWidget(QWidget):
     def __init__(self, node=None, plugin=None,stack=None):
@@ -52,3 +47,13 @@ class BaseWidget(QWidget):
             self.stack.goToDeletedRobotScreen()
 
         self.comboBox.removeItem(indexOfElementToBeRemoved)
+
+    def setRobotOnScreen(self, data):
+        filePath = data['filePath']
+        index=self.comboBox.findData(data)
+        self.comboBox.setCurrentIndex(index)
+        self.initializeSettings(filePath)
+
+    @abstractmethod
+    def initializeSettings(self, filePath):
+        pass

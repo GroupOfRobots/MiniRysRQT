@@ -10,10 +10,10 @@ from python_qt_binding.QtCore import Qt, QPoint
 from python_qt_binding.QtGui import QPainter, QBrush, QPen
 from python_qt_binding.QtWidgets import QWidget
 from shared.enums import ControlKeyEnum
-from shared.utils.utils import OptionsManager
+from shared.base_widget.base_widget import BaseWidget
 
 
-class JoystickWidget(QWidget):
+class JoystickWidget(BaseWidget):
     BOUNDARY_RADIUS = 0.45
     BOUNDARY_DIAMETER = BOUNDARY_RADIUS * 2
     JOYSTICK_RADIUS = 0.1
@@ -32,16 +32,19 @@ class JoystickWidget(QWidget):
         ui_file = os.path.join(package_path, 'share', 'joystick', 'resource', 'joystick.ui')
         loadUi(ui_file, self)
 
-        self.setFocusPolicy(Qt.ClickFocus)
-        self.setFocus()
+        # self.setFocusPolicy(Qt.ClickFocus)
+        # self.setFocus()
 
         self.pressedKeys = []
         self.xMove = 0
         self.yMove = 0
         self.keyPressedThread = threading.Thread()
 
-        self.optionsManager = OptionsManager(self.comboBox, self.stack)
-        self.optionsManager.initializeRobotsOptions()
+        # self.optionsManager = OptionsManager(self.comboBox, self.stack)
+        # self.optionsManager.initializeRobotsOptions()
+
+    def initializeSettings(self, filePath):
+        print('initializeSettings')
 
     def paintEvent(self, event):
         painter = QPainter(self)
