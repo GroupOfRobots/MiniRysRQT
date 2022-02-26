@@ -7,7 +7,7 @@ package_name = 'shared'
 setup(
     name=package_name,
     version='0.0.0',
-    packages=[package_name, package_name + '/test', package_name + '/deleted_robot_screen', package_name + '/utils'],
+    packages=[package_name, package_name + '/test', package_name + '/deleted_robot_screen', package_name + '/utils',  package_name + '/stack_widget'],
     data_files=[
         ('share/' + package_name, ['package.xml']),
         ('share/' + package_name + '/data', glob('*/*.json')),

@@ -38,8 +38,8 @@ class ControlPanelWidget(QWidget):
 
         self.loadUI()
 
-        _, shared_package_path = get_resource('packages', 'shared')
-        self.dataFilePath = os.path.join(shared_package_path, 'share', 'shared', 'data', 'robots')
+        # _, shared_package_path = get_resource('packages', 'shared')
+        # self.dataFilePath = os.path.join(shared_package_path, 'share', 'shared', 'data', 'robots')
 
         innerCommunication.closeApp.connect(self.test1)
         innerCommunication.addRobotSignal.connect(self.initializeRobotsOptions)
@@ -54,9 +54,9 @@ class ControlPanelWidget(QWidget):
         self.comboBox.currentIndexChanged.connect(self.onChoosenRobotChange)
         currentData = self.comboBox.currentData()
         if currentData:
-            filePath = currentData['filePath']
+            self.dataFilePath = currentData['filePath']
 
-            self.initializeSettings(filePath)
+            self.initializeSettings(self.dataFilePath)
 
     def loadUI(self):
         _, package_path = get_resource('packages', 'control_panel')
@@ -101,9 +101,13 @@ class ControlPanelWidget(QWidget):
         self.initializeSettings(filePath)
 
     def keyPressEvent(self, event):
+        print('keyPressEvent')
+        print(event)
         if event.isAutoRepeat():
             return
         key = QtCore.Qt.Key(event.key())
+        print(key)
+        print(self.controlKeys)
         if key == self.controlKeys[ControlKeyEnum.FORWARD]:
             self.forwardButtonElement.pressedKeyState()
         elif event.key() == self.controlKeys[ControlKeyEnum.RIGHT]:
@@ -129,7 +133,7 @@ class ControlPanelWidget(QWidget):
         event.accept()
 
     def settingsClicked(self):
-        self.controlPanelStack.goToSettings()
+        self.controlPanelStack.goToSettings(self.dataFilePath)
 
     def buttonClicked(self):
         pass

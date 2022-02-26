@@ -21,8 +21,9 @@ from std_msgs.msg import String
 
 from .dashboard_element import DashboardElementWidget \
 
+
 class SetupWidget(QWidget):
-    def __init__(self, node=None, plugin=None, fileName=None, context=None):
+    def __init__(self, node=None, plugin=None, dataFilePath=None, context=None):
         super(SetupWidget, self).__init__()
 
         self.node = node
@@ -38,24 +39,23 @@ class SetupWidget(QWidget):
 
         self.addMode = False
 
-        self.fileName = fileName
+        self.dataFilePath = dataFilePath
 
-        if fileName:
-            self.dataFilePath = os.path.join(self.shared_path, 'share', 'shared', 'data', 'robots', fileName)
+        if self.dataFilePath:
             self.data = self.loadData(self.dataFilePath)
         else:
             self.addMode = True
-            self.dataFilePath = os.path.join(self.shared_path, 'share', 'shared', 'data', 'robots')
+            self.dataPath = os.path.join(self.shared_path, 'share', 'shared', 'data', 'robots')
             self.data = self.loadData(self.defaultFilePath)
 
-            currentFiles = os.listdir(self.dataFilePath)
-            for index in range(len(os.listdir(self.dataFilePath)) + 1):
-                self.fileName = 'data' + str(index) + '.json'
-                if self.fileName in currentFiles:
+            currentFiles = os.listdir(self.dataPath)
+            for index in range(len(os.listdir(self.dataPath)) + 1):
+                filePath = 'data' + str(index) + '.json'
+                if filePath in currentFiles:
                     continue
                 else:
+                    self.dataFilePath = self.dataPath + '/' + filePath
                     break
-            self.dataFilePath += '/' + self.fileName
 
         self.loadJson()
 
@@ -128,7 +128,7 @@ class SetupWidget(QWidget):
         self.stack.stack.setCurrentIndex(0)
 
     def saveClicked(self):
-        if (self.addMode):
+        if self.addMode:
             self.addNewRobot()
             return
         self.updateRobotData()
@@ -137,6 +137,22 @@ class SetupWidget(QWidget):
         self.data['robotName'] = self.robotNameInput.text()
         self.data['controlKeys']['forward'] = self.forwardKeyInput.text()
 
+        currentIds = []
+        currentFiles = os.listdir(self.dataPath)
+        for file in currentFiles:
+            dataFile = open(self.dataPath + '/' + file, 'r')
+            data = json.load(dataFile)
+            dataFile.close()
+            currentIds.append(data['id'])
+
+        id = None
+        for possibleId in range(1, len(currentIds) + 1):
+            notFound = next((x for x in currentIds if x == possibleId), True)
+            if notFound:
+                id = possibleId
+                break
+        self.data['id'] = id
+
         # save to new file
         dataFile = open(self.dataFilePath, 'x')
         json.dump(self.data, dataFile)
@@ -144,8 +160,8 @@ class SetupWidget(QWidget):
 
         parent = self.parent()
         setupDashboard = parent.widget(0)
-        dashboardElement = DashboardElementWidget(self, fileName=self.fileName)
-        setupDashboard.myForm.addRow(dashboardElement)
+        # dashboardElement = DashboardElementWidget(self, fileName=self.fileName)
+        # setupDashboard.myForm.addRow(dashboardElement)
 
         innerCommunication.addRobotSignal.emit()
         self.goBack()
@@ -170,8 +186,8 @@ class SetupWidget(QWidget):
         pass
         # print("resize")
 
-    def loadData(self, filePath):
-        dataFile = open(filePath)
+    def loadData(self, dataFilePath):
+        dataFile = open(dataFilePath)
         data = json.load(dataFile)
         dataFile.close()
         return data

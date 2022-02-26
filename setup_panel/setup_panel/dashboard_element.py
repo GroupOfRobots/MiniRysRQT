@@ -33,6 +33,8 @@ class DashboardElementWidget(QWidget):
         data = json.load(dataFile)
         dataFile.close()
 
+        # print(data)
+
         self.robotName=data['robotName']
         self.id=data['id']
         self.robotNameInput.setText(data['robotName'])
@@ -48,8 +50,6 @@ class DashboardElementWidget(QWidget):
             self.parent().parent().parent().parent().myForm.removeRow(self)
             os.remove(self.dataFilePath)
 
-            # self.r
-
         print('self.fileName')
         print(self.fileName)
         itemData = {
@@ -62,5 +62,5 @@ class DashboardElementWidget(QWidget):
 
     def modifyButtonClicked(self):
         print(self.parent().parent().parent().parent().parent().parent())
-        self.parent().parent().parent().parent().parent().parent().goToSettings(self.fileName)
+        self.parent().parent().parent().parent().parent().parent().goToSettings(self.dataFilePath)
 

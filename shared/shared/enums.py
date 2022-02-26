@@ -6,3 +6,5 @@ class ControlKeyEnum(str, Enum):
     RIGHT = 'right'
     BACKWARD = 'backward'
     LEFT = 'left'
+    STABLE = 'stable' # position is preserved if stable key is pressed
+

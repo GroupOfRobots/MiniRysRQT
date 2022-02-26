@@ -26,10 +26,10 @@ class ControlPanelStack(QWidget):
 
         self.setLayout(hbox)
 
-    def goToSettings(self, fileName=None):
+    def goToSettings(self, dataFilePath=None):
         if hasattr(self, 'setupWidget'):
             self.stack.removeWidget(self.setupWidget)
-        self.setupWidget = SetupWidget(self.node,plugin= self, fileName=fileName)
+        self.setupWidget = SetupWidget(self.node,plugin= self, dataFilePath=dataFilePath)
         self.stack.addWidget(self.setupWidget)
         self.stack.setCurrentWidget(self.setupWidget)
 
