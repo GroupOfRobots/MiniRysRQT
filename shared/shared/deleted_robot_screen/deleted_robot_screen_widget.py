@@ -36,7 +36,10 @@ class DeletedRobotScreenWidget(QWidget):
 
     def onChoosenRobotChange(self,event):
         data = self.comboBox.currentData()
-        self.stackWidget.onDeletedRobotScreenReturn(data)
+        print('onChoosenRobotChange')
+        print('onChoosenRobotChange')
+        print( self.stackWidget)
+        # self.stackWidget.onDeletedRobotScreenReturn(data)
 
 
     def onDeleteRobotSignal(self, data):

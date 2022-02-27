@@ -101,13 +101,14 @@ class ControlPanelWidget(QWidget):
         self.initializeSettings(filePath)
 
     def keyPressEvent(self, event):
-        print('keyPressEvent')
-        print(event)
         if event.isAutoRepeat():
             return
         key = QtCore.Qt.Key(event.key())
-        print(key)
-        print(self.controlKeys)
+
+        # print('key')
+        # print(key)
+        # print(event.key())
+
         if key == self.controlKeys[ControlKeyEnum.FORWARD]:
             self.forwardButtonElement.pressedKeyState()
         elif event.key() == self.controlKeys[ControlKeyEnum.RIGHT]:
@@ -122,13 +123,13 @@ class ControlPanelWidget(QWidget):
         if event.isAutoRepeat():
             return
         key = event.key()
-        if key == QtCore.Qt.Key_W:
+        if key == self.controlKeys[ControlKeyEnum.FORWARD]:
             self.forwardButtonElement.releasedKeyState()
-        elif event.key() == QtCore.Qt.Key_D:
+        elif event.key() == self.controlKeys[ControlKeyEnum.RIGHT]:
             self.rightButtonElement.releasedKeyState()
-        elif event.key() == QtCore.Qt.Key_S:
+        elif event.key() == self.controlKeys[ControlKeyEnum.BACKWARD]:
             self.backwardButtonElement.releasedKeyState()
-        elif event.key() == QtCore.Qt.Key_A:
+        elif event.key() == self.controlKeys[ControlKeyEnum.LEFT]:
             self.leftButtonElement.releasedKeyState()
         event.accept()
 

@@ -1,25 +1,12 @@
 # This Python file uses the following encoding: utf-8
+import json
 import os
 
-# from PyQt5.QtWidgets import QMessageBox
-from python_qt_binding.QtWidgets import QPushButton, QWidget, QLineEdit, QTableWidget, QTableWidgetItem, QMessageBox
 from ament_index_python import get_resource
 from python_qt_binding import loadUi
-
-import json
-
+from python_qt_binding.QtWidgets import QWidget, QTableWidgetItem, QMessageBox
 from shared.enums import ControlKeyEnum
 from shared.inner_communication import innerCommunication
-
-# from setup_panel.dashboard_element import DashboardElementWidget
-
-
-import rclpy
-from rclpy.node import Node
-
-from std_msgs.msg import String
-
-from .dashboard_element import DashboardElementWidget \
 
 
 class SetupWidget(QWidget):
@@ -30,12 +17,12 @@ class SetupWidget(QWidget):
 
         self.stack = plugin
 
-        _, self.shared_path = get_resource('packages', 'shared')
-        _, self.package_path = get_resource('packages', 'setup_panel')
-        ui_file = os.path.join(self.package_path, 'share', 'setup_panel', 'resource', 'setup.ui')
+        _, self.sharedPath = get_resource('packages', 'shared')
+        _, self.packagePath = get_resource('packages', 'setup_panel')
+        ui_file = os.path.join(self.packagePath, 'share', 'setup_panel', 'resource', 'setup.ui')
         loadUi(ui_file, self)
 
-        self.defaultFilePath = os.path.join(self.shared_path, 'share', 'shared', 'data', 'default.json')
+        self.defaultFilePath = os.path.join(self.sharedPath, 'share', 'shared', 'data', 'default.json')
 
         self.addMode = False
 
@@ -45,16 +32,16 @@ class SetupWidget(QWidget):
             self.data = self.loadData(self.dataFilePath)
         else:
             self.addMode = True
-            self.dataPath = os.path.join(self.shared_path, 'share', 'shared', 'data', 'robots')
+            self.dataPath = os.path.join(self.sharedPath, 'share', 'shared', 'data', 'robots')
             self.data = self.loadData(self.defaultFilePath)
 
             currentFiles = os.listdir(self.dataPath)
             for index in range(len(os.listdir(self.dataPath)) + 1):
-                filePath = 'data' + str(index) + '.json'
-                if filePath in currentFiles:
+                self.fileName = 'data' + str(index) + '.json'
+                if self.fileName in currentFiles:
                     continue
                 else:
-                    self.dataFilePath = self.dataPath + '/' + filePath
+                    self.dataFilePath = self.dataPath + '/' + self.fileName
                     break
 
         self.loadJson()
@@ -120,10 +107,6 @@ class SetupWidget(QWidget):
             self.data = self.loadData(self.defaultFilePath)
             self.loadJson()
 
-    def __del__(self):
-        print('eeeeeeeeeeennnnnnnnnnnndddddddd')
-        # rclpy.shutdown()
-
     def goBack(self):
         self.stack.stack.setCurrentIndex(0)
 
@@ -158,12 +141,13 @@ class SetupWidget(QWidget):
         json.dump(self.data, dataFile)
         dataFile.close()
 
-        parent = self.parent()
-        setupDashboard = parent.widget(0)
-        # dashboardElement = DashboardElementWidget(self, fileName=self.fileName)
-        # setupDashboard.myForm.addRow(dashboardElement)
+        itemData = {
+            "fileName": self.fileName,
+            "filePath": self.dataFilePath,
+            "id": id,
+        }
 
-        innerCommunication.addRobotSignal.emit()
+        innerCommunication.addRobotSignal.emit(itemData)
         self.goBack()
 
     def updateRobotData(self):
@@ -176,11 +160,16 @@ class SetupWidget(QWidget):
         json.dump(data, dataFile)
         dataFile.close()
 
-        innerCommunication.closeApp.emit()
-        self.goBack()
+        id = data['id']
 
-    def test1(self):
-        print('qqqqqqqqqqqqqqqwwwwwwwwwwwwwwwwwww aaaaaaaaaaaaa')
+        itemData = {
+            "fileName": self.fileName,
+            "filePath": self.dataFilePath,
+            "id": id,
+        }
+
+        innerCommunication.updateRobotSignal.emit(itemData)
+        self.goBack()
 
     def resizeEvent(self, event):
         pass

@@ -5,7 +5,8 @@
     "forward": "w",
     "right": "d",
     "backward": "s",
-    "left": "a"
+    "left": "a",
+    "stable": "Q"
   },
   "dynamic": {
     "forward": {

@@ -1,6 +1,6 @@
 from rqt_gui_py.plugin import Plugin
 from .setup_widget import SetupWidget
-from .setup_dashboard import SetupDashboardWidget
+from .setup_dashboard_widget import SetupDashboardWidget
 from .setup_dashboard_stack import SetupDashboardStackWidget
 
 

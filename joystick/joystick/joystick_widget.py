@@ -1,4 +1,5 @@
 # This Python file uses the following encoding: utf-8
+import json
 import os
 import threading
 import time
@@ -8,9 +9,8 @@ from python_qt_binding import QtCore
 from python_qt_binding import loadUi
 from python_qt_binding.QtCore import Qt, QPoint
 from python_qt_binding.QtGui import QPainter, QBrush, QPen
-from python_qt_binding.QtWidgets import QWidget
-from shared.enums import ControlKeyEnum
 from shared.base_widget.base_widget import BaseWidget
+from shared.enums import ControlKeyEnum
 
 
 class JoystickWidget(BaseWidget):
@@ -24,27 +24,29 @@ class JoystickWidget(BaseWidget):
     def __init__(self, node=None, plugin=None,stack=None):
         super(JoystickWidget, self).__init__()
 
-        print("JoystickWidget")
-        print(stack)
         self.stack=stack
 
         _, package_path = get_resource('packages', 'joystick')
         ui_file = os.path.join(package_path, 'share', 'joystick', 'resource', 'joystick.ui')
         loadUi(ui_file, self)
 
-        # self.setFocusPolicy(Qt.ClickFocus)
-        # self.setFocus()
-
         self.pressedKeys = []
         self.xMove = 0
         self.yMove = 0
         self.keyPressedThread = threading.Thread()
 
-        # self.optionsManager = OptionsManager(self.comboBox, self.stack)
-        # self.optionsManager.initializeRobotsOptions()
+        self.initializeRobotsOptions()
+        self.initializeSettings(self.comboBox.currentData()['filePath'])
 
     def initializeSettings(self, filePath):
-        print('initializeSettings')
+        dataFile = open(filePath)
+        data = json.load(dataFile)
+        dataFile.close()
+        self.controlKeys = data['controlKeys']
+
+        for key in self.controlKeys:
+            controlValue = self.controlKeys[key].upper()
+            self.controlKeys[key] = QtCore.Qt.Key(ord(controlValue))
 
     def paintEvent(self, event):
         painter = QPainter(self)
@@ -126,25 +128,28 @@ class JoystickWidget(BaseWidget):
     def keyPressEvent(self, event):
         if event.isAutoRepeat():
             return
+        # key = QtCore.Qt.Key(event.key())
         key = event.key()
-        if key == QtCore.Qt.Key_W:
+
+        if key == self.controlKeys[ControlKeyEnum.FORWARD]:
             self.pressedKeys.append(ControlKeyEnum.FORWARD)
             self.yMove = -1
-        elif event.key() == QtCore.Qt.Key_D:
+        elif key == self.controlKeys[ControlKeyEnum.RIGHT]:
             self.pressedKeys.append(ControlKeyEnum.RIGHT)
             self.xMove = 1
-        elif event.key() == QtCore.Qt.Key_S:
+        elif key == self.controlKeys[ControlKeyEnum.BACKWARD]:
             self.pressedKeys.append(ControlKeyEnum.BACKWARD)
             self.yMove = 1
-        elif event.key() == QtCore.Qt.Key_A:
+        elif key == self.controlKeys[ControlKeyEnum.LEFT]:
             self.pressedKeys.append(ControlKeyEnum.LEFT)
             self.xMove = -1
-        elif event.key() == QtCore.Qt.Key_Q:
+        elif key == self.controlKeys[ControlKeyEnum.STABLE]:
             self.pressedKeys.append(ControlKeyEnum.STABLE)
         else:
             event.accept()
             return
         if not self.keyPressedThread.is_alive():
+            self.keyPressedFlag = True
             self.keyPressedThread = threading.Thread(target=self.calculateKeyPressed, args=())
             self.keyPressedThread.start()
 
@@ -152,31 +157,31 @@ class JoystickWidget(BaseWidget):
         if event.isAutoRepeat():
             return
         key = event.key()
-        if key == QtCore.Qt.Key_W:
+        if key == self.controlKeys[ControlKeyEnum.FORWARD]:
             self.pressedKeys.remove(ControlKeyEnum.FORWARD)
             if ControlKeyEnum.BACKWARD in self.pressedKeys:
                 self.yMove = 1
             else:
                 self.yMove = 0
-        elif event.key() == QtCore.Qt.Key_D:
+        elif key == self.controlKeys[ControlKeyEnum.RIGHT]:
             self.pressedKeys.remove(ControlKeyEnum.RIGHT)
             if ControlKeyEnum.LEFT in self.pressedKeys:
                 self.xMove = -1
             else:
                 self.xMove = 0
-        elif event.key() == QtCore.Qt.Key_S:
+        elif key == self.controlKeys[ControlKeyEnum.BACKWARD]:
             self.pressedKeys.remove(ControlKeyEnum.BACKWARD)
             if ControlKeyEnum.FORWARD in self.pressedKeys:
                 self.yMove = -1
             else:
                 self.yMove = 0
-        elif event.key() == QtCore.Qt.Key_A:
+        elif key == self.controlKeys[ControlKeyEnum.LEFT]:
             self.pressedKeys.remove(ControlKeyEnum.LEFT)
             if ControlKeyEnum.RIGHT in self.pressedKeys:
                 self.xMove = 1
             else:
                 self.xMove = 0
-        elif event.key() == QtCore.Qt.Key_Q:
+        elif key == QtCore.Qt.Key_Q:
             self.pressedKeys.remove(ControlKeyEnum.STABLE)
         else:
             event.accept()

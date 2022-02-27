@@ -12,15 +12,14 @@ import os
 
 
 class DashboardElementWidget(QWidget):
-    def __init__(self, node, plugin=None, fileName=None,context=None):
+    def __init__(self, node, plugin=None, fileName=None, stack=None):
         super(DashboardElementWidget, self).__init__()
 
         self.fileName = fileName
+        self.stack=stack
 
+        self.loadUi()
         _, shared_path = get_resource('packages', 'shared')
-        _, package_path = get_resource('packages', 'setup_panel')
-        ui_file = os.path.join(package_path, 'share', 'setup_panel', 'resource', 'dashboard_element.ui')
-        loadUi(ui_file, self)
 
         self.dataFilePath = os.path.join(shared_path, 'share', 'shared', 'data', 'robots',fileName)
         self.loadJson()
@@ -28,12 +27,15 @@ class DashboardElementWidget(QWidget):
         self.modifyButton.clicked.connect(self.modifyButtonClicked)
         self.deleteButton.clicked.connect(self.deleteClicked)
 
+    def loadUi(self):
+        _, packagePath = get_resource('packages', 'setup_panel')
+        uiFile = os.path.join(packagePath, 'share', 'setup_panel', 'resource', 'dashboard_element.ui')
+        loadUi(uiFile, self)
+
     def loadJson(self):
         dataFile = open(self.dataFilePath)
         data = json.load(dataFile)
         dataFile.close()
-
-        # print(data)
 
         self.robotName=data['robotName']
         self.id=data['id']
@@ -47,11 +49,10 @@ class DashboardElementWidget(QWidget):
 
 
         if reply == QMessageBox.Yes:
-            self.parent().parent().parent().parent().myForm.removeRow(self)
+            # self.parent().parent().parent().parent().myForm.removeRow(self)
             os.remove(self.dataFilePath)
 
-        print('self.fileName')
-        print(self.fileName)
+
         itemData = {
             "fileName": self.fileName,
             "filePath": self.dataFilePath,
@@ -61,6 +62,5 @@ class DashboardElementWidget(QWidget):
         innerCommunication.deleteRobotSignal.emit(itemData)
 
     def modifyButtonClicked(self):
-        print(self.parent().parent().parent().parent().parent().parent())
-        self.parent().parent().parent().parent().parent().parent().goToSettings(self.dataFilePath)
+        self.stack.goToSettings(self.dataFilePath)
 

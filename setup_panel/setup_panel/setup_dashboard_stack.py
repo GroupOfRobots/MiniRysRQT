@@ -1,52 +1,31 @@
 # This Python file uses the following encoding: utf-8
-import os, os.path
 
 
+from python_qt_binding.QtWidgets import QStackedWidget
 
-import asyncio
-import can
+from .setup_dashboard_widget import SetupDashboardWidget
+from .setup_widget import SetupWidget
 
-
-
-from python_qt_binding.QtWidgets import QWidget, QStackedWidget, QStackedLayout, QListWidget, QGridLayout, QLayout
-
+from shared.stack_widget.stack_widget import StackWidget
 
 
 # import QObjectClass
 # import PyQt5.QtWidgets
 
-
-from .dashboard_element import DashboardElementWidget
-from .setup_widget import SetupWidget
-from .setup_dashboard import SetupDashboardWidget
-
-
-class SetupDashboardStackWidget(QWidget):
+class SetupDashboardStackWidget(StackWidget):
     def __init__(self, node, plugin=None, context=None):
         super(SetupDashboardStackWidget, self).__init__()
 
-        self.context= context
+        self.context = context
 
-        # self.setObjectName("aaa")
+        self.node = node
 
-        self.stack = QStackedWidget(self)
-
-        self.node =node
-
-        self.controlPanelWidget = SetupDashboardWidget(node, plugin = self,context=context)
-
-        self.stack.addWidget(self.controlPanelWidget)
-
-        hbox = QStackedLayout(self)
-        hbox.addWidget(self.stack)
-
-        self.stack.setCurrentIndex(0)
-
-        self.setLayout(hbox)
+        self.mainChildWidget = SetupDashboardWidget(stack=self)
+        self.stack.addWidget(self.mainChildWidget)
 
     def goToSettings(self, dataFilePath=None):
         if hasattr(self, 'setupWidget'):
             self.stack.removeWidget(self.setupWidget)
-        self.setupWidget = SetupWidget(self.node, dataFilePath=dataFilePath,plugin=self,context=self.context)
+        self.setupWidget = SetupWidget(self.node, dataFilePath=dataFilePath, plugin=self, context=self.context)
         self.stack.addWidget(self.setupWidget)
         self.stack.setCurrentIndex(1)
