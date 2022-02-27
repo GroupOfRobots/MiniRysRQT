@@ -1,7 +1,7 @@
 <library path="lib">
   <class name="SetupPanel" type="setup_panel.setup_panel.SetupPanel" base_class_type="rqt_gui_py::Plugin">
     <description>
-      Control panel control gui
+      Setup panel gui
     </description>
     <qtgui>
 <!--      &lt;!&ndash; optional grouping...-->
@@ -12,7 +12,7 @@
 <!--        <label>Subgroup</label>-->
 <!--      </group>-->
 <!--      &ndash;&gt;-->
-      <label>Setup panel</label>
+      <label>Setup Panel</label>
       <icon type="theme">emblem-system</icon>
       <statustip>Setup panel interface</statustip>
     </qtgui>

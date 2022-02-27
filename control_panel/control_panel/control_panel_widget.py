@@ -1,55 +1,36 @@
 # This Python file uses the following encoding: utf-8
+import json
 import os
 
-import rclpy
-
-from std_msgs.msg import String
-
-from python_qt_binding import QtCore
-from python_qt_binding.QtCore import Qt
-from python_qt_binding.QtWidgets import QPushButton, QWidget, QComboBox
 from ament_index_python import get_resource
+from python_qt_binding import QtCore
 from python_qt_binding import loadUi
-
+from python_qt_binding.QtCore import Qt
+from python_qt_binding.QtWidgets import QPushButton, QWidget
 from shared.enums import ControlKeyEnum
+from shared.inner_communication import innerCommunication
+from shared.base_widget.base_widget import BaseWidget
+
 from .elements.button import Button
 
-import logging
-from watchdog.observers import Observer
-from watchdog.events import LoggingEventHandler
 
-import rclpy
-from rclpy.node import Node
-
-from std_msgs.msg import String
-
-from shared.inner_communication import innerCommunication
-from shared.utils.utils import initializeRobotsOptions
-
-
-import json
-
-class ControlPanelWidget(QWidget):
-    def __init__(self, node, plugin=None):
+class ControlPanelWidget(BaseWidget):
+    def __init__(self, stack=None):
         super(ControlPanelWidget, self).__init__()
 
-        self.node = node
-        self.controlPanelStack = plugin
+        self.stack = stack
 
         self.loadUI()
 
-        # _, shared_package_path = get_resource('packages', 'shared')
-        # self.dataFilePath = os.path.join(shared_package_path, 'share', 'shared', 'data', 'robots')
-
-        innerCommunication.closeApp.connect(self.test1)
         innerCommunication.addRobotSignal.connect(self.initializeRobotsOptions)
-        innerCommunication.deleteRobotSignal.connect(self.onDeleteRobotSignal)
+        # innerCommunication.deleteRobotSignal.connect(self.onDeleteRobotSignal)
 
         self.setFocusPolicy(Qt.ClickFocus)
         self.setFocus()
 
         self.defineButtons()
-        initializeRobotsOptions(self.comboBox)
+
+        self.initializeRobotsOptions()
 
         self.comboBox.currentIndexChanged.connect(self.onChoosenRobotChange)
         currentData = self.comboBox.currentData()
@@ -66,18 +47,6 @@ class ControlPanelWidget(QWidget):
     def test1(self):
         print('wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww aaaaaaaaaaaaa')
 
-    def onDeleteRobotSignal(self, data):
-        indexOfElementToBeRemoved = self.comboBox.findData(data)
-
-        if indexOfElementToBeRemoved == self.comboBox.currentIndex():
-            self.controlPanelStack.goToDeletedRobotScreen()
-
-        self.comboBox.removeItem(indexOfElementToBeRemoved)
-
-
-
-    def initializeRobotsOptions(self):
-        initializeRobotsOptions(self.comboBox)
 
     def initializeSettings(self, filePath):
         dataFile = open(filePath)
@@ -94,20 +63,10 @@ class ControlPanelWidget(QWidget):
         if data:
             self.setRobotOnScreen(data)
 
-    def setRobotOnScreen(self, data):
-        filePath = data['filePath']
-        index=self.comboBox.findData(data)
-        self.comboBox.setCurrentIndex(index)
-        self.initializeSettings(filePath)
-
     def keyPressEvent(self, event):
         if event.isAutoRepeat():
             return
         key = QtCore.Qt.Key(event.key())
-
-        # print('key')
-        # print(key)
-        # print(event.key())
 
         if key == self.controlKeys[ControlKeyEnum.FORWARD]:
             self.forwardButtonElement.pressedKeyState()
@@ -134,7 +93,7 @@ class ControlPanelWidget(QWidget):
         event.accept()
 
     def settingsClicked(self):
-        self.controlPanelStack.goToSettings(self.dataFilePath)
+        self.stack.goToSettings(self.dataFilePath)
 
     def buttonClicked(self):
         pass

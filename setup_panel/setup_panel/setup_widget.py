@@ -10,12 +10,10 @@ from shared.inner_communication import innerCommunication
 
 
 class SetupWidget(QWidget):
-    def __init__(self, node=None, plugin=None, dataFilePath=None, context=None):
+    def __init__(self, stack=None, dataFilePath=None):
         super(SetupWidget, self).__init__()
 
-        self.node = node
-
-        self.stack = plugin
+        self.stack = stack
 
         _, self.sharedPath = get_resource('packages', 'shared')
         _, self.packagePath = get_resource('packages', 'setup_panel')
@@ -163,7 +161,7 @@ class SetupWidget(QWidget):
         id = data['id']
 
         itemData = {
-            "fileName": self.fileName,
+            "fileName": None,
             "filePath": self.dataFilePath,
             "id": id,
         }

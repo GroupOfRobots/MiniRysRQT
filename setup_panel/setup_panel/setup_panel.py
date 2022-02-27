@@ -1,23 +1,15 @@
 from rqt_gui_py.plugin import Plugin
-from .setup_widget import SetupWidget
-from .setup_dashboard_widget import SetupDashboardWidget
 from .setup_dashboard_stack import SetupDashboardStackWidget
 
-
 class SetupPanel(Plugin):
-
     def __init__(self, context):
         super(SetupPanel, self).__init__(context)
-        self._node = context.node
-        self._node123 = context.node
-        self.setObjectName('Test')
+        self._widget = SetupDashboardStackWidget()
+        self._widget.setObjectName('SetupPanel')
 
-        self._widget = SetupDashboardStackWidget(context.node, self,context)
+        self._widget.setWindowTitle('Setup Panel')
 
         if context.serial_number() > 1:
             self._widget.setWindowTitle(
                 self._widget.windowTitle() + (' (%d)' % context.serial_number()))
         context.add_widget(self._widget)
-
-    # def shutdown_plugin(self):
-    #     print("shuutdownaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")

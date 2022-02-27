@@ -5,7 +5,7 @@ from shared.deleted_robot_screen.deleted_robot_screen import DeletedRobotScreenW
 
 
 class StackWidget(QWidget):
-    def __init__(self, node=None, plugin=None):
+    def __init__(self):
         super(StackWidget, self).__init__()
         self.stack = QStackedWidget(self)
 

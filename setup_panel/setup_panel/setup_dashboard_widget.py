@@ -5,11 +5,8 @@ import os.path
 from ament_index_python import get_resource
 from python_qt_binding import loadUi
 from python_qt_binding.QtWidgets import QWidget, QGroupBox, QFormLayout
-
 from .dashboard_element import DashboardElementWidget
-
 from shared.inner_communication import innerCommunication
-
 
 class SetupDashboardWidget(QWidget):
     def __init__(self, stack=None):
@@ -17,50 +14,55 @@ class SetupDashboardWidget(QWidget):
 
         self.stack = stack
 
-        self._loadUi()
-        self._setupDashboardElements()
+        self.loadUi()
+
+        _, sharedPath = get_resource('packages', 'shared')
+        self.dataFilePath = os.path.join(sharedPath, 'share', 'shared', 'data', 'robots')
+
+        self.elementDictionary = {}
+
+        self.groupBox = QGroupBox()
+        self.form = QFormLayout()
+        self.setupDashboardElements()
 
         self.addNewRobotButton.clicked.connect(self.addNewRobot)
 
         innerCommunication.addRobotSignal.connect(self.addDashboardElement)
         innerCommunication.deleteRobotSignal.connect(self.onDeleteRobotSignal)
+        innerCommunication.updateRobotSignal.connect(self.onUpdateRobotSignal)
 
-    def _setupDashboardElements(self):
-        self.groupBox = QGroupBox()
-        self.myForm = QFormLayout()
+    def setupDashboardElements(self):
+        for fileName in (os.listdir(self.dataFilePath)):
+            element = DashboardElementWidget(fileName=fileName, stack=self.stack)
+            self.elementDictionary[self.dataFilePath + '/'+ fileName] = element
+            self.form.addRow(element)
 
-        _, sharedPath = get_resource('packages', 'shared')
-        dataFilePath = os.path.join(sharedPath, 'share', 'shared', 'data', 'robots')
-
-        self.elementDictionary = {}
-
-        for fileName in (os.listdir(dataFilePath)):
-            element = DashboardElementWidget(self, fileName=fileName, stack=self.stack)
-            self.elementDictionary[fileName] = element
-            self.myForm.addRow(element)
-
-        self.groupBox.setLayout(self.myForm)
+        self.groupBox.setLayout(self.form)
 
         self.scrollArea.setWidget(self.groupBox)
 
-    def _loadUi(self):
+    def loadUi(self):
         _, packagePath = get_resource('packages', 'setup_panel')
         uiFile = os.path.join(packagePath, 'share', 'setup_panel', 'resource', 'setup_dashboard.ui')
         loadUi(uiFile, self)
 
-
     def onDeleteRobotSignal(self, data):
-        fileName = data['fileName']
-        element = self.elementDictionary[fileName]
-        self.myForm.removeRow(element)
+        dataFilePath = data['filePath']
+        element = self.elementDictionary[dataFilePath]
+        self.form.removeRow(element)
         self.update()
 
     def addDashboardElement(self, data):
-        fileName = data['fileName']
+        fileName = data['filePath']
         element = DashboardElementWidget(self, fileName=fileName, stack=self.stack)
-        self.elementDictionary[fileName] = element
-        self.myForm.addRow(element)
+        self.elementDictionary[self.dataFilePath + '/'+ fileName] = element
+        self.form.addRow(element)
         self.update()
+
+    def onUpdateRobotSignal(self, data):
+        filePath = data['filePath']
+        element = self.elementDictionary[filePath]
+        element.loadJson()
 
     def addNewRobot(self):
         self.stack.goToSettings()

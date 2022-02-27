@@ -19,6 +19,7 @@ class BaseWidget(QWidget):
         self.setFocus()
 
         innerCommunication.deleteRobotSignal.connect(self.onDeleteRobotSignal)
+        innerCommunication.addRobotSignal.connect(self.onAddRobotSignal)
 
     def initializeRobotsOptions(self):
         _, shared_package_path = get_resource('packages', 'shared')
@@ -47,6 +48,9 @@ class BaseWidget(QWidget):
             self.stack.goToDeletedRobotScreen()
 
         self.comboBox.removeItem(indexOfElementToBeRemoved)
+
+    def onAddRobotSignal(self):
+        pass
 
     def setRobotOnScreen(self, data):
         filePath = data['filePath']

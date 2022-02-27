@@ -1,8 +1,6 @@
 # This Python file uses the following encoding: utf-8
 
 from shared.inner_communication import innerCommunication
-
-
 from python_qt_binding.QtWidgets import QPushButton, QWidget,QLineEdit,QTableWidget,QTableWidgetItem,QMessageBox
 from ament_index_python import get_resource
 from python_qt_binding import loadUi
@@ -10,9 +8,8 @@ from python_qt_binding import loadUi
 import json
 import os
 
-
 class DashboardElementWidget(QWidget):
-    def __init__(self, node, plugin=None, fileName=None, stack=None):
+    def __init__(self, fileName=None, stack=None):
         super(DashboardElementWidget, self).__init__()
 
         self.fileName = fileName
@@ -49,9 +46,7 @@ class DashboardElementWidget(QWidget):
 
 
         if reply == QMessageBox.Yes:
-            # self.parent().parent().parent().parent().myForm.removeRow(self)
             os.remove(self.dataFilePath)
-
 
         itemData = {
             "fileName": self.fileName,
@@ -63,4 +58,3 @@ class DashboardElementWidget(QWidget):
 
     def modifyButtonClicked(self):
         self.stack.goToSettings(self.dataFilePath)
-
