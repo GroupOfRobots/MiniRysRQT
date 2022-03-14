@@ -10,16 +10,17 @@ from shared.inner_communication import innerCommunication
 
 
 class BaseWidget(QWidget):
-    def __init__(self, node=None, plugin=None,stack=None):
+    def __init__(self, stack=None):
         super(BaseWidget, self).__init__()
 
-        self.stack=stack
+        self.stack = stack
 
         self.setFocusPolicy(Qt.ClickFocus)
         self.setFocus()
 
         innerCommunication.deleteRobotSignal.connect(self.onDeleteRobotSignal)
         innerCommunication.addRobotSignal.connect(self.onAddRobotSignal)
+        innerCommunication.updateRobotSignal.connect(self.onUpdateRobotSignal)
 
     def initializeRobotsOptions(self):
         _, shared_package_path = get_resource('packages', 'shared')
@@ -34,12 +35,26 @@ class BaseWidget(QWidget):
             id = data['id']
 
             itemData = {
-                "fileName": fileName,
+                "fileName": None,
                 "filePath": filePath,
                 "id": id,
             }
 
             self.comboBox.addItem(robotName, itemData)
+
+    def onUpdateRobotSignal(self, data):
+        index = self.comboBox.findData(data)
+        filePath = data['filePath']
+        dataFile = open(filePath)
+        data = json.load(dataFile)
+        dataFile.close()
+        robotName = data['robotName']
+        self.comboBox.setItemText(index, robotName)
+
+        if index == self.comboBox.currentIndex():
+            self.initializeSettings(filePath)
+
+        self.update()
 
     def onDeleteRobotSignal(self, data):
         indexOfElementToBeRemoved = self.comboBox.findData(data)
@@ -49,15 +64,31 @@ class BaseWidget(QWidget):
 
         self.comboBox.removeItem(indexOfElementToBeRemoved)
 
-    def onAddRobotSignal(self):
-        pass
+    def onAddRobotSignal(self, data):
+        fileName = data['fileName']
+        filePath = data['filePath']
+        id = data['id']
+
+        dataFile = open(filePath)
+        data = json.load(dataFile)
+        dataFile.close()
+        robotName = data['robotName']
+
+        itemData = {
+            "fileName": None,
+            "filePath": filePath,
+            "id": id,
+        }
+
+        self.comboBox.addItem(robotName, itemData)
 
     def setRobotOnScreen(self, data):
         filePath = data['filePath']
-        index=self.comboBox.findData(data)
+        index = self.comboBox.findData(data)
         self.comboBox.setCurrentIndex(index)
         self.initializeSettings(filePath)
 
     @abstractmethod
     def initializeSettings(self, filePath):
+        print('abstractmethod')
         pass

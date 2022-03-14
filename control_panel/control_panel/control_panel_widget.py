@@ -8,25 +8,21 @@ from python_qt_binding import loadUi
 from python_qt_binding.QtCore import Qt
 from python_qt_binding.QtWidgets import QPushButton, QWidget
 from shared.enums import ControlKeyEnum
-from shared.inner_communication import innerCommunication
 from shared.base_widget.base_widget import BaseWidget
 
 from .elements.button import Button
+
+import rclpy
+from rclpy.node import Node
+from minirys_msgs.msg import MotorCommand
 
 
 class ControlPanelWidget(BaseWidget):
     def __init__(self, stack=None):
         super(ControlPanelWidget, self).__init__()
-
-        self.stack = stack
+        BaseWidget.__init__(self, stack)
 
         self.loadUI()
-
-        innerCommunication.addRobotSignal.connect(self.initializeRobotsOptions)
-        # innerCommunication.deleteRobotSignal.connect(self.onDeleteRobotSignal)
-
-        self.setFocusPolicy(Qt.ClickFocus)
-        self.setFocus()
 
         self.defineButtons()
 
@@ -39,20 +35,20 @@ class ControlPanelWidget(BaseWidget):
 
             self.initializeSettings(self.dataFilePath)
 
+        self.node = Node('control_panel')
+        self.publisher = self.node.create_publisher(MotorCommand, '/internal/motor_command', 10)
+
     def loadUI(self):
-        _, package_path = get_resource('packages', 'control_panel')
-        ui_file = os.path.join(package_path, 'share', 'control_panel', 'resource', 'control_panel.ui')
-        loadUi(ui_file, self)
-
-    def test1(self):
-        print('wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww aaaaaaaaaaaaa')
-
+        _, packagePath = get_resource('packages', 'control_panel')
+        uiFile = os.path.join(packagePath, 'share', 'control_panel', 'resource', 'control_panel.ui')
+        loadUi(uiFile, self)
 
     def initializeSettings(self, filePath):
         dataFile = open(filePath)
         data = json.load(dataFile)
         dataFile.close()
         self.controlKeys = data['controlKeys']
+        self.dynamic = data['dynamic']
 
         for key in self.controlKeys:
             controlValue = self.controlKeys[key].upper()
@@ -67,14 +63,31 @@ class ControlPanelWidget(BaseWidget):
         if event.isAutoRepeat():
             return
         key = QtCore.Qt.Key(event.key())
+        msg = MotorCommand()
 
         if key == self.controlKeys[ControlKeyEnum.FORWARD]:
             self.forwardButtonElement.pressedKeyState()
+            # print(self.dynamic)
+            msg.speed_l = float(self.dynamic['forward']['leftEngine'])
+            msg.speed_r = float(self.dynamic['forward']['rightEngine'])
+            print(msg)
+            self.publisher.publish(msg)
         elif event.key() == self.controlKeys[ControlKeyEnum.RIGHT]:
+            msg.speed_l = 20.0
+            msg.speed_r = 20.0
+            self.publisher.publish(msg)
+
             self.rightButtonElement.pressedKeyState()
         elif event.key() == self.controlKeys[ControlKeyEnum.BACKWARD]:
+            msg.speed_l = -20.0
+            msg.speed_r = 20.0
+            self.publisher.publish(msg)
+
             self.backwardButtonElement.pressedKeyState()
         elif event.key() == self.controlKeys[ControlKeyEnum.LEFT]:
+            msg.speed_l = -20.0
+            msg.speed_r = -20.0
+            self.publisher.publish(msg)
             self.leftButtonElement.pressedKeyState()
         event.accept()
 
@@ -82,13 +95,25 @@ class ControlPanelWidget(BaseWidget):
         if event.isAutoRepeat():
             return
         key = event.key()
+        msg = MotorCommand()
+        msg.speed_l = 0.0
+        msg.speed_r = 0.0
+
         if key == self.controlKeys[ControlKeyEnum.FORWARD]:
+
+            self.publisher.publish(msg)
             self.forwardButtonElement.releasedKeyState()
         elif event.key() == self.controlKeys[ControlKeyEnum.RIGHT]:
+            self.publisher.publish(msg)
+
             self.rightButtonElement.releasedKeyState()
         elif event.key() == self.controlKeys[ControlKeyEnum.BACKWARD]:
+            self.publisher.publish(msg)
+
             self.backwardButtonElement.releasedKeyState()
         elif event.key() == self.controlKeys[ControlKeyEnum.LEFT]:
+            self.publisher.publish(msg)
+
             self.leftButtonElement.releasedKeyState()
         event.accept()
 

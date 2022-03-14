@@ -80,7 +80,7 @@ background-color:none;</string>
         </property>
         <property name="icon">
          <iconset>
-          <normaloff>../../control_panel/resource/imgs/settings1.png</normaloff>../../control_panel/resource/imgs/settings1.png</iconset>
+          <normaloff>../../shared/resource/imgs/settings1.png</normaloff>../../shared/resource/imgs/settings1.png</iconset>
         </property>
        </widget>
       </item>

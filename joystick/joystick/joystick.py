@@ -11,7 +11,7 @@ class Joystick(Plugin):
 
         self.setObjectName('Test')
 
-        self._widget = JoystickStack(context.node, self)
+        self._widget = JoystickStack()
 
         if context.serial_number() > 1:
             self._widget.setWindowTitle(

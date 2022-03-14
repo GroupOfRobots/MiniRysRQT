@@ -8,7 +8,7 @@ class Dashboard(Plugin):
         self._node = context.node
         self.setObjectName('Test')
 
-        self._stack = DashboardStack(context.node, self)
+        self._stack = DashboardStack()
 
         if context.serial_number() > 1:
             self._stack.setWindowTitle(

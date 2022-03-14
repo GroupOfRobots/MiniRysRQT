@@ -42,7 +42,7 @@
       <item>
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>Rys</string>
+         <string>ROBOT SETUP</string>
         </property>
        </widget>
       </item>
@@ -206,8 +206,25 @@
         </property>
        </widget>
       </item>
-      <item row="13" column="1">
-       <widget class="QOpenGLWidget" name="openGLWidget"/>
+      <item row="9" column="0">
+       <widget class="QLabel" name="stableKeyLabel">
+        <property name="text">
+         <string>STABLE KEY</string>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="1">
+       <widget class="QLineEdit" name="stableKeyInput">
+        <property name="maximumSize">
+         <size>
+          <width>50</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="maxLength">
+         <number>1</number>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -262,6 +279,11 @@
      </row>
      <row>
       <property name="text">
+       <string>RIGHT</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
        <string>BACKWARD</string>
       </property>
      </row>
@@ -273,6 +295,11 @@
      <row>
       <property name="text">
        <string>BACKWARD+RIGHT</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>LEFT</string>
       </property>
      </row>
      <column>

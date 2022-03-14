@@ -2,7 +2,7 @@
 
 from python_qt_binding.QtWidgets import QWidget, QStackedWidget, QStackedLayout
 from shared.deleted_robot_screen.deleted_robot_screen import DeletedRobotScreenWidget
-
+from setup_panel.setup_widget import SetupWidget
 
 class StackWidget(QWidget):
     def __init__(self):
@@ -17,7 +17,7 @@ class StackWidget(QWidget):
         self.mainChildWidget=None
 
     def goToDeletedRobotScreen(self):
-        self.deletedRobotScreenWidget = DeletedRobotScreenWidget(stackWidget=self)
+        self.deletedRobotScreenWidget = DeletedRobotScreenWidget(stack=self)
         self.stack.addWidget(self.deletedRobotScreenWidget)
         self.stack.setCurrentWidget(self.deletedRobotScreenWidget)
 
@@ -27,3 +27,10 @@ class StackWidget(QWidget):
         self.stack.removeWidget(self.deletedRobotScreenWidget)
         self.deletedRobotScreenWidget.deleteLater()
         self.deletedRobotScreenWidget = None
+
+    def goToSettings(self, dataFilePath=None):
+        if hasattr(self, 'setupWidget'):
+            self.stack.removeWidget(self.setupWidget)
+        self.setupWidget = SetupWidget(stack = self, dataFilePath=dataFilePath)
+        self.stack.addWidget(self.setupWidget)
+        self.stack.setCurrentWidget(self.setupWidget)

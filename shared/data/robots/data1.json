@@ -8,7 +8,7 @@
     "left": "a",
     "stable": "Q"
   },
-  "dynamic": {
+ "dynamic": {
     "forward": {
       "leftEngine": 100,
       "rightEngine": 100,
@@ -24,6 +24,11 @@
       "rightEngine": 100,
       "inertia": 1
     },
+    "right": {
+      "leftEngine": 100,
+      "rightEngine": 100,
+      "inertia": 1
+    },
     "backward": {
       "leftEngine": 100,
       "rightEngine": 100,
@@ -35,6 +40,11 @@
       "inertia": 1
     },
     "backwardRight": {
+      "leftEngine": 100,
+      "rightEngine": 100,
+      "inertia": 1
+    },
+    "left": {
       "leftEngine": 100,
       "rightEngine": 100,
       "inertia": 1

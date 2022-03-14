@@ -53,8 +53,8 @@ class SetupDashboardWidget(QWidget):
         self.update()
 
     def addDashboardElement(self, data):
-        fileName = data['filePath']
-        element = DashboardElementWidget(self, fileName=fileName, stack=self.stack)
+        fileName = data['fileName']
+        element = DashboardElementWidget( fileName=fileName, stack=self.stack)
         self.elementDictionary[self.dataFilePath + '/'+ fileName] = element
         self.form.addRow(element)
         self.update()

@@ -21,8 +21,9 @@ class JoystickWidget(BaseWidget):
     MARGIN = 0.05
     MARGIN_HORIZONTAL = 2 * MARGIN
 
-    def __init__(self, node=None, plugin=None,stack=None):
+    def __init__(self,stack=None):
         super(JoystickWidget, self).__init__()
+        BaseWidget.__init__(self, stack)
 
         self.stack=stack
 

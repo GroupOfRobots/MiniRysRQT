@@ -49,7 +49,7 @@ class DashboardElementWidget(QWidget):
             os.remove(self.dataFilePath)
 
         itemData = {
-            "fileName": self.fileName,
+            "fileName": None,
             "filePath": self.dataFilePath,
             "id": self.id,
         }
