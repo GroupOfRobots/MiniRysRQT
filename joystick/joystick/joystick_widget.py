@@ -12,6 +12,7 @@ from python_qt_binding.QtGui import QPainter, QBrush, QPen
 from shared.base_widget.base_widget import BaseWidget
 from shared.enums import ControlKeyEnum
 
+from python_qt_binding.QtWidgets import QWidget
 
 class JoystickWidget(BaseWidget):
     BOUNDARY_RADIUS = 0.45
@@ -21,11 +22,11 @@ class JoystickWidget(BaseWidget):
     MARGIN = 0.05
     MARGIN_HORIZONTAL = 2 * MARGIN
 
-    def __init__(self,stack=None):
+    def __init__(self, stack=None):
         super(JoystickWidget, self).__init__()
         BaseWidget.__init__(self, stack)
 
-        self.stack=stack
+        self.stack = stack
 
         _, package_path = get_resource('packages', 'joystick')
         ui_file = os.path.join(package_path, 'share', 'joystick', 'resource', 'joystick.ui')
@@ -38,6 +39,17 @@ class JoystickWidget(BaseWidget):
 
         self.initializeRobotsOptions()
         self.initializeSettings(self.comboBox.currentData()['filePath'])
+
+        self.joystickWidget.mouseMoveEvent = self.joystickWidgetMouseMove
+        self.setMouseTracking(False)
+
+    def joystickWidgetMouseMove(self, event):
+        self.joystickPosition = event.pos()
+        x = self.joystickPosition.x()
+        y = self.joystickPosition.y()
+
+        if self.checkIfPointIsInEllipse(x, y):
+            self.update()
 
     def initializeSettings(self, filePath):
         dataFile = open(filePath)
@@ -92,14 +104,6 @@ class JoystickWidget(BaseWidget):
     def mouseReleaseEvent(self, event):
         self.returnToCenter()
 
-    def mouseMoveEvent(self, event):
-        self.joystickPosition = event.pos()
-        x = self.joystickPosition.x()
-        y = self.joystickPosition.y()
-
-        if self.checkIfPointIsInEllipse(x, y):
-            self.update()
-
     def resizeEvent(self, event):
         self.joystickPosition = QPoint(self.joystickWidget.width() * 0.5, self.joystickWidget.height() * 0.5)
 
@@ -120,6 +124,7 @@ class JoystickWidget(BaseWidget):
     def checkIfPointIsInEllipse(self, x, y):
         h = self.joystickWidget.width() * 0.5
         k = self.joystickWidget.height() * 0.5
+
         # half of drawEllipse radius minus boundary margins from both sides
         rx = self.joystickWidget.width() * self.BOUNDARY_RADIUS - self.MARGIN_HORIZONTAL * self.joystickWidget.width()
         ry = self.joystickWidget.height() * self.BOUNDARY_RADIUS - self.MARGIN_HORIZONTAL * self.joystickWidget.height()
@@ -129,7 +134,6 @@ class JoystickWidget(BaseWidget):
     def keyPressEvent(self, event):
         if event.isAutoRepeat():
             return
-        # key = QtCore.Qt.Key(event.key())
         key = event.key()
 
         if key == self.controlKeys[ControlKeyEnum.FORWARD]:
