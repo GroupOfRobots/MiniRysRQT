@@ -1,0 +1,20 @@
+<library path="lib">
+  <class name="FanPanel" type="fan_panel.fan_panel.FanPanel" base_class_type="rqt_gui_py::Plugin">
+    <description>
+      Fan panel gui
+    </description>
+    <qtgui>
+<!--      &lt;!&ndash; optional grouping...-->
+<!--      <group>-->
+<!--        <label>Group</label>-->
+<!--      </group>-->
+<!--      <group>-->
+<!--        <label>Subgroup</label>-->
+<!--      </group>-->
+<!--      &ndash;&gt;-->
+      <label>Fan</label>
+      <icon type="theme">face-cool</icon>
+      <statustip>Fan panel interface</statustip>
+    </qtgui>
+  </class>
+</library>
