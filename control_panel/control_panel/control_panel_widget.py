@@ -16,9 +16,11 @@ import rclpy
 from rclpy.node import Node
 from minirys_msgs.msg import MotorCommand
 
+from std_msgs.msg import Float32, String
+
 
 class ControlPanelWidget(BaseWidget):
-    def __init__(self, stack=None):
+    def __init__(self, stack=None,node=None):
         super(ControlPanelWidget, self).__init__()
         BaseWidget.__init__(self, stack)
 
@@ -35,8 +37,9 @@ class ControlPanelWidget(BaseWidget):
 
             self.initializeSettings(self.dataFilePath)
 
-        self.node = Node('control_panel')
+        self.node = node
         self.publisher = self.node.create_publisher(MotorCommand, '/internal/motor_command', 10)
+        self.publisher2 = self.node.create_publisher(Float32, '/internal/fan_output', 10)
 
     def loadUI(self):
         _, packagePath = get_resource('packages', 'control_panel')
@@ -64,6 +67,10 @@ class ControlPanelWidget(BaseWidget):
             return
         key = QtCore.Qt.Key(event.key())
         msg = MotorCommand()
+
+        a = Float32()
+        a.data = 0.3
+        self.publisher2.publish(a)
 
         if key == self.controlKeys[ControlKeyEnum.FORWARD]:
             self.forwardButtonElement.pressedKeyState()
@@ -99,6 +106,12 @@ class ControlPanelWidget(BaseWidget):
         msg.speed_l = 0.0
         msg.speed_r = 0.0
 
+        # a= Float32(0)
+        a = Float32()
+        a.data = 0.0
+
+        self.publisher2.publish(a)
+
         if key == self.controlKeys[ControlKeyEnum.FORWARD]:
 
             self.publisher.publish(msg)
@@ -124,10 +137,11 @@ class ControlPanelWidget(BaseWidget):
         pass
 
     def defineButtons(self):
-        self.forwardButtonElement = Button(self.findChild(QPushButton, 'forwardButton'))
-        self.rightButtonElement = Button(self.findChild(QPushButton, 'rightButton'))
-        self.backwardButtonElement = Button(self.findChild(QPushButton, 'backwardButton'))
-        self.leftButtonElement = Button(self.findChild(QPushButton, 'leftButton'))
+        self.forwardButtonElement = Button(self.forwardButton)
+
+        self.rightButtonElement = Button(self.rightButton)
+        self.backwardButtonElement = Button(self.backwardButton)
+        self.leftButtonElement = Button(self.leftButton)
 
         self.settingsButton.clicked.connect(self.settingsClicked)
         self.forwardButton.clicked.connect(self.buttonClicked)

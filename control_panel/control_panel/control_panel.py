@@ -6,7 +6,7 @@ class ControlPanel(Plugin):
         super(ControlPanel, self).__init__(context)
         self.setObjectName('ControlPanel')
 
-        self._widget = ControlPanelStack()
+        self._widget = ControlPanelStack(node=context.node)
         self._widget.setWindowTitle('Control Panel')
 
         if context.serial_number() > 1:

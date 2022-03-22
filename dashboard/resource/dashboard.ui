@@ -100,15 +100,15 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QGroupBox" name="groupBox_2">
+        <widget class="QGroupBox" name="batteryGroupBox">
          <property name="styleSheet">
           <string notr="true"> QGroupBox {
- background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                   stop: 0 #bbbbbb, stop: 1 #eeeeee);
- border: 2px solid #222222;
- border-radius: 5px;
- margin-top: 0; /* leave space at the top for the title */
-
+ 	background-color: qlineargradient(
+													x1: 0, y1: 0, x2: 0, y2: 1,
+                                   			     stop: 0 #bbbbbb, stop: 1 #eeeeee);
+ 	border: 2px solid #222222;
+ 	border-radius: 5px;
+ 	margin-top: 0; /* leave space at the top for the title */
 }
 
 QGroupBox:title {
@@ -126,7 +126,7 @@ QGroupBox:title {
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="1,0,4">
             <item>
-             <widget class="QLabel" name="label_7">
+             <widget class="QLabel" name="voltageCell1Label">
               <property name="maximumSize">
                <size>
                 <width>50</width>
@@ -167,7 +167,7 @@ QGroupBox:title {
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="0,0,4">
             <item>
-             <widget class="QLabel" name="label_8">
+             <widget class="QLabel" name="voltageCell2Label">
               <property name="maximumSize">
                <size>
                 <width>50</width>
@@ -204,7 +204,7 @@ QGroupBox:title {
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="0,0,0">
             <item>
-             <widget class="QLabel" name="label">
+             <widget class="QLabel" name="voltageCell3Label">
               <property name="maximumSize">
                <size>
                 <width>50</width>
@@ -270,7 +270,7 @@ QGroupBox:title {
                </size>
               </property>
               <property name="styleSheet">
-               <string notr="true">color: red;</string>
+               <string notr="true"/>
               </property>
              </widget>
             </item>
@@ -286,10 +286,7 @@ QGroupBox:title {
                <bool>false</bool>
               </property>
               <property name="styleSheet">
-               <string notr="true">QLCDNumber {
-	font: bold;
- 	color: blue;
-}</string>
+               <string notr="true"/>
               </property>
              </widget>
             </item>
@@ -503,18 +500,7 @@ QGroupBox:title {
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout_10">
         <item>
-         <widget class="QWidget" name="widget" native="true">
-          <widget class="QLCDNumber" name="lcdNumber">
-           <property name="geometry">
-            <rect>
-             <x>50</x>
-             <y>60</y>
-             <width>64</width>
-             <height>23</height>
-            </rect>
-           </property>
-          </widget>
-         </widget>
+         <widget class="QWidget" name="widget" native="true"/>
         </item>
         <item>
          <widget class="Line" name="line_9">
@@ -583,7 +569,7 @@ QGroupBox:title {
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_8">
         <item>
-         <widget class="QWidget" name="widget_2" native="true">
+         <widget class="QWidget" name="angleWidget" native="true">
           <widget class="QLCDNumber" name="lcdNumber_2">
            <property name="geometry">
             <rect>

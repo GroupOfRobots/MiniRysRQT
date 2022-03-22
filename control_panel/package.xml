@@ -17,6 +17,8 @@
   <exec_depend>rqt_gui_py</exec_depend>
   <exec_depend>rqt_py_common</exec_depend>
 
+    <exec_depend>std_msgs</exec_depend>
+
   <exec_depend>rclpy</exec_depend>
 <!--  <depend>setup_panel</depend>-->
 <!--  <depend>shared</depend>-->
