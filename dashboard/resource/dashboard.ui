@@ -340,7 +340,7 @@ QGroupBox:title {
          <number>30</number>
         </property>
         <item>
-         <layout class="QHBoxLayout" name="frontSensor" stretch="1,4">
+         <layout class="QHBoxLayout" name="frontSensor" stretch="1,0,4">
           <property name="topMargin">
            <number>10</number>
           </property>
@@ -355,9 +355,19 @@ QGroupBox:title {
            </widget>
           </item>
           <item>
+           <widget class="QLCDNumber" name="frontDistanceLcd">
+            <property name="digitCount">
+             <number>4</number>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QProgressBar" name="frontSensorProgressBar">
+            <property name="maximum">
+             <number>4</number>
+            </property>
             <property name="value">
-             <number>24</number>
+             <number>0</number>
             </property>
            </widget>
           </item>
@@ -374,7 +384,7 @@ QGroupBox:title {
          </widget>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="backSensor" stretch="1,4">
+         <layout class="QHBoxLayout" name="backSensor" stretch="1,0,4">
           <item>
            <widget class="QLabel" name="backSensorLabel">
             <property name="text">
@@ -383,7 +393,17 @@ QGroupBox:title {
            </widget>
           </item>
           <item>
+           <widget class="QLCDNumber" name="backDistanceLcd">
+            <property name="digitCount">
+             <number>4</number>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QProgressBar" name="backSensorProgressBar">
+            <property name="maximum">
+             <number>4000</number>
+            </property>
             <property name="value">
              <number>24</number>
             </property>

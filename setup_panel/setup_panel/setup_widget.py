@@ -8,6 +8,8 @@ from python_qt_binding.QtWidgets import QWidget, QTableWidgetItem, QMessageBox
 from shared.enums import ControlKeyEnum
 from shared.inner_communication import innerCommunication
 
+from .command_element import CommandElementWidget
+
 
 class SetupWidget(QWidget):
     def __init__(self, stack=None, dataFilePath=None):
@@ -58,6 +60,16 @@ class SetupWidget(QWidget):
         }
 
         self.addControlKeysValidators()
+
+        self.setupDashboardElements()
+
+    def setupDashboardElements(self):
+        for i in range(1, 5):
+            print(self.elements)
+            element = CommandElementWidget()
+            print(element)
+            # self.elements.addWidget(element)
+            self.elements.addWidget(element)
 
     def addControlKeysValidators(self):
         self.keyInputDictionary[ControlKeyEnum.FORWARD].textChanged.connect(

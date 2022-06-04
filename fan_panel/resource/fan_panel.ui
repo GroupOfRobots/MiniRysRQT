@@ -23,7 +23,7 @@
    <string notr="true">border:none</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
+   <item alignment="Qt::AlignTop">
     <widget class="QGroupBox" name="groupBox">
      <property name="minimumSize">
       <size>
@@ -103,11 +103,24 @@ background-color:none;</string>
        <property name="spacing">
         <number>0</number>
        </property>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
        <item alignment="Qt::AlignRight">
         <widget class="QLabel" name="label">
          <property name="minimumSize">
           <size>
-           <width>0</width>
+           <width>50</width>
            <height>50</height>
           </size>
          </property>
@@ -118,29 +131,45 @@ background-color:none;</string>
           </size>
          </property>
          <property name="text">
-          <string>PWM</string>
+          <string>PWM:   </string>
          </property>
         </widget>
        </item>
-       <item alignment="Qt::AlignLeft">
-        <widget class="QLCDNumber" name="fanLcd">
+       <item>
+        <widget class="QSpinBox" name="fanSpinBox">
          <property name="minimumSize">
           <size>
-           <width>0</width>
-           <height>50</height>
+           <width>50</width>
+           <height>30</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>16777215</width>
-           <height>100</height>
+           <width>50</width>
+           <height>30</height>
           </size>
+         </property>
+         <property name="maximum">
+          <number>100</number>
          </property>
         </widget>
        </item>
+       <item>
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
       </layout>
      </item>
-     <item alignment="Qt::AlignTop">
+     <item>
       <widget class="QSlider" name="fanSlider">
        <property name="minimumSize">
         <size>
@@ -161,6 +190,19 @@ background-color:none;</string>
         <enum>Qt::Horizontal</enum>
        </property>
       </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
      </item>
     </layout>
    </item>

@@ -1,4 +1,6 @@
 from setuptools import setup
+from glob import glob
+
 
 package_name = 'joystick'
 
@@ -11,6 +13,7 @@ setup(
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
         ('share/' + package_name + '/resource', ['resource/joystick.ui']),
+        ('share/' + package_name + '/resource/imgs', glob('resource/imgs/*.png')),
         ('share/' + package_name, ['plugin.xml']),
     ],
     install_requires=['setuptools'],

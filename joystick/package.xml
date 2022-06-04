@@ -17,8 +17,8 @@
   <exec_depend>rqt_gui_py</exec_depend>
   <exec_depend>rqt_py_common</exec_depend>
 
-<!--    <build_depend>shared</build_depend>-->
-<!--    <exec_depend>shared</exec_depend>-->
+    <build_depend>shared</build_depend>
+    <exec_depend>shared</exec_depend>
 <!--    <run_depend>shared</run_depend>-->
 
   <export>

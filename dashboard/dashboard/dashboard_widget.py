@@ -1,13 +1,15 @@
 # This Python file uses the following encoding: utf-8
+import math
 import os
-
-from python_qt_binding.QtGui import QPainter, Qt
+from python_qt_binding.QtCore import Qt
+from python_qt_binding.QtGui import QPainter
 from ament_index_python import get_resource
 from python_qt_binding import loadUi
 from shared.base_widget.base_widget import BaseWidget
 
 from rclpy.node import Node
 from minirys_msgs.msg import BatteryStatus
+from sensor_msgs.msg import Range
 
 from python_qt_binding.QtWidgets import QProgressBar
 
@@ -27,6 +29,9 @@ class DashboardWidget(BaseWidget):
         self.subscription = self.node.create_subscription(BatteryStatus, '/internal/battery_status',
                                                           self.batteryCallback, 10)
 
+        self.node.create_subscription(Range, '/internal/distance_0', self.frontSensorCallback, 10)
+        self.node.create_subscription(Range, '/internal/distance_1', self.backSensorCallback, 10)
+
         self.node.create_subscription(Float32, '/internal/temperature_cpu', self.temperatureCpuCallback, 10)
         self.node.create_subscription(Float32, '/internal/temperature_main', self.temperatureMainCallback, 10)
 
@@ -35,13 +40,14 @@ class DashboardWidget(BaseWidget):
         self.voltageCell2ProgressBar.setRange(3500, 5500)
         self.voltageCell3ProgressBar.setRange(3500, 5500)
 
+        # self.frontSensorProgressBar.setRange(0, 4000)
+
         self.batteryUnderVoltageFlag = False
 
-        self.angleWidget.paintEvent =self.paintRobotAngle
+        self.angleWidget.paintEvent = self.paintRobotAngle
         # self.paintRobotAngle('a')
         # self.paintRobotAngle('b')
         # self.paintRobotAngle('c')
-
 
     def paintEvent(self, event):
         # self.paintRobotAngle(event)
@@ -54,6 +60,7 @@ class DashboardWidget(BaseWidget):
         painter.setPen(Qt.red)
         painter.setBrush(Qt.white)
         painter.drawLine(50, 50, 100, 100)
+        painter.end()
 
     def loadUi(self):
         _, packagePath = get_resource('packages', 'dashboard')
@@ -94,14 +101,16 @@ class DashboardWidget(BaseWidget):
 
         if underVoltageError and not self.batteryUnderVoltageFlag:
             self.previousStyleSheet = self.batteryGroupBox.styleSheet()
-            self.batteryGroupBox.setStyleSheet(self.previousStyleSheet + 'QGroupBox { background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 red, stop: 1 pink);}')
+            self.batteryGroupBox.setStyleSheet(
+                self.previousStyleSheet + 'QGroupBox { background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 red, stop: 1 pink);}')
             self.batteryGroupBox.setToolTip('<h2>ERROR</h2><div>Battery voltage is too low</div>')
             self.batteryGroupBox.setToolTipDuration(5000)
             self.batteryUnderVoltageFlag = True
 
         elif underVoltageWarning and not self.batteryUnderVoltageFlag:
             self.previousStyleSheet = self.batteryGroupBox.styleSheet()
-            self.batteryGroupBox.setStyleSheet(self.previousStyleSheet + 'QGroupBox { background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 orange, stop: 1 yellow);}')
+            self.batteryGroupBox.setStyleSheet(
+                self.previousStyleSheet + 'QGroupBox { background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 orange, stop: 1 yellow);}')
             self.batteryGroupBox.setToolTip(
                 '<h2>WARNING</h2><div>Battery voltage is too low</div>')
             self.batteryGroupBox.setToolTipDuration(5000)
@@ -119,3 +128,16 @@ class DashboardWidget(BaseWidget):
         self.temperatureMainLcd.display(event.data)
 
         # self.temperatureMainLcd.setStyleSheet('color: black;')
+
+    def frontSensorCallback(self, event):
+        print(event.range)
+        range = int((event.range * 1000))
+        self.frontSensorProgressBar.setValue(range)
+        self.frontDistanceLcd.display(event.range)
+
+    def backSensorCallback(self, event):
+        # print(event)
+        range = int((event.range * 1000))
+        # self.backSensorProgressBar.setValue(range)
+        self.backDistanceLcd.display(event.range)
+        # self.frontDistanceLcd.display(event.range)

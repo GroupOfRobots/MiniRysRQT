@@ -21,8 +21,8 @@ class SetupDashboardWidget(QWidget):
 
         self.elementDictionary = {}
 
-        self.groupBox = QGroupBox()
-        self.form = QFormLayout()
+        # self.groupBox = QGroupBox()
+        # self.form = QFormLayout()
         self.setupDashboardElements()
 
         self.addNewRobotButton.clicked.connect(self.addNewRobot)
@@ -35,11 +35,16 @@ class SetupDashboardWidget(QWidget):
         for fileName in (os.listdir(self.dataFilePath)):
             element = DashboardElementWidget(fileName=fileName, stack=self.stack)
             self.elementDictionary[self.dataFilePath + '/'+ fileName] = element
-            self.form.addRow(element)
+            # self.elements.addWidget(element)
+            self.elements.addWidget(element)
 
-        self.groupBox.setLayout(self.form)
+        # self.elementsGroupBox.setLayout(self.form)
+        # print(self.elements)
+        # print(self.scrollArea)
+        # print(self.elementsGroupBox)
+        # self.repaint()
 
-        self.scrollArea.setWidget(self.groupBox)
+        # self.scrollArea.setWidget(self.groupBox)
 
     def loadUi(self):
         _, packagePath = get_resource('packages', 'setup_panel')
@@ -49,14 +54,16 @@ class SetupDashboardWidget(QWidget):
     def onDeleteRobotSignal(self, data):
         dataFilePath = data['filePath']
         element = self.elementDictionary[dataFilePath]
-        self.form.removeRow(element)
+        # self.form.removeRow(element)
+        self.elements.removeWidget(element)
         self.update()
 
     def addDashboardElement(self, data):
         fileName = data['fileName']
         element = DashboardElementWidget( fileName=fileName, stack=self.stack)
         self.elementDictionary[self.dataFilePath + '/'+ fileName] = element
-        self.form.addRow(element)
+        # self.form.addRow(element)
+        self.elements.addWidget(element)
         self.update()
 
     def onUpdateRobotSignal(self, data):

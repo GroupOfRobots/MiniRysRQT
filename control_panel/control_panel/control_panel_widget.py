@@ -5,22 +5,14 @@ import os
 from ament_index_python import get_resource
 from python_qt_binding import QtCore
 from python_qt_binding import loadUi
-from python_qt_binding.QtCore import Qt
-from python_qt_binding.QtWidgets import QPushButton, QWidget
 from shared.enums import ControlKeyEnum
 from shared.base_widget.base_widget import BaseWidget
 
 from .elements.button import Button
-
-import rclpy
-from rclpy.node import Node
 from minirys_msgs.msg import MotorCommand
 
-from std_msgs.msg import Float32, String
-
-
 class ControlPanelWidget(BaseWidget):
-    def __init__(self, stack=None,node=None):
+    def __init__(self, stack=None, node=None):
         super(ControlPanelWidget, self).__init__()
         BaseWidget.__init__(self, stack)
 
@@ -37,9 +29,13 @@ class ControlPanelWidget(BaseWidget):
 
             self.initializeSettings(self.dataFilePath)
 
-        self.node = node
-        self.publisher = self.node.create_publisher(MotorCommand, '/internal/motor_command', 10)
-        self.publisher2 = self.node.create_publisher(Float32, '/internal/fan_output', 10)
+        self.pressedKeys = {
+            ControlKeyEnum.FORWARD: False,
+            ControlKeyEnum.RIGHT: False,
+            ControlKeyEnum.BACKWARD: False,
+            ControlKeyEnum.LEFT: False
+        }
+        self.publisher = node.create_publisher(MotorCommand, '/internal/motor_command', 10)
 
     def loadUI(self):
         _, packagePath = get_resource('packages', 'control_panel')
@@ -62,72 +58,89 @@ class ControlPanelWidget(BaseWidget):
         if data:
             self.setRobotOnScreen(data)
 
+    def determineKeyedPressedState(self):
+        forward = self.pressedKeys[ControlKeyEnum.FORWARD]
+        right = self.pressedKeys[ControlKeyEnum.RIGHT]
+        backward = self.pressedKeys[ControlKeyEnum.BACKWARD]
+        left = self.pressedKeys[ControlKeyEnum.LEFT]
+        msg = MotorCommand()
+
+        if forward and right and not (backward or left):
+            msg.speed_l = float(self.dynamic['forwardRight']['leftEngine'])
+            msg.speed_r = float(self.dynamic['forwardRight']['rightEngine'])
+        elif forward and left and not (backward or left):
+            msg.speed_l = float(self.dynamic['forwardLeft']['leftEngine'])
+            msg.speed_r = float(self.dynamic['forwardLeft']['rightEngine'])
+        elif forward and not (right or backward or left):
+            msg.speed_l = float(self.dynamic['forward']['leftEngine'])
+            msg.speed_r = float(self.dynamic['forward']['rightEngine'])
+
+        elif right and not (forward or backward or left):
+            msg.speed_l = float(self.dynamic['right']['leftEngine'])
+            msg.speed_r = float(self.dynamic['right']['rightEngine'])
+
+        if backward and right and not (forward or left):
+            msg.speed_l = float(self.dynamic['backwardRight']['leftEngine'])
+            msg.speed_r = float(self.dynamic['backwardRight']['rightEngine'])
+        elif backward and left and not (forward or left):
+            msg.speed_l = float(self.dynamic['backwardLeft']['leftEngine'])
+            msg.speed_r = float(self.dynamic['backwardLeft']['rightEngine'])
+        elif backward and not (right or forward or left):
+            msg.speed_l = float(self.dynamic['backward']['leftEngine'])
+            msg.speed_r = float(self.dynamic['backward']['rightEngine'])
+
+        elif left and not (forward or backward or right):
+            msg.speed_l = float(self.dynamic['left']['leftEngine'])
+            msg.speed_r = float(self.dynamic['left']['rightEngine'])
+
+        elif not (forward or right or backward or left):
+            msg.speed_l = 0.0
+            msg.speed_r = 0.0
+
+        self.publisher.publish(msg)
+
     def keyPressEvent(self, event):
         if event.isAutoRepeat():
             return
         key = QtCore.Qt.Key(event.key())
-        msg = MotorCommand()
-
-        a = Float32()
-        a.data = 0.3
-        self.publisher2.publish(a)
 
         if key == self.controlKeys[ControlKeyEnum.FORWARD]:
             self.forwardButtonElement.pressedKeyState()
-            # print(self.dynamic)
-            msg.speed_l = float(self.dynamic['forward']['leftEngine'])
-            msg.speed_r = float(self.dynamic['forward']['rightEngine'])
-            print(msg)
-            self.publisher.publish(msg)
+            self.pressedKeys[ControlKeyEnum.FORWARD] = True
         elif event.key() == self.controlKeys[ControlKeyEnum.RIGHT]:
-            msg.speed_l = 20.0
-            msg.speed_r = 20.0
-            self.publisher.publish(msg)
-
+            self.pressedKeys[ControlKeyEnum.RIGHT] = True
             self.rightButtonElement.pressedKeyState()
         elif event.key() == self.controlKeys[ControlKeyEnum.BACKWARD]:
-            msg.speed_l = -20.0
-            msg.speed_r = 20.0
-            self.publisher.publish(msg)
-
+            self.pressedKeys[ControlKeyEnum.BACKWARD] = True
             self.backwardButtonElement.pressedKeyState()
         elif event.key() == self.controlKeys[ControlKeyEnum.LEFT]:
-            msg.speed_l = -20.0
-            msg.speed_r = -20.0
-            self.publisher.publish(msg)
+            self.pressedKeys[ControlKeyEnum.LEFT] = True
             self.leftButtonElement.pressedKeyState()
+
+        self.determineKeyedPressedState()
+
         event.accept()
 
     def keyReleaseEvent(self, event):
         if event.isAutoRepeat():
             return
         key = event.key()
-        msg = MotorCommand()
-        msg.speed_l = 0.0
-        msg.speed_r = 0.0
-
-        # a= Float32(0)
-        a = Float32()
-        a.data = 0.0
-
-        self.publisher2.publish(a)
 
         if key == self.controlKeys[ControlKeyEnum.FORWARD]:
-
-            self.publisher.publish(msg)
+            self.pressedKeys[ControlKeyEnum.FORWARD] = False
             self.forwardButtonElement.releasedKeyState()
         elif event.key() == self.controlKeys[ControlKeyEnum.RIGHT]:
-            self.publisher.publish(msg)
-
+            self.pressedKeys[ControlKeyEnum.RIGHT] = False
             self.rightButtonElement.releasedKeyState()
         elif event.key() == self.controlKeys[ControlKeyEnum.BACKWARD]:
-            self.publisher.publish(msg)
-
+            self.pressedKeys[ControlKeyEnum.BACKWARD] = False
             self.backwardButtonElement.releasedKeyState()
         elif event.key() == self.controlKeys[ControlKeyEnum.LEFT]:
-            self.publisher.publish(msg)
-
+            self.pressedKeys[ControlKeyEnum.LEFT] = False
             self.leftButtonElement.releasedKeyState()
+
+        self.determineKeyedPressedState()
+
         event.accept()
 
     def settingsClicked(self):
@@ -138,7 +151,6 @@ class ControlPanelWidget(BaseWidget):
 
     def defineButtons(self):
         self.forwardButtonElement = Button(self.forwardButton)
-
         self.rightButtonElement = Button(self.rightButton)
         self.backwardButtonElement = Button(self.backwardButton)
         self.leftButtonElement = Button(self.leftButton)

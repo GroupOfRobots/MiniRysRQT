@@ -1,5 +1,6 @@
 # This Python file uses the following encoding: utf-8
 import json
+import math
 import os
 import threading
 import time
@@ -14,12 +15,13 @@ from shared.enums import ControlKeyEnum
 
 from python_qt_binding.QtWidgets import QWidget
 
+
 class JoystickWidget(BaseWidget):
     BOUNDARY_RADIUS = 0.45
     BOUNDARY_DIAMETER = BOUNDARY_RADIUS * 2
     JOYSTICK_RADIUS = 0.1
     JOYSTICK_DIAMETER = JOYSTICK_RADIUS * 2
-    MARGIN = 0.05
+    MARGIN = (1 - BOUNDARY_DIAMETER) / 2
     MARGIN_HORIZONTAL = 2 * MARGIN
 
     def __init__(self, stack=None):
@@ -38,10 +40,27 @@ class JoystickWidget(BaseWidget):
         self.keyPressedThread = threading.Thread()
 
         self.initializeRobotsOptions()
-        self.initializeSettings(self.comboBox.currentData()['filePath'])
+        # self.initializeSettings(self.comboBox.currentData()['filePath'])
 
         self.joystickWidget.mouseMoveEvent = self.joystickWidgetMouseMove
         self.setMouseTracking(False)
+
+        self.comboBox.currentIndexChanged.connect(self.onChoosenRobotChange)
+        currentData = self.comboBox.currentData()
+        if currentData:
+            self.dataFilePath = currentData['filePath']
+
+            self.initializeSettings(self.dataFilePath)
+
+        self.settingsButton.clicked.connect(self.settingsClicked)
+
+    def settingsClicked(self):
+        self.stack.goToSettings(self.dataFilePath)
+
+    def onChoosenRobotChange(self, event):
+        data = self.comboBox.currentData()
+        if data:
+            self.setRobotOnScreen(data)
 
     def joystickWidgetMouseMove(self, event):
         self.joystickPosition = event.pos()
@@ -65,37 +84,25 @@ class JoystickWidget(BaseWidget):
         painter = QPainter(self)
         painter.setPen(QPen(Qt.black, 5, Qt.SolidLine))
         pos = self.joystickWidget.pos()
-        rect = self.joystickWidget.rect()
-        painter.setClipRect(pos.x(), pos.y(), rect.width(), rect.height())
+        painter.setClipRect(pos.x(), pos.y(), self.joystickWidget.width(), self.joystickWidget.height())
 
         self.paintJoystickBoundary(painter)
         self.paintJoystick(painter)
 
     def paintJoystickBoundary(self, painter):
-        width = self.joystickWidget.width()
-        height = self.joystickWidget.height()
-        startX = self.joystickWidget.pos().x()
-        startY = self.joystickWidget.pos().y()
-        x = startX + int(width * self.MARGIN)
-        y = startY + int(height * self.MARGIN)
-        rx = int(self.BOUNDARY_DIAMETER * width)
-        ry = int(self.BOUNDARY_DIAMETER * height)
+        x = self.startX + int(self.width * self.MARGIN)
+        y = self.startY + int(self.height * self.MARGIN)
 
         painter.setPen(QPen(Qt.black, 5, Qt.SolidLine))
         painter.setBrush(QBrush(Qt.red, Qt.SolidPattern))
-        painter.drawEllipse(x, y, rx, ry)
+        painter.drawEllipse(x, y, self.widgetRx, self.widgetRy)
 
     def paintJoystick(self, painter):
-        width = self.joystickWidget.width()
-        height = self.joystickWidget.height()
-        startX = self.joystickWidget.pos().x()
-        startY = self.joystickWidget.pos().y()
-        rx = int(self.JOYSTICK_DIAMETER * width)
-        ry = int(self.JOYSTICK_DIAMETER * height)
-        x = startX + int(self.joystickPosition.x() - 0.5 * rx)
-        y = startY + int(self.joystickPosition.y() - 0.5 * ry)
+        x = self.startX + int(self.joystickPosition.x() - 0.5 * self.joystickRx)
+        y = self.startY + int(self.joystickPosition.y() - 0.5 * self.joystickRy)
+
         painter.setBrush(QBrush(Qt.cyan, Qt.SolidPattern))
-        painter.drawEllipse(x, y, rx, ry)
+        painter.drawEllipse(x, y, self.joystickRx, self.joystickRy)
 
     def returnToCenter(self):
         self.joystickPosition = QPoint(self.joystickWidget.width() * 0.5, self.joystickWidget.height() * 0.5)
@@ -106,15 +113,41 @@ class JoystickWidget(BaseWidget):
 
     def resizeEvent(self, event):
         self.joystickPosition = QPoint(self.joystickWidget.width() * 0.5, self.joystickWidget.height() * 0.5)
+        self.width = self.joystickWidget.width()
+        self.height = self.joystickWidget.height()
+        self.startX = self.joystickWidget.pos().x()
+        self.startY = self.joystickWidget.pos().y()
+
+        self.widgetRx = int(self.BOUNDARY_DIAMETER * self.width)
+        self.widgetRy = int(self.BOUNDARY_DIAMETER * self.height)
+
+        self.joystickRx = int(self.JOYSTICK_DIAMETER * self.width)
+        self.joystickRy = int(self.JOYSTICK_DIAMETER * self.height)
+
+        self.innerEllipseRx = self.widgetRx - self.joystickRx
+        self.innerEllipseRy = self.widgetRy - self.joystickRy
 
     def calculateKeyPressed(self):
         while self.keyPressedFlag:
             x = self.joystickPosition.x() + self.xMove
             y = self.joystickPosition.y() + self.yMove
 
-            if self.checkIfPointIsInEllipse(x, y):
-                self.joystickPosition.setY(y)
+            if self.checkIfPointIsInEllipse(x, y) and not (
+                    ControlKeyEnum.STABLE in self.pressedKeys and len(self.pressedKeys) == 1):
                 self.joystickPosition.setX(x)
+                self.joystickPosition.setY(y)
+
+                cartesianPositionX = x - self.joystickWidget.width() * 0.5
+                cartesianPositionY = self.joystickWidget.height() * 0.5 - y
+
+                angle = math.radians(math.atan2(cartesianPositionY, cartesianPositionX) / math.pi * 180)
+
+                ellipseR = self.innerEllipseRx * self.innerEllipseRy * 0.25 / (math.sqrt(
+                    (self.innerEllipseRx * 0.5) ** 2 * math.sin(angle) ** 2 + (self.innerEllipseRy * 0.5) ** 2 * math.cos(angle) ** 2))
+                joystickR = math.sqrt(cartesianPositionX ** 2 + cartesianPositionY ** 2)
+
+                # print(self.rx, self.ry,rx,ry)
+                # print(cartesianPositionX,cartesianPositionY,x,y, angle," ellipseR: ",ellipseR,"  joystickR:",joystickR,joystickR/ellipseR)
 
                 self.update()
                 time.sleep(0.001)
