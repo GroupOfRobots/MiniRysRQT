@@ -28,7 +28,10 @@ class FanPanelWidget(BaseWidget):
         self.fanSlider.valueChanged.connect(self.sliderValueChanged)
         
         # self.fanSpinBox.setButtonSymbols(QAbstractSpinBox.NoButtons)
-        self.fanSpinBox.valueChanged.connect(self.fanSpinBoxValueChanged)
+
+        print('self.fanSpinBox')
+        print(self.spinBox)
+        self.spinBox.valueChanged.connect(self.fanSpinBoxValueChanged)
         self.movedBySlider=False
         self.movedBySpinBox=False
 
@@ -54,7 +57,7 @@ class FanPanelWidget(BaseWidget):
         if self.movedBySpinBox:
             self.movedBySpinBox = False
         else :
-            self.fanSpinBox.setValue(event)
+            self.spinBox.setValue(event)
             self.value = event / 100
 
     def loadUI(self):

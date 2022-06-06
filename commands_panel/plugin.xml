@@ -1,0 +1,20 @@
+<library path="lib">
+  <class name="CommandsPanel" type="commands_panel.commands_panel.CommandsPanel" base_class_type="rqt_gui_py::Plugin">
+    <description>
+      Commands panel gui
+    </description>
+    <qtgui>
+<!--      &lt;!&ndash; optional grouping...-->
+<!--      <group>-->
+<!--        <label>Group</label>-->
+<!--      </group>-->
+<!--      <group>-->
+<!--        <label>Subgroup</label>-->
+<!--      </group>-->
+<!--      &ndash;&gt;-->
+      <label>Commands</label>
+      <icon type="theme">face-cool</icon>
+      <statustip>Commands panel interface</statustip>
+    </qtgui>
+  </class>
+</library>

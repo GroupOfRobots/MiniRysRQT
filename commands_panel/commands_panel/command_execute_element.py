@@ -8,16 +8,13 @@ from python_qt_binding import loadUi
 import json
 import os
 
-class CommandElementWidget(QWidget):
+class CommandExecuteElementWidget(QWidget):
     def __init__(self, fileName=None, stack=None):
-        super(CommandElementWidget, self).__init__()
+        super(CommandExecuteElementWidget, self).__init__()
 
         self.loadUi()
 
-
     def loadUi(self):
-        _, packagePath = get_resource('packages', 'setup_panel')
-        uiFile = os.path.join(packagePath, 'share', 'setup_panel', 'resource', 'command_element.ui')
+        _, packagePath = get_resource('packages', 'commands_panel')
+        uiFile = os.path.join(packagePath, 'share', 'commands_panel', 'resource', 'command_execute_element.ui')
         loadUi(uiFile, self)
-
-
