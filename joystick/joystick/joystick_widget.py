@@ -105,14 +105,18 @@ class JoystickWidget(BaseWidget):
         painter.drawEllipse(x, y, self.joystickRx, self.joystickRy)
 
     def returnToCenter(self):
-        self.joystickPosition = QPoint(self.joystickWidget.width() * 0.5, self.joystickWidget.height() * 0.5)
+        x = int(self.joystickWidget.width() * 0.5)
+        y = int(self.joystickWidget.height() * 0.5)
+        self.joystickPosition = QPoint(x, y)
         self.update()
 
     def mouseReleaseEvent(self, event):
         self.returnToCenter()
 
     def resizeEvent(self, event):
-        self.joystickPosition = QPoint(self.joystickWidget.width() * 0.5, self.joystickWidget.height() * 0.5)
+        x = int(self.joystickWidget.width() * 0.5)
+        y = int(self.joystickWidget.height() * 0.5)
+        self.joystickPosition = QPoint(x, y)
         self.width = self.joystickWidget.width()
         self.height = self.joystickWidget.height()
         self.startX = self.joystickWidget.pos().x()
@@ -143,7 +147,8 @@ class JoystickWidget(BaseWidget):
                 angle = math.radians(math.atan2(cartesianPositionY, cartesianPositionX) / math.pi * 180)
 
                 ellipseR = self.innerEllipseRx * self.innerEllipseRy * 0.25 / (math.sqrt(
-                    (self.innerEllipseRx * 0.5) ** 2 * math.sin(angle) ** 2 + (self.innerEllipseRy * 0.5) ** 2 * math.cos(angle) ** 2))
+                    (self.innerEllipseRx * 0.5) ** 2 * math.sin(angle) ** 2 + (
+                                self.innerEllipseRy * 0.5) ** 2 * math.cos(angle) ** 2))
                 joystickR = math.sqrt(cartesianPositionX ** 2 + cartesianPositionY ** 2)
 
                 # print(self.rx, self.ry,rx,ry)

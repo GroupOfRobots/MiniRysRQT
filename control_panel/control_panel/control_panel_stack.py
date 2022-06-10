@@ -9,4 +9,3 @@ class ControlPanelStack(StackWidget):
 
         self.mainChildWidget = ControlPanelWidget( stack=self, node=node)
         self.stack.addWidget(self.mainChildWidget)
-

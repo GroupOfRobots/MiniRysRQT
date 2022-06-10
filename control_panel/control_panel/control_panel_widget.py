@@ -162,8 +162,8 @@ class ControlPanelWidget(BaseWidget):
         self.setIconSize()
 
     def setIconSize(self):
-        width = self.backwardButton.size().width() * 0.9
-        height = self.backwardButton.size().height() * 0.9
+        width = int(self.backwardButton.size().width() * 0.9)
+        height = int(self.backwardButton.size().height() * 0.9)
         self.forwardButtonElement.resizeIcon(width, height)
         self.leftButtonElement.resizeIcon(width, height)
         self.rightButtonElement.resizeIcon(width, height)
