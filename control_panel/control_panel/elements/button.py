@@ -18,7 +18,7 @@ class Button(QPushButton):
         return self.button.size()
 
     def resizeIcon(self, width,height):
-        self.button.setIconSize(QSize(width,height))
+        self.button.setIconSize(QSize(width, height))
 
     def pressedKeyState(self):
         self.setKeyPressedColor()

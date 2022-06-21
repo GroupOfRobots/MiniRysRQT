@@ -1,7 +1,7 @@
 # This Python file uses the following encoding: utf-8
 
 from .setup_dashboard_widget import SetupDashboardWidget
-from .setup_widget import SetupWidget
+from .details.setup_widget import SetupWidget
 
 from shared.stack_widget.stack_widget import StackWidget
 

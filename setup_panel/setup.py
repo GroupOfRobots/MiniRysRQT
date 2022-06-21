@@ -1,13 +1,13 @@
 from glob import glob
 
-from setuptools import setup
+from setuptools import setup,find_packages
 
 package_name = 'setup_panel'
 
 setup(
     name=package_name,
     version='0.0.0',
-    packages=[package_name, package_name + '/elements'],
+    packages=find_packages(),
     data_files=[
         ('share/ament_index/resource_index/packages',
          ['resource/' + package_name]),

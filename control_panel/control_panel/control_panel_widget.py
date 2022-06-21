@@ -58,47 +58,6 @@ class ControlPanelWidget(BaseWidget):
         if data:
             self.setRobotOnScreen(data)
 
-    def determineKeyedPressedState(self):
-        forward = self.pressedKeys[ControlKeyEnum.FORWARD]
-        right = self.pressedKeys[ControlKeyEnum.RIGHT]
-        backward = self.pressedKeys[ControlKeyEnum.BACKWARD]
-        left = self.pressedKeys[ControlKeyEnum.LEFT]
-        msg = MotorCommand()
-
-        if forward and right and not (backward or left):
-            msg.speed_l = float(self.dynamic['forwardRight']['leftEngine'])
-            msg.speed_r = float(self.dynamic['forwardRight']['rightEngine'])
-        elif forward and left and not (backward or left):
-            msg.speed_l = float(self.dynamic['forwardLeft']['leftEngine'])
-            msg.speed_r = float(self.dynamic['forwardLeft']['rightEngine'])
-        elif forward and not (right or backward or left):
-            msg.speed_l = float(self.dynamic['forward']['leftEngine'])
-            msg.speed_r = float(self.dynamic['forward']['rightEngine'])
-
-        elif right and not (forward or backward or left):
-            msg.speed_l = float(self.dynamic['right']['leftEngine'])
-            msg.speed_r = float(self.dynamic['right']['rightEngine'])
-
-        if backward and right and not (forward or left):
-            msg.speed_l = float(self.dynamic['backwardRight']['leftEngine'])
-            msg.speed_r = float(self.dynamic['backwardRight']['rightEngine'])
-        elif backward and left and not (forward or left):
-            msg.speed_l = float(self.dynamic['backwardLeft']['leftEngine'])
-            msg.speed_r = float(self.dynamic['backwardLeft']['rightEngine'])
-        elif backward and not (right or forward or left):
-            msg.speed_l = float(self.dynamic['backward']['leftEngine'])
-            msg.speed_r = float(self.dynamic['backward']['rightEngine'])
-
-        elif left and not (forward or backward or right):
-            msg.speed_l = float(self.dynamic['left']['leftEngine'])
-            msg.speed_r = float(self.dynamic['left']['rightEngine'])
-
-        elif not (forward or right or backward or left):
-            msg.speed_l = 0.0
-            msg.speed_r = 0.0
-
-        self.publisher.publish(msg)
-
     def keyPressEvent(self, event):
         if event.isAutoRepeat():
             return
@@ -142,6 +101,47 @@ class ControlPanelWidget(BaseWidget):
         self.determineKeyedPressedState()
 
         event.accept()
+
+    def determineKeyedPressedState(self):
+        forward = self.pressedKeys[ControlKeyEnum.FORWARD]
+        right = self.pressedKeys[ControlKeyEnum.RIGHT]
+        backward = self.pressedKeys[ControlKeyEnum.BACKWARD]
+        left = self.pressedKeys[ControlKeyEnum.LEFT]
+        msg = MotorCommand()
+
+        if forward and right and not (backward or left):
+            msg.speed_l = float(self.dynamic['forwardRight']['leftEngine'])
+            msg.speed_r = float(self.dynamic['forwardRight']['rightEngine'])
+        elif forward and left and not (backward or left):
+            msg.speed_l = float(self.dynamic['forwardLeft']['leftEngine'])
+            msg.speed_r = float(self.dynamic['forwardLeft']['rightEngine'])
+        elif forward and not (right or backward or left):
+            msg.speed_l = float(self.dynamic['forward']['leftEngine'])
+            msg.speed_r = float(self.dynamic['forward']['rightEngine'])
+
+        elif right and not (forward or backward or left):
+            msg.speed_l = float(self.dynamic['right']['leftEngine'])
+            msg.speed_r = float(self.dynamic['right']['rightEngine'])
+
+        if backward and right and not (forward or left):
+            msg.speed_l = float(self.dynamic['backwardRight']['leftEngine'])
+            msg.speed_r = float(self.dynamic['backwardRight']['rightEngine'])
+        elif backward and left and not (forward or left):
+            msg.speed_l = float(self.dynamic['backwardLeft']['leftEngine'])
+            msg.speed_r = float(self.dynamic['backwardLeft']['rightEngine'])
+        elif backward and not (right or forward or left):
+            msg.speed_l = float(self.dynamic['backward']['leftEngine'])
+            msg.speed_r = float(self.dynamic['backward']['rightEngine'])
+
+        elif left and not (forward or backward or right):
+            msg.speed_l = float(self.dynamic['left']['leftEngine'])
+            msg.speed_r = float(self.dynamic['left']['rightEngine'])
+
+        elif not (forward or right or backward or left):
+            msg.speed_l = 0.0
+            msg.speed_r = 0.0
+
+        self.publisher.publish(msg)
 
     def settingsClicked(self):
         self.stack.goToSettings(self.dataFilePath)

@@ -8,7 +8,9 @@ from python_qt_binding.QtWidgets import QWidget, QTableWidgetItem, QMessageBox
 from shared.enums import ControlKeyEnum
 from shared.inner_communication import innerCommunication
 
-from .command_element import CommandElementWidget
+from .commands.command_element import CommandElementWidget
+from .pid.pid_widget import PidWidget
+from .ssh_data.ssh_data import SshData
 
 
 class SetupWidget(QWidget):
@@ -63,11 +65,34 @@ class SetupWidget(QWidget):
 
         self.setupDashboardElements()
 
+        self.sshData = SshData(self)
+        self.pidWidget = PidWidget(self)
+        self.connectElements()
+
+
+
+        self.pidSpeedKpUI.valueChanged.connect(self.test)
+
+    def connectElements(self):
+        self.pidAngleKpUI.valueChanged.connect(self.pidWidget.test)
+        self.pidAngleKiUI.valueChanged.connect(self.pidWidget.test)
+        self.pidAngleKdUI.valueChanged.connect(self.pidWidget.test)
+
+        self.pidSpeedKpUI.valueChanged.connect(self.pidWidget.test)
+        self.pidSpeedKiUI.valueChanged.connect(self.pidWidget.test)
+        self.pidSpeedKdUI.valueChanged.connect(self.pidWidget.test)
+
+    def test(self, event):
+        print("event1233")
+        print("event1233")
+        print(event)
+
+
     def setupDashboardElements(self):
         for i in range(1, 5):
-            print(self.elements)
+            # print(self.elements)
             element = CommandElementWidget()
-            print(element)
+            # print(element)
             # self.elements.addWidget(element)
             self.elements.addWidget(element)
 

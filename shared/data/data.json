@@ -65,5 +65,22 @@
       "leftEngine": 90,
       "rightEngine": 90
     }
+  },
+  "pid": {
+    "pidSpeed": {
+      "Kp": 1,
+      "Ki": 2,
+      "Kd": 3
+    },
+    "pidAngle": {
+      "Kp": 4,
+      "Ki": 5,
+      "Kd": 6
+    }
+  },
+  "ssh": {
+    "port": 22,
+    "username": "minirys",
+    "password": "minirys"
   }
 }
