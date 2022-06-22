@@ -29,7 +29,7 @@ qlineargradient:(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(255, 255, 255, 
    <item>
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>aaaaaaaaaaaa</string>
+      <string>aaaaaaaaaaaabb</string>
      </property>
     </widget>
    </item>

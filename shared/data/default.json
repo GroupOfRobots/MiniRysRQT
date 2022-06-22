@@ -79,9 +79,17 @@
       "Kd": 6
     }
   },
-   "ssh": {
+  "ssh": {
+    "host": "",
     "port": "22",
     "username": "minirys",
     "password": "minirys"
-  }
+  },
+  "commands": [
+    {
+      "executeViaSsh": true,
+      "commandName": "Prepare gpio",
+      "command": "./prepare_gpio.sh"
+    }
+  ]
 }

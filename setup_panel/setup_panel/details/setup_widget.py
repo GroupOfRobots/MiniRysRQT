@@ -65,15 +65,25 @@ class SetupWidget(QWidget):
 
         self.setupDashboardElements()
 
-        self.sshData = SshData(self)
-        self.pidWidget = PidWidget(self)
-        self.connectElements()
+        self.initSshData()
+
+        self.initPidData()
 
 
 
         self.pidSpeedKpUI.valueChanged.connect(self.test)
 
-    def connectElements(self):
+    def initSshData(self):
+        self.sshData = SshData(self)
+
+        self.sshHostInputUI.editingFinished.connect(self.sshData.hostEdited)
+        self.sshPortInputUI.editingFinished.connect(self.sshData.portEdited)
+        self.sshUsernameInputUI.editingFinished.connect(self.sshData.usernameEdited)
+        self.sshPasswordInputUI.editingFinished.connect(self.sshData.passwordEdited)
+
+    def initPidData(self):
+        self.pidWidget = PidWidget(self)
+
         self.pidAngleKpUI.valueChanged.connect(self.pidWidget.test)
         self.pidAngleKiUI.valueChanged.connect(self.pidWidget.test)
         self.pidAngleKdUI.valueChanged.connect(self.pidWidget.test)

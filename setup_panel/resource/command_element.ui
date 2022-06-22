@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>660</width>
-    <height>84</height>
+    <height>107</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -31,6 +31,13 @@ qlineargradient:(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(255, 255, 255, 
    </item>
    <item>
     <widget class="QPlainTextEdit" name="plainTextEdit"/>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="executeViaSshUI">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

@@ -103,7 +103,7 @@
       </size>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="controls">
       <attribute name="title">
@@ -785,6 +785,13 @@ border-radius: 75px;
                </property>
               </widget>
              </item>
+             <item alignment="Qt::AlignRight">
+              <widget class="QLabel" name="label_9">
+               <property name="text">
+                <string>EXECUTE VIA SSH</string>
+               </property>
+              </widget>
+             </item>
             </layout>
            </item>
            <item>
@@ -797,6 +804,13 @@ border-radius: 75px;
                <layout class="QVBoxLayout" name="elements"/>
               </item>
              </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_8">
+             <property name="text">
+              <string>TextLabel</string>
+             </property>
             </widget>
            </item>
            <item>
