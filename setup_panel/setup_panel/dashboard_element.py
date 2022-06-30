@@ -34,13 +34,12 @@ class DashboardElementWidget(QWidget):
         data = json.load(dataFile)
         dataFile.close()
 
-        self.robotName=data['robotName']
-        self.id=data['id']
-        self.robotNameInput.setText(data['robotName'])
+        self.robotName=data.get('robotName')
+        self.id=data.get('id')
+        self.robotNameInput.setText(data.get('robotName'))
 
 
     def deleteClicked(self):
-
         reply = QMessageBox.question(self, self.robotName, 'Are you sure to delete robot?',
         QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
 

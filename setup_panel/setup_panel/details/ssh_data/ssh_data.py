@@ -5,14 +5,14 @@ class SshData(QWidget):
     def __init__(self, widget):
         super(SshData, self).__init__()
         self.widget = widget
-        self.sshData =self.widget.data['ssh']
+        self.sshData =self.widget.data.get('ssh', {})
         self.setSshData()
 
     def setSshData(self):
-        self.widget.sshHostInputUI.setText(self.sshData['host'])
-        self.widget.sshPortInputUI.setText(self.sshData['port'])
-        self.widget.sshUsernameInputUI.setText(self.sshData['username'])
-        self.widget.sshPasswordInputUI.setText(self.sshData['password'])
+        self.widget.sshHostInputUI.setText(self.sshData.get('host'))
+        self.widget.sshPortInputUI.setText(self.sshData.get('port'))
+        self.widget.sshUsernameInputUI.setText(self.sshData.get('username'))
+        self.widget.sshPasswordInputUI.setText(self.sshData.get('password'))
 
     def hostEdited(self):
         self.widget.data['ssh']['host'] = self.widget.sshHostInputUI.text()

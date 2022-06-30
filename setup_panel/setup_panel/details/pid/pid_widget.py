@@ -1,6 +1,7 @@
 # from python_qt_binding.QtWidgets import QWidget
-from python_qt_binding.QtCore import  QObject
+from python_qt_binding.QtCore import QObject
 from python_qt_binding.QtWidgets import QWidget
+
 
 class PidWidget(QWidget):
     def __init__(self, widget):
@@ -8,14 +9,9 @@ class PidWidget(QWidget):
         self.widget = widget
         data = self.widget.data
 
-        # print(data)
-        # print( data['dynamic'])
-        # print(data)
-        # print("test1")
-        # print(data)
-        self.setPidAngle(data['pid']['pidAngle'])
-        self.setPidSpeed(data['pid']['pidSpeed'])
-
+        pidData = data.get('pid', {})
+        self.setPidAngle(pidData.get('pidAngle', {}))
+        self.setPidSpeed(pidData.get('pidSpeed', {}))
 
     def connectElements(self):
         self.widget.pidAngleKpUI.valueChanged.connect(self.test)
@@ -27,14 +23,14 @@ class PidWidget(QWidget):
         self.widget.pidSpeedKdUI.valueChanged.connect(self.test)
 
     def setPidAngle(self, pidAngleData):
-        self.widget.pidAngleKpUI.setValue(pidAngleData['Kp'])
-        self.widget.pidAngleKiUI.setValue(pidAngleData['Ki'])
-        self.widget.pidAngleKdUI.setValue(pidAngleData['Kd'])
+        self.widget.pidAngleKpUI.setValue(pidAngleData.get('Kp', 0))
+        self.widget.pidAngleKiUI.setValue(pidAngleData.get('Ki', 0))
+        self.widget.pidAngleKdUI.setValue(pidAngleData.get('Kd', 0))
 
     def setPidSpeed(self, pidSpeedData):
-        self.widget.pidSpeedKpUI.setValue(pidSpeedData['Kp'])
-        self.widget.pidSpeedKiUI.setValue(pidSpeedData['Ki'])
-        self.widget.pidSpeedKdUI.setValue(pidSpeedData['Kd'])
+        self.widget.pidSpeedKpUI.setValue(pidSpeedData.get('Kp', 0))
+        self.widget.pidSpeedKiUI.setValue(pidSpeedData.get('Ki', 0))
+        self.widget.pidSpeedKdUI.setValue(pidSpeedData.get('Kd', 0))
 
     def test(self, event):
         print("event")

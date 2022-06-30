@@ -30,37 +30,27 @@ class JoystickWidget(BaseWidget):
 
         self.stack = stack
 
-        _, package_path = get_resource('packages', 'joystick')
-        ui_file = os.path.join(package_path, 'share', 'joystick', 'resource', 'joystick.ui')
-        loadUi(ui_file, self)
+        self.loadUI()
+        self.initializeRobotsOptions()
 
         self.pressedKeys = []
         self.xMove = 0
         self.yMove = 0
         self.keyPressedThread = threading.Thread()
 
-        self.initializeRobotsOptions()
-        # self.initializeSettings(self.comboBox.currentData()['filePath'])
-
         self.joystickWidget.mouseMoveEvent = self.joystickWidgetMouseMove
         self.setMouseTracking(False)
 
-        self.comboBox.currentIndexChanged.connect(self.onChoosenRobotChange)
-        currentData = self.comboBox.currentData()
-        if currentData:
-            self.dataFilePath = currentData['filePath']
-
-            self.initializeSettings(self.dataFilePath)
+        self.comboBox.currentIndexChanged.connect(self.setRobotOnScreen)
+        self.setRobotOnScreen()
 
         self.settingsButton.clicked.connect(self.settingsClicked)
 
     def settingsClicked(self):
-        self.stack.goToSettings(self.dataFilePath)
-
-    def onChoosenRobotChange(self, event):
-        data = self.comboBox.currentData()
-        if data:
-            self.setRobotOnScreen(data)
+        currentData = self.comboBox.currentData()
+        if currentData:
+            dataFilePath = currentData['filePath']
+            self.stack.goToSettings(dataFilePath)
 
     def joystickWidgetMouseMove(self, event):
         self.joystickPosition = event.pos()
@@ -70,11 +60,8 @@ class JoystickWidget(BaseWidget):
         if self.checkIfPointIsInEllipse(x, y):
             self.update()
 
-    def initializeSettings(self, filePath):
-        dataFile = open(filePath)
-        data = json.load(dataFile)
-        dataFile.close()
-        self.controlKeys = data['controlKeys']
+    def initializeRobotSettings(self):
+        self.controlKeys = self.data['controlKeys']
 
         for key in self.controlKeys:
             controlValue = self.controlKeys[key].upper()
@@ -236,3 +223,8 @@ class JoystickWidget(BaseWidget):
             self.returnToCenter()
 
         event.accept()
+
+    def loadUI(self):
+        _, package_path = get_resource('packages', 'joystick')
+        ui_file = os.path.join(package_path, 'share', 'joystick', 'resource', 'joystick.ui')
+        loadUi(ui_file, self)

@@ -27,14 +27,14 @@ qlineargradient:(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(255, 255, 255, 
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="commandLabelUI">
      <property name="text">
-      <string>aaaaaaaaaaaabb</string>
+      <string/>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="pushButton">
+    <widget class="QPushButton" name="commandButtonUI">
      <property name="minimumSize">
       <size>
        <width>50</width>

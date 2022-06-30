@@ -22,32 +22,15 @@ class CommandsPanelWidget(BaseWidget):
         self.loadUI()
         self.initializeRobotsOptions()
 
-        self.setupDashboardElements()
+        self.comboBox.currentIndexChanged.connect(self.setRobotOnScreen)
+        self.setRobotOnScreen()
 
-        self.comboBox.currentIndexChanged.connect(self.onChoosenRobotChange)
-        currentData = self.comboBox.currentData()
-        if currentData:
-            self.dataFilePath = currentData['filePath']
-
-            self.initializeSettings(self.dataFilePath)
-
-    def onChoosenRobotChange(self, event):
-        data = self.comboBox.currentData()
-        if data:
-            self.setRobotOnScreen(data)
-
-    def initializeSettings(self, filePath):
-        dataFile = open(filePath)
-        data = json.load(dataFile)
-        dataFile.close()
-        # print(data)
-
-    def setupDashboardElements(self):
-        for i in range(1, 5):
-            # print(self.www)
-            element = CommandExecuteElementWidget()
+    def initializeRobotSettings(self):
+        self.elements.clear()
+        commands = self.data.get('commands', [])
+        for command in commands:
+            element = CommandExecuteElementWidget(command)
             self.elements.addWidget(element)
-            # self.groupBox.addWidget(element)
 
     def loadUI(self):
         _, packagePath = get_resource('packages', 'commands_panel')

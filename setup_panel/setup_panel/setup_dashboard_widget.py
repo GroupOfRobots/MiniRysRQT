@@ -38,14 +38,6 @@ class SetupDashboardWidget(QWidget):
             # self.elements.addWidget(element)
             self.elements.addWidget(element)
 
-        # self.elementsGroupBox.setLayout(self.form)
-        # print(self.elements)
-        # print(self.scrollArea)
-        # print(self.elementsGroupBox)
-        # self.repaint()
-
-        # self.scrollArea.setWidget(self.groupBox)
-
     def loadUi(self):
         _, packagePath = get_resource('packages', 'setup_panel')
         uiFile = os.path.join(packagePath, 'share', 'setup_panel', 'resource', 'setup_dashboard.ui')

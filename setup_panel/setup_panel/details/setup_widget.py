@@ -31,11 +31,11 @@ class SetupWidget(QWidget):
         self.dataFilePath = dataFilePath
 
         if self.dataFilePath:
-            self.data = self.loadData(self.dataFilePath)
+            self.loadData(self.dataFilePath)
         else:
             self.addMode = True
             self.dataPath = os.path.join(self.sharedPath, 'share', 'shared', 'data', 'robots')
-            self.data = self.loadData(self.defaultFilePath)
+            self.loadData(self.defaultFilePath)
 
             currentFiles = os.listdir(self.dataPath)
             for index in range(len(os.listdir(self.dataPath)) + 1):
@@ -63,13 +63,11 @@ class SetupWidget(QWidget):
 
         self.addControlKeysValidators()
 
-        self.setupDashboardElements()
+        self.setupCommandsElements()
 
         self.initSshData()
 
         self.initPidData()
-
-
 
         self.pidSpeedKpUI.valueChanged.connect(self.test)
 
@@ -97,14 +95,16 @@ class SetupWidget(QWidget):
         print("event1233")
         print(event)
 
+    def setupCommandsElements(self):
+        self.addNewCommandButtonUI.clicked.connect(self.addNewCommand)
+        commands = self.data.get('commands', [])
+        for command in commands:
+            commandElement = CommandElementWidget(self, command)
+            self.commandElementsBoxUI.addWidget(commandElement)
 
-    def setupDashboardElements(self):
-        for i in range(1, 5):
-            # print(self.elements)
-            element = CommandElementWidget()
-            # print(element)
-            # self.elements.addWidget(element)
-            self.elements.addWidget(element)
+    def addNewCommand(self):
+        commandElement = CommandElementWidget(self, None)
+        self.commandElementsBoxUI.addWidget(commandElement)
 
     def addControlKeysValidators(self):
         self.keyInputDictionary[ControlKeyEnum.FORWARD].textChanged.connect(
@@ -159,12 +159,22 @@ class SetupWidget(QWidget):
         self.stack.stack.setCurrentIndex(0)
 
     def saveClicked(self):
+        self.saveCommands()
+
         if self.addMode:
             self.addNewRobot()
             return
         self.updateRobotData()
 
+    def saveCommands(self):
+        self.data['commands'] = []
+        for index in range(0, self.commandElementsBoxUI.count()):
+            commandElement = self.commandElementsBoxUI.itemAt(index).widget()
+            self.data['commands'].append(commandElement.returnCommand())
+
     def addNewRobot(self):
+        print('addNewRobot')
+        print(self.data)
         self.data['robotName'] = self.robotNameInput.text()
         self.data['controlKeys']['forward'] = self.forwardKeyInput.text()
 
@@ -199,60 +209,64 @@ class SetupWidget(QWidget):
         self.goBack()
 
     def updateRobotData(self):
-        dataFile = open(self.dataFilePath, 'r')
-        data = json.load(dataFile)
-        dataFile.close()
-        dataFile = open(self.dataFilePath, 'w')
-        data['robotName'] = self.robotNameInput.text()
-        data['controlKeys']['forward'] = self.forwardKeyInput.text()
-        data['controlKeys']['right'] = self.rightKeyInput.text()
-        data['controlKeys']['backward'] = self.backwardKeyInput.text()
-        data['controlKeys']['left'] = self.leftKeyInput.text()
-        data['controlKeys']['stable'] = self.stableKeyInput.text()
+        print('updateRobotData')
 
+        # dataFile = open(self.dataFilePath, 'r')
+        # data = json.load(dataFile)
+        # dataFile.close()
+        # dataFile = open(self.dataFilePath, 'w')
+        self.data['robotName'] = self.robotNameInput.text()
+        self.data['controlKeys']['forward'] = self.forwardKeyInput.text()
+        self.data['controlKeys']['backward'] = self.backwardKeyInput.text()
+        self.data['controlKeys']['right'] = self.rightKeyInput.text()
+        self.data['controlKeys']['left'] = self.leftKeyInput.text()
+        self.data['controlKeys']['stable'] = self.stableKeyInput.text()
 
         # FORWARD
-        data['dynamic']['forward']['leftEngine'] = self.dynamicTable.item(0, 0).text()
+        self.data['dynamic']['forward']['leftEngine'] = self.dynamicTable.item(0, 0).text()
         print(self.dynamicTable.item(0, 1).text())
         print(self.dynamicTable.item(1, 0).text())
-        data['dynamic']['forward']['rightEngine'] = self.dynamicTable.item(0, 1).text()
+        self.data['dynamic']['forward']['rightEngine'] = self.dynamicTable.item(0, 1).text()
         # data['dynamic']['forward']['inertia'] = self.dynamicTable.item(0, 2).text()
 
-        data['dynamic']['forwardLeft']['leftEngine'] = self.dynamicTable.item(1, 0).text()
-        data['dynamic']['forwardLeft']['rightEngine'] = self.dynamicTable.item(1, 1).text()
+        self.data['dynamic']['forwardLeft']['leftEngine'] = self.dynamicTable.item(1, 0).text()
+        self.data['dynamic']['forwardLeft']['rightEngine'] = self.dynamicTable.item(1, 1).text()
         # data['dynamic']['forwardLeft']['inertia'] = self.dynamicTable.item(1, 2).text()
 
-        data['dynamic']['forwardRight']['leftEngine'] = self.dynamicTable.item(2, 0).text()
-        data['dynamic']['forwardRight']['rightEngine'] = self.dynamicTable.item(2, 1).text()
+        self.data['dynamic']['forwardRight']['leftEngine'] = self.dynamicTable.item(2, 0).text()
+        self.data['dynamic']['forwardRight']['rightEngine'] = self.dynamicTable.item(2, 1).text()
         # data['dynamic']['forwardRight']['inertia'] = self.dynamicTable.item(2, 2).text()
 
         # RIGHT
-        data['dynamic']['backward']['leftEngine'] = self.dynamicTable.item(4, 0).text()
-        data['dynamic']['backward']['rightEngine'] = self.dynamicTable.item(4, 1).text()
+        self.data['dynamic']['backward']['leftEngine'] = self.dynamicTable.item(4, 0).text()
+        self.data['dynamic']['backward']['rightEngine'] = self.dynamicTable.item(4, 1).text()
         # data['dynamic']['backward']['inertia'] = self.dynamicTable.item(4, 2).text()
 
         # BACKWARD
-        data['dynamic']['backwardLeft']['leftEngine'] = self.dynamicTable.item(4, 0).text()
-        data['dynamic']['backwardLeft']['rightEngine'] = self.dynamicTable.item(4, 1).text()
+        self.data['dynamic']['backwardLeft']['leftEngine'] = self.dynamicTable.item(4, 0).text()
+        self.data['dynamic']['backwardLeft']['rightEngine'] = self.dynamicTable.item(4, 1).text()
         # data['dynamic']['backwardLeft']['inertia'] = self.dynamicTable.item(4, 2).text()
 
-        data['dynamic']['backwardRight']['leftEngine'] = self.dynamicTable.itemAt(5, 0).text()
-        data['dynamic']['backwardRight']['rightEngine'] = self.dynamicTable.itemAt(5, 1).text()
+        self.data['dynamic']['backwardRight']['leftEngine'] = self.dynamicTable.itemAt(5, 0).text()
+        self.data['dynamic']['backwardRight']['rightEngine'] = self.dynamicTable.itemAt(5, 1).text()
         # data['dynamic']['backwardRight']['inertia'] = self.dynamicTable.item(5, 2).text()
 
-        data['dynamic']['backwardRight']['leftEngine'] = self.dynamicTable.itemAt(6, 0).text()
-        data['dynamic']['backwardRight']['rightEngine'] = self.dynamicTable.itemAt(6, 1).text()
+        self.data['dynamic']['backwardRight']['leftEngine'] = self.dynamicTable.itemAt(6, 0).text()
+        self.data['dynamic']['backwardRight']['rightEngine'] = self.dynamicTable.itemAt(6, 1).text()
         # data['dynamic']['backwardRight']['inertia'] = self.dynamicTable.item(6, 2).text()
 
         # LEFT
-        data['dynamic']['backwardRight']['leftEngine'] = self.dynamicTable.itemAt(7, 0).text()
-        data['dynamic']['backwardRight']['rightEngine'] = self.dynamicTable.itemAt(7, 1).text()
+        self.data['dynamic']['backwardRight']['leftEngine'] = self.dynamicTable.itemAt(7, 0).text()
+        self.data['dynamic']['backwardRight']['rightEngine'] = self.dynamicTable.itemAt(7, 1).text()
         # data['dynamic']['backwardRight']['inertia'] = self.dynamicTable.item(7, 2).text()
 
-        json.dump(data, dataFile)
-        dataFile.close()
+        # print('self.data')
+        # print(self.data)
 
-        id = data['id']
+        # json.dump(self.data, dataFile)
+        # dataFile.close()
+
+        id = self.data.get('id', None)
 
         itemData = {
             "fileName": None,
@@ -260,7 +274,12 @@ class SetupWidget(QWidget):
             "id": id,
         }
 
+        dataFile = open(self.dataFilePath, 'w')
+        json.dump(self.data, dataFile)
+        dataFile.close()
+
         print('updateRobotData')
+
         innerCommunication.updateRobotSignal.emit(itemData)
         self.goBack()
 
@@ -270,66 +289,65 @@ class SetupWidget(QWidget):
 
     def loadData(self, dataFilePath):
         dataFile = open(dataFilePath)
-        data = json.load(dataFile)
+        self.data = json.load(dataFile)
         dataFile.close()
-        return data
 
     def loadJson(self):
         self.robotNameInput.setText(self.data['robotName'])
 
         # CONTROL KEYS
-        self.controlKeys = self.data['controlKeys']
-        self.forwardKeyInput.setText(self.controlKeys[ControlKeyEnum.FORWARD])
-        self.rightKeyInput.setText(self.controlKeys[ControlKeyEnum.RIGHT])
-        self.backwardKeyInput.setText(self.controlKeys[ControlKeyEnum.BACKWARD])
-        self.leftKeyInput.setText(self.controlKeys[ControlKeyEnum.LEFT])
-        self.stableKeyInput.setText(self.controlKeys[ControlKeyEnum.STABLE])
+        self.controlKeys = self.data.get('controlKeys', {})
+        self.forwardKeyInput.setText(self.controlKeys.get(ControlKeyEnum.FORWARD))
+        self.rightKeyInput.setText(self.controlKeys.get(ControlKeyEnum.RIGHT))
+        self.backwardKeyInput.setText(self.controlKeys.get(ControlKeyEnum.BACKWARD))
+        self.leftKeyInput.setText(self.controlKeys.get(ControlKeyEnum.LEFT))
+        self.stableKeyInput.setText(self.controlKeys.get(ControlKeyEnum.STABLE))
 
         # DYNAMIC
-        dynamic = self.data['dynamic']
-        forwardDynamic = dynamic['forward']
-        forwardLeftDynamic = dynamic['forwardLeft']
-        forwardRightDynamic = dynamic['forwardRight']
+        dynamic = self.data.get('dynamic', {})
+        forwardDynamic = dynamic.get('forward', {})
+        forwardLeftDynamic = dynamic.get('forwardLeft', {})
+        forwardRightDynamic = dynamic.get('forwardRight', {})
 
-        backwardDynamic = dynamic['backward']
-        backwardLeftDynamic = dynamic['backward']
-        backwardRightDynamic = dynamic['backward']
+        backwardDynamic = dynamic.get('backward', {})
+        backwardLeftDynamic = dynamic.get('backwardLeft', {})
+        backwardRightDynamic = dynamic.get('backwardRight', {})
 
         # FORWARD
-        self.dynamicTable.setItem(0, 0, QTableWidgetItem(str(forwardDynamic['leftEngine'])))
-        self.dynamicTable.setItem(0, 1, QTableWidgetItem(str(forwardDynamic['rightEngine'])))
-        self.dynamicTable.setItem(0, 2, QTableWidgetItem(str(forwardDynamic['inertia'])))
+        self.dynamicTable.setItem(0, 0, QTableWidgetItem(str(forwardDynamic.get('leftEngine'))))
+        self.dynamicTable.setItem(0, 1, QTableWidgetItem(str(forwardDynamic.get('rightEngine'))))
+        self.dynamicTable.setItem(0, 2, QTableWidgetItem(str(forwardDynamic.get('inertia'))))
 
-        self.dynamicTable.setItem(1, 0, QTableWidgetItem(str(forwardLeftDynamic['leftEngine'])))
-        self.dynamicTable.setItem(1, 1, QTableWidgetItem(str(forwardLeftDynamic['rightEngine'])))
-        self.dynamicTable.setItem(1, 2, QTableWidgetItem(str(forwardLeftDynamic['inertia'])))
+        self.dynamicTable.setItem(1, 0, QTableWidgetItem(str(forwardLeftDynamic.get('leftEngine'))))
+        self.dynamicTable.setItem(1, 1, QTableWidgetItem(str(forwardLeftDynamic.get('rightEngine'))))
+        self.dynamicTable.setItem(1, 2, QTableWidgetItem(str(forwardLeftDynamic.get('inertia'))))
 
-        self.dynamicTable.setItem(2, 0, QTableWidgetItem(str(forwardRightDynamic['leftEngine'])))
-        self.dynamicTable.setItem(2, 1, QTableWidgetItem(str(forwardRightDynamic['rightEngine'])))
-        self.dynamicTable.setItem(2, 2, QTableWidgetItem(str(forwardRightDynamic['inertia'])))
+        self.dynamicTable.setItem(2, 0, QTableWidgetItem(str(forwardRightDynamic.get('leftEngine'))))
+        self.dynamicTable.setItem(2, 1, QTableWidgetItem(str(forwardRightDynamic.get('rightEngine'))))
+        self.dynamicTable.setItem(2, 2, QTableWidgetItem(str(forwardRightDynamic.get('inertia'))))
 
         # RIGHT
-        self.dynamicTable.setItem(3, 0, QTableWidgetItem(str(backwardDynamic['leftEngine'])))
-        self.dynamicTable.setItem(3, 1, QTableWidgetItem(str(backwardDynamic['rightEngine'])))
-        self.dynamicTable.setItem(3, 2, QTableWidgetItem(str(backwardDynamic['inertia'])))
+        self.dynamicTable.setItem(3, 0, QTableWidgetItem(str(backwardDynamic.get('leftEngine'))))
+        self.dynamicTable.setItem(3, 1, QTableWidgetItem(str(backwardDynamic.get('rightEngine'))))
+        self.dynamicTable.setItem(3, 2, QTableWidgetItem(str(backwardDynamic.get('inertia'))))
 
         # BACKWARD
-        self.dynamicTable.setItem(4, 0, QTableWidgetItem(str(backwardLeftDynamic['leftEngine'])))
-        self.dynamicTable.setItem(4, 1, QTableWidgetItem(str(backwardLeftDynamic['rightEngine'])))
-        self.dynamicTable.setItem(4, 2, QTableWidgetItem(str(backwardLeftDynamic['inertia'])))
+        self.dynamicTable.setItem(4, 0, QTableWidgetItem(str(backwardLeftDynamic.get('leftEngine'))))
+        self.dynamicTable.setItem(4, 1, QTableWidgetItem(str(backwardLeftDynamic.get('rightEngine'))))
+        self.dynamicTable.setItem(4, 2, QTableWidgetItem(str(backwardLeftDynamic.get('inertia'))))
 
-        self.dynamicTable.setItem(5, 0, QTableWidgetItem(str(backwardRightDynamic['leftEngine'])))
-        self.dynamicTable.setItem(5, 1, QTableWidgetItem(str(backwardRightDynamic['rightEngine'])))
-        self.dynamicTable.setItem(5, 2, QTableWidgetItem(str(backwardRightDynamic['inertia'])))
+        self.dynamicTable.setItem(5, 0, QTableWidgetItem(str(backwardRightDynamic.get('leftEngine'))))
+        self.dynamicTable.setItem(5, 1, QTableWidgetItem(str(backwardRightDynamic.get('rightEngine'))))
+        self.dynamicTable.setItem(5, 2, QTableWidgetItem(str(backwardRightDynamic.get('inertia'))))
 
-        self.dynamicTable.setItem(6, 0, QTableWidgetItem(str(backwardRightDynamic['leftEngine'])))
-        self.dynamicTable.setItem(6, 1, QTableWidgetItem(str(backwardRightDynamic['rightEngine'])))
-        self.dynamicTable.setItem(6, 2, QTableWidgetItem(str(backwardRightDynamic['inertia'])))
+        self.dynamicTable.setItem(6, 0, QTableWidgetItem(str(backwardRightDynamic.get('leftEngine'))))
+        self.dynamicTable.setItem(6, 1, QTableWidgetItem(str(backwardRightDynamic.get('rightEngine'))))
+        self.dynamicTable.setItem(6, 2, QTableWidgetItem(str(backwardRightDynamic.get('inertia'))))
 
         # LEFT
-        self.dynamicTable.setItem(7, 0, QTableWidgetItem(str(backwardRightDynamic['leftEngine'])))
-        self.dynamicTable.setItem(7, 1, QTableWidgetItem(str(backwardRightDynamic['rightEngine'])))
-        self.dynamicTable.setItem(7, 2, QTableWidgetItem(str(backwardRightDynamic['inertia'])))
+        self.dynamicTable.setItem(7, 0, QTableWidgetItem(str(backwardRightDynamic.get('leftEngine'))))
+        self.dynamicTable.setItem(7, 1, QTableWidgetItem(str(backwardRightDynamic.get('rightEngine'))))
+        self.dynamicTable.setItem(7, 2, QTableWidgetItem(str(backwardRightDynamic.get('inertia'))))
 
         # JOYSTICK
         joystick = self.data['joystick']

@@ -21,12 +21,15 @@ class RunStatusIcon(str, Enum):
     STOP = 'stopIcon.png'
 
 class CommandExecuteElementWidget(QWidget):
-    def __init__(self, fileName=None, stack=None):
+    def __init__(self, command=None):
         super(CommandExecuteElementWidget, self).__init__()
         _, self.packagePath = get_resource('packages', 'commands_panel')
 
+        self.command = command
+
         self.loadUi()
         self.isCommandRunning = False
+        self.commandLabelUI.setText(self.command.get('commandName', ''))
         self.commandButtonUI.clicked.connect(self.commandButtonClicked)
 
     def loadUi(self):
@@ -56,7 +59,7 @@ class CommandExecuteElementWidget(QWidget):
         username = "minirys"
         password = "minirys"
 
-        command = "./prepare_gpio.sh"
+        command = self.command.command
 
         self.ssh = paramiko.SSHClient()
         self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
