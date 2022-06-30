@@ -98,6 +98,7 @@ class SetupWidget(QWidget):
     def setupCommandsElements(self):
         self.addNewCommandButtonUI.clicked.connect(self.addNewCommand)
         commands = self.data.get('commands', [])
+        # self.commandElementsBoxUI.clear()
         for command in commands:
             commandElement = CommandElementWidget(self, command)
             self.commandElementsBoxUI.addWidget(commandElement)

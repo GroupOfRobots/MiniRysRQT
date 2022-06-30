@@ -26,7 +26,7 @@ class CommandsPanelWidget(BaseWidget):
         self.setRobotOnScreen()
 
     def initializeRobotSettings(self):
-        self.elements.clear()
+        # self.elements.clear()
         commands = self.data.get('commands', [])
         for command in commands:
             element = CommandExecuteElementWidget(command)
