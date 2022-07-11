@@ -138,9 +138,6 @@ class JoystickWidget(BaseWidget):
                                 self.innerEllipseRy * 0.5) ** 2 * math.cos(angle) ** 2))
                 joystickR = math.sqrt(cartesianPositionX ** 2 + cartesianPositionY ** 2)
 
-                # print(self.rx, self.ry,rx,ry)
-                # print(cartesianPositionX,cartesianPositionY,x,y, angle," ellipseR: ",ellipseR,"  joystickR:",joystickR,joystickR/ellipseR)
-
                 self.update()
                 time.sleep(0.001)
             else:

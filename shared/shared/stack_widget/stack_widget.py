@@ -2,7 +2,7 @@
 
 from python_qt_binding.QtWidgets import QWidget, QStackedWidget, QStackedLayout
 from shared.deleted_robot_screen.deleted_robot_screen import DeletedRobotScreenWidget
-from setup_panel.setup_widget import SetupWidget
+from setup_panel.details.setup_widget import SetupWidget
 
 class StackWidget(QWidget):
     def __init__(self):

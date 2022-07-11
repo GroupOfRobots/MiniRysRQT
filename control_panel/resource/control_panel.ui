@@ -54,7 +54,17 @@
        <widget class="QComboBox" name="comboBox"/>
       </item>
       <item>
-       <widget class="QCheckBox" name="checkBox">
+       <widget class="QCheckBox" name="checkBox_2">
+        <property name="layoutDirection">
+         <enum>Qt::RightToLeft</enum>
+        </property>
+        <property name="text">
+         <string>balance</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="balanceCheckBoxUI">
         <property name="layoutDirection">
          <enum>Qt::RightToLeft</enum>
         </property>

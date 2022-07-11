@@ -798,8 +798,8 @@ border-radius: 75px;
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>776</width>
-              <height>727</height>
+              <width>786</width>
+              <height>725</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -810,7 +810,7 @@ border-radius: 75px;
                </property>
                <layout class="QVBoxLayout" name="verticalLayout_4">
                 <item>
-                 <layout class="QVBoxLayout" name="elements"/>
+                 <layout class="QVBoxLayout" name="commandElementsBoxUI"/>
                 </item>
                 <item>
                  <spacer name="verticalSpacer">

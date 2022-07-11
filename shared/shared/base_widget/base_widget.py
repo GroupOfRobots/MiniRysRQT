@@ -13,6 +13,7 @@ class BaseWidget(QWidget):
         super(BaseWidget, self).__init__()
 
         self.stack = stack
+        self.currentDataFile = None
         self.data = None
 
         self.setFocusPolicy(Qt.ClickFocus)
@@ -29,25 +30,16 @@ class BaseWidget(QWidget):
         for index, fileName in enumerate(os.listdir(dataFilePath)):
             filePath = dataFilePath + '/' + fileName
             dataFile = open(filePath)
-            self.data = json.load(dataFile)
+            dataFromFile = json.load(dataFile)
             dataFile.close()
-            robotName = self.data.get('robotName','')
-            id = self.data.get('id', None)
 
-            itemData = {
-                "fileName": None,
-                "filePath": filePath,
-                "id": id,
-            }
-
-            self.comboBox.addItem(robotName, itemData)
+            self.addItemData(dataFromFile, filePath)
 
     def onUpdateRobotSignal(self, event):
         index = self.comboBox.findData(event)
-        filePath = event['filePath']
-        dataFile = open(filePath)
-        self.data = json.load(dataFile)
-        dataFile.close()
+
+        self.loadData(event)
+
         robotName = self.data.get('robotName','')
         self.comboBox.setItemText(index, robotName)
 
@@ -65,15 +57,28 @@ class BaseWidget(QWidget):
 
         self.comboBox.removeItem(indexOfElementToBeRemoved)
 
-    def onAddRobotSignal(self, signaldData):
-        fileName = signaldData['fileName']
-        filePath = signaldData['filePath']
-        id = signaldData['id']
+    def onAddRobotSignal(self, signalData):
+        self.loadData(signalData)
+        self.addItemData( self.data, signaldData['filePath'])
 
-        dataFile = open(filePath)
+    def setRobotOnScreen(self):
+        currentData = self.comboBox.currentData()
+        if currentData == None:
+            return
+
+        self.loadData(currentData)
+        self.initializeRobotSettings()
+
+    def loadData(self, currentData):
+        self.dataFilePath = currentData['filePath']
+        dataFile = open(self.dataFilePath)
         self.data = json.load(dataFile)
         dataFile.close()
-        robotName = self.data.get('robotName','')
+
+    def addItemData(self, data, filePath):
+        id = data.get('id', None)
+
+        robotName = data.get('robotName', '')
 
         itemData = {
             "fileName": None,
@@ -82,17 +87,6 @@ class BaseWidget(QWidget):
         }
 
         self.comboBox.addItem(robotName, itemData)
-
-    def setRobotOnScreen(self):
-        currentData = self.comboBox.currentData()
-        if currentData == None:
-            return
-
-        filePath = currentData['filePath']
-        dataFile = open(filePath)
-        self.data = json.load(dataFile)
-        dataFile.close()
-        self.initializeRobotSettings()
 
     @abstractmethod
     def initializeRobotSettings(self):

@@ -17,17 +17,14 @@ class ControlPanelWidget(BaseWidget):
         BaseWidget.__init__(self, stack)
 
         self.loadUI()
+        self.initializeRobotsOptions()
+        self.setRobotOnScreen()
+
+        # self.initializeRobotSettings()
 
         self.defineButtons()
 
-        self.initializeRobotsOptions()
-
-        self.comboBox.currentIndexChanged.connect(self.onChoosenRobotChange)
-        currentData = self.comboBox.currentData()
-        if currentData:
-            self.dataFilePath = currentData['filePath']
-
-            self.initializeSettings(self.dataFilePath)
+        self.comboBox.currentIndexChanged.connect(self.setRobotOnScreen)
 
         self.pressedKeys = {
             ControlKeyEnum.FORWARD: False,
@@ -42,21 +39,13 @@ class ControlPanelWidget(BaseWidget):
         uiFile = os.path.join(packagePath, 'share', 'control_panel', 'resource', 'control_panel.ui')
         loadUi(uiFile, self)
 
-    def initializeSettings(self, filePath):
-        dataFile = open(filePath)
-        data = json.load(dataFile)
-        dataFile.close()
-        self.controlKeys = data['controlKeys']
-        self.dynamic = data['dynamic']
+    def initializeRobotSettings(self):
+        self.controlKeys = self.data.get('controlKeys', {})
+        self.dynamic = self.data.get('dynamic',{})
 
         for key in self.controlKeys:
             controlValue = self.controlKeys[key].upper()
             self.controlKeys[key] = QtCore.Qt.Key(ord(controlValue))
-
-    def onChoosenRobotChange(self, event):
-        data = self.comboBox.currentData()
-        if data:
-            self.setRobotOnScreen(data)
 
     def keyPressEvent(self, event):
         if event.isAutoRepeat():
