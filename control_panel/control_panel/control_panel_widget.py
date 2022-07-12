@@ -11,6 +11,8 @@ from shared.base_widget.base_widget import BaseWidget
 from .elements.button import Button
 from minirys_msgs.msg import MotorCommand
 
+from std_msgs.msg import Bool
+
 class ControlPanelWidget(BaseWidget):
     def __init__(self, stack=None, node=None):
         super(ControlPanelWidget, self).__init__()
@@ -20,24 +22,38 @@ class ControlPanelWidget(BaseWidget):
         self.initializeRobotsOptions()
         self.setRobotOnScreen()
 
-        # self.initializeRobotSettings()
-
         self.defineButtons()
 
         self.comboBox.currentIndexChanged.connect(self.setRobotOnScreen)
+        self.balanceCheckBoxUI.stateChanged.connect(self.balanceStateChanged)
 
+        self.initPressesKeys()
+
+        self.publisher = node.create_publisher(MotorCommand, '/internal/motor_command', 10)
+        self.balancePublisher = node.create_publisher(Bool, '/balance_mode', 10)
+
+    def loadUI(self):
+        _, packagePath = get_resource('packages', 'control_panel')
+        uiFile = os.path.join(packagePath, 'share', 'control_panel', 'resource', 'control_panel.ui')
+        loadUi(uiFile, self)
+
+    def balanceStateChanged(self, state):
+        msg = Bool()
+
+        if state == 0:
+            msg.data=False
+            self.balancePublisher.publish(msg)
+            return
+        msg.data=True
+        self.balancePublisher.publish(msg)
+
+    def initPressesKeys(self):
         self.pressedKeys = {
             ControlKeyEnum.FORWARD: False,
             ControlKeyEnum.RIGHT: False,
             ControlKeyEnum.BACKWARD: False,
             ControlKeyEnum.LEFT: False
         }
-        self.publisher = node.create_publisher(MotorCommand, '/internal/motor_command', 10)
-
-    def loadUI(self):
-        _, packagePath = get_resource('packages', 'control_panel')
-        uiFile = os.path.join(packagePath, 'share', 'control_panel', 'resource', 'control_panel.ui')
-        loadUi(uiFile, self)
 
     def initializeRobotSettings(self):
         self.controlKeys = self.data.get('controlKeys', {})
