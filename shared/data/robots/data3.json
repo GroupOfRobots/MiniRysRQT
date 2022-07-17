@@ -67,5 +67,11 @@
       "leftEngine": 90,
       "rightEngine": 90
     }
+  },
+  "ssh": {
+    "host": "",
+    "port": "22",
+    "username": "minirys",
+    "password": "minirys"
   }
 }

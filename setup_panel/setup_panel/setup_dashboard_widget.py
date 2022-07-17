@@ -21,8 +21,6 @@ class SetupDashboardWidget(QWidget):
 
         self.elementDictionary = {}
 
-        # self.groupBox = QGroupBox()
-        # self.form = QFormLayout()
         self.setupDashboardElements()
 
         self.addNewRobotButton.clicked.connect(self.addNewRobot)
@@ -64,4 +62,4 @@ class SetupDashboardWidget(QWidget):
         element.loadJson()
 
     def addNewRobot(self):
-        self.stack.goToSettings()
+        self.stack.goToSettings(addMode= True)

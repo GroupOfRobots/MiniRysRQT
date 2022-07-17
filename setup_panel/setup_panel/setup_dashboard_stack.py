@@ -12,9 +12,9 @@ class SetupDashboardStackWidget(StackWidget):
         self.mainChildWidget = SetupDashboardWidget(stack=self)
         self.stack.addWidget(self.mainChildWidget)
 
-    def goToSettings(self, dataFilePath=None):
+    def goToSettings(self, dataFilePath=None, addMode=False):
         if hasattr(self, 'setupWidget'):
             self.stack.removeWidget(self.setupWidget)
-        self.setupWidget = SetupWidget(dataFilePath=dataFilePath, stack=self)
+        self.setupWidget = SetupWidget(dataFilePath=dataFilePath, stack=self ,addMode=addMode)
         self.stack.addWidget(self.setupWidget)
         self.stack.setCurrentIndex(1)

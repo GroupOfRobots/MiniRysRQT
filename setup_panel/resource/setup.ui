@@ -109,505 +109,516 @@
       <attribute name="title">
        <string>CONTROLS</string>
       </attribute>
-      <widget class="QFrame" name="controlButtonsWraper">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>802</width>
-         <height>193</height>
-        </rect>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">border:none;</string>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::StyledPanel</enum>
-       </property>
-       <property name="frameShadow">
-        <enum>QFrame::Raised</enum>
-       </property>
-       <layout class="QFormLayout" name="formLayout">
-        <item row="1" column="0">
-         <widget class="QLabel" name="robotNameLabel">
-          <property name="text">
-           <string>ROBOT NAME</string>
+      <layout class="QVBoxLayout" name="verticalLayout_7">
+       <item>
+        <widget class="QScrollArea" name="scrollArea">
+         <property name="styleSheet">
+          <string notr="true">background: white;</string>
+         </property>
+         <property name="widgetResizable">
+          <bool>true</bool>
+         </property>
+         <widget class="QWidget" name="scrollAreaWidgetContents_2">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>774</width>
+            <height>847</height>
+           </rect>
           </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QLineEdit" name="robotNameInput">
-          <property name="maximumSize">
-           <size>
-            <width>200</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="maxLength">
-           <number>150</number>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="forwardKeyLabel">
-          <property name="text">
-           <string>FORWARD KEY</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="QLineEdit" name="forwardKeyInput">
-          <property name="minimumSize">
-           <size>
-            <width>20</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>50</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="maxLength">
-           <number>1</number>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="0">
-         <widget class="QLabel" name="rightKeyLabel">
-          <property name="text">
-           <string>RIGHT KEY</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="1">
-         <widget class="QLineEdit" name="rightKeyInput">
-          <property name="maximumSize">
-           <size>
-            <width>50</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="maxLength">
-           <number>1</number>
-          </property>
-         </widget>
-        </item>
-        <item row="6" column="0">
-         <widget class="QLabel" name="backwardKeyLabel">
-          <property name="text">
-           <string>BACKWARD KEY</string>
-          </property>
-         </widget>
-        </item>
-        <item row="6" column="1">
-         <widget class="QLineEdit" name="backwardKeyInput">
-          <property name="maximumSize">
-           <size>
-            <width>50</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="maxLength">
-           <number>1</number>
-          </property>
-         </widget>
-        </item>
-        <item row="8" column="0">
-         <widget class="QLabel" name="leftKeyLabel">
-          <property name="text">
-           <string>LEFT KEY</string>
-          </property>
-         </widget>
-        </item>
-        <item row="8" column="1">
-         <widget class="QLineEdit" name="leftKeyInput">
-          <property name="maximumSize">
-           <size>
-            <width>50</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="maxLength">
-           <number>1</number>
-          </property>
-         </widget>
-        </item>
-        <item row="9" column="0">
-         <widget class="QLabel" name="stableKeyLabel">
-          <property name="text">
-           <string>STABLE KEY</string>
-          </property>
-         </widget>
-        </item>
-        <item row="9" column="1">
-         <widget class="QLineEdit" name="stableKeyInput">
-          <property name="maximumSize">
-           <size>
-            <width>50</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="maxLength">
-           <number>1</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QTableWidget" name="dynamicTable">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>220</y>
-         <width>450</width>
-         <height>210</height>
-        </rect>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>215</width>
-         <height>210</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>450</width>
-         <height>210</height>
-        </size>
-       </property>
-       <attribute name="horizontalHeaderCascadingSectionResizes">
-        <bool>true</bool>
-       </attribute>
-       <attribute name="horizontalHeaderMinimumSectionSize">
-        <number>70</number>
-       </attribute>
-       <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
-        <bool>true</bool>
-       </attribute>
-       <attribute name="horizontalHeaderStretchLastSection">
-        <bool>true</bool>
-       </attribute>
-       <row>
-        <property name="text">
-         <string>FORWARD</string>
-        </property>
-       </row>
-       <row>
-        <property name="text">
-         <string>FORWARD+LEFT</string>
-        </property>
-       </row>
-       <row>
-        <property name="text">
-         <string>FORWARD+RIGHT</string>
-        </property>
-       </row>
-       <row>
-        <property name="text">
-         <string>RIGHT</string>
-        </property>
-       </row>
-       <row>
-        <property name="text">
-         <string>BACKWARD</string>
-        </property>
-       </row>
-       <row>
-        <property name="text">
-         <string>BACKWARD+LEFT</string>
-        </property>
-       </row>
-       <row>
-        <property name="text">
-         <string>BACKWARD+RIGHT</string>
-        </property>
-       </row>
-       <row>
-        <property name="text">
-         <string>LEFT</string>
-        </property>
-       </row>
-       <column>
-        <property name="text">
-         <string>LEFT ENGINE</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>RIGHT ENGINE</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>INTERTIA</string>
-        </property>
-       </column>
-       <item row="0" column="0">
-        <property name="text">
-         <string/>
-        </property>
-       </item>
-      </widget>
-      <widget class="QLabel" name="dynamicLabel">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>197</y>
-         <width>802</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>DYNAMIC</string>
-       </property>
-      </widget>
-      <widget class="QWidget" name="layoutWidget">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>470</y>
-         <width>802</width>
-         <height>278</height>
-        </rect>
-       </property>
-       <layout class="QVBoxLayout" name="joystickWrapper">
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_6">
-          <item>
-           <widget class="QFrame" name="frame_4">
-            <property name="frameShape">
-             <enum>QFrame::StyledPanel</enum>
-            </property>
-            <property name="frameShadow">
-             <enum>QFrame::Raised</enum>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QTableWidget" name="joystickForward">
-            <property name="minimumSize">
-             <size>
-              <width>210</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>210</width>
-              <height>50</height>
-             </size>
-            </property>
-            <row>
-             <property name="text">
-              <string/>
+          <layout class="QVBoxLayout" name="verticalLayout_10">
+           <item>
+            <widget class="QFrame" name="controlButtonsWraper">
+             <property name="styleSheet">
+              <string notr="true">border:none;</string>
              </property>
-            </row>
-            <column>
-             <property name="text">
-              <string>LEFT</string>
+             <property name="frameShape">
+              <enum>QFrame::StyledPanel</enum>
              </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>RIGHT</string>
+             <property name="frameShadow">
+              <enum>QFrame::Raised</enum>
              </property>
-            </column>
-           </widget>
-          </item>
-          <item>
-           <widget class="QFrame" name="frame_5">
-            <property name="frameShape">
-             <enum>QFrame::StyledPanel</enum>
-            </property>
-            <property name="frameShadow">
-             <enum>QFrame::Raised</enum>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_5">
-          <item>
-           <widget class="QTableWidget" name="joystickLeft">
-            <property name="minimumSize">
-             <size>
-              <width>210</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>210</width>
-              <height>50</height>
-             </size>
-            </property>
-            <row>
-             <property name="text">
-              <string/>
+             <layout class="QFormLayout" name="formLayout">
+              <item row="1" column="0">
+               <widget class="QLabel" name="robotNameLabel">
+                <property name="text">
+                 <string>ROBOT NAME</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QLineEdit" name="robotNameInput">
+                <property name="maximumSize">
+                 <size>
+                  <width>200</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">background: lightGray;</string>
+                </property>
+                <property name="maxLength">
+                 <number>150</number>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="forwardKeyLabel">
+                <property name="text">
+                 <string>FORWARD KEY</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QLineEdit" name="forwardKeyInput">
+                <property name="minimumSize">
+                 <size>
+                  <width>20</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>50</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">background: lightGray;</string>
+                </property>
+                <property name="maxLength">
+                 <number>1</number>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="0">
+               <widget class="QLabel" name="rightKeyLabel">
+                <property name="text">
+                 <string>RIGHT KEY</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="1">
+               <widget class="QLineEdit" name="rightKeyInput">
+                <property name="maximumSize">
+                 <size>
+                  <width>50</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">background: lightGray;</string>
+                </property>
+                <property name="maxLength">
+                 <number>1</number>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="0">
+               <widget class="QLabel" name="backwardKeyLabel">
+                <property name="text">
+                 <string>BACKWARD KEY</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="1">
+               <widget class="QLineEdit" name="backwardKeyInput">
+                <property name="maximumSize">
+                 <size>
+                  <width>50</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">background: lightGray;</string>
+                </property>
+                <property name="maxLength">
+                 <number>1</number>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="0">
+               <widget class="QLabel" name="leftKeyLabel">
+                <property name="text">
+                 <string>LEFT KEY</string>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="1">
+               <widget class="QLineEdit" name="leftKeyInput">
+                <property name="maximumSize">
+                 <size>
+                  <width>50</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">background: lightGray;</string>
+                </property>
+                <property name="maxLength">
+                 <number>1</number>
+                </property>
+               </widget>
+              </item>
+              <item row="9" column="0">
+               <widget class="QLabel" name="stableKeyLabel">
+                <property name="text">
+                 <string>STABLE KEY</string>
+                </property>
+               </widget>
+              </item>
+              <item row="9" column="1">
+               <widget class="QLineEdit" name="stableKeyInput">
+                <property name="maximumSize">
+                 <size>
+                  <width>50</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">background: lightGray;</string>
+                </property>
+                <property name="maxLength">
+                 <number>1</number>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="Line" name="line_2">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
              </property>
-            </row>
-            <column>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="dynamicLabel">
              <property name="text">
-              <string>LEFT</string>
+              <string>DYNAMIC</string>
              </property>
-            </column>
-            <column>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTableWidget" name="dynamicTable">
+             <property name="minimumSize">
+              <size>
+               <width>300</width>
+               <height>300</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>450</width>
+               <height>210</height>
+              </size>
+             </property>
+             <attribute name="horizontalHeaderCascadingSectionResizes">
+              <bool>true</bool>
+             </attribute>
+             <attribute name="horizontalHeaderMinimumSectionSize">
+              <number>70</number>
+             </attribute>
+             <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+              <bool>true</bool>
+             </attribute>
+             <attribute name="horizontalHeaderStretchLastSection">
+              <bool>true</bool>
+             </attribute>
+             <row>
+              <property name="text">
+               <string>FORWARD</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>FORWARD+LEFT</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>FORWARD+RIGHT</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>RIGHT</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>BACKWARD</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>BACKWARD+LEFT</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>BACKWARD+RIGHT</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>LEFT</string>
+              </property>
+             </row>
+             <column>
+              <property name="text">
+               <string>LEFT ENGINE</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>RIGHT ENGINE</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>INTERTIA</string>
+              </property>
+             </column>
+             <item row="0" column="0">
+              <property name="text">
+               <string/>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="joystickLabel">
              <property name="text">
-              <string>RIGHT</string>
+              <string>JOYSTICK</string>
              </property>
-            </column>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="joystick">
-            <property name="minimumSize">
-             <size>
-              <width>150</width>
-              <height>150</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>150</width>
-              <height>150</height>
-             </size>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">background-color: red;
+            </widget>
+           </item>
+           <item>
+            <layout class="QVBoxLayout" name="joystickWrapper">
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_6">
+               <item>
+                <widget class="QFrame" name="frame_4">
+                 <property name="frameShape">
+                  <enum>QFrame::StyledPanel</enum>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Raised</enum>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QTableWidget" name="joystickForward">
+                 <property name="minimumSize">
+                  <size>
+                   <width>210</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>210</width>
+                   <height>50</height>
+                  </size>
+                 </property>
+                 <row>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </row>
+                 <column>
+                  <property name="text">
+                   <string>LEFT</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>RIGHT</string>
+                  </property>
+                 </column>
+                </widget>
+               </item>
+               <item>
+                <widget class="QFrame" name="frame_5">
+                 <property name="frameShape">
+                  <enum>QFrame::StyledPanel</enum>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Raised</enum>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_5">
+               <item>
+                <widget class="QTableWidget" name="joystickLeft">
+                 <property name="minimumSize">
+                  <size>
+                   <width>210</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>210</width>
+                   <height>50</height>
+                  </size>
+                 </property>
+                 <row>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </row>
+                 <column>
+                  <property name="text">
+                   <string>LEFT</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>RIGHT</string>
+                  </property>
+                 </column>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="joystick">
+                 <property name="minimumSize">
+                  <size>
+                   <width>150</width>
+                   <height>150</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>150</width>
+                   <height>150</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">background-color: red;
 border: 3px solid blue;
 border-radius: 75px;
 </string>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QTableWidget" name="joystickRight">
-            <property name="minimumSize">
-             <size>
-              <width>210</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>210</width>
-              <height>50</height>
-             </size>
-            </property>
-            <row>
-             <property name="text">
-              <string/>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QTableWidget" name="joystickRight">
+                 <property name="minimumSize">
+                  <size>
+                   <width>210</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>210</width>
+                   <height>50</height>
+                  </size>
+                 </property>
+                 <row>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </row>
+                 <column>
+                  <property name="text">
+                   <string>LEFT</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>RIGHT</string>
+                  </property>
+                 </column>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_2">
+               <item>
+                <widget class="QFrame" name="frame_2">
+                 <property name="frameShape">
+                  <enum>QFrame::StyledPanel</enum>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Raised</enum>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QTableWidget" name="joystickBackward">
+                 <property name="minimumSize">
+                  <size>
+                   <width>210</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>210</width>
+                   <height>50</height>
+                  </size>
+                 </property>
+                 <row>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </row>
+                 <column>
+                  <property name="text">
+                   <string>LEFT</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>RIGHT</string>
+                  </property>
+                 </column>
+                </widget>
+               </item>
+               <item>
+                <widget class="QFrame" name="frame_3">
+                 <property name="frameShape">
+                  <enum>QFrame::StyledPanel</enum>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Raised</enum>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_4">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
              </property>
-            </row>
-            <column>
-             <property name="text">
-              <string>LEFT</string>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
              </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>RIGHT</string>
-             </property>
-            </column>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_2">
-          <item>
-           <widget class="QFrame" name="frame_2">
-            <property name="frameShape">
-             <enum>QFrame::StyledPanel</enum>
-            </property>
-            <property name="frameShadow">
-             <enum>QFrame::Raised</enum>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QTableWidget" name="joystickBackward">
-            <property name="minimumSize">
-             <size>
-              <width>210</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>210</width>
-              <height>50</height>
-             </size>
-            </property>
-            <row>
-             <property name="text">
-              <string/>
-             </property>
-            </row>
-            <column>
-             <property name="text">
-              <string>LEFT</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>RIGHT</string>
-             </property>
-            </column>
-           </widget>
-          </item>
-          <item>
-           <widget class="QFrame" name="frame_3">
-            <property name="frameShape">
-             <enum>QFrame::StyledPanel</enum>
-            </property>
-            <property name="frameShadow">
-             <enum>QFrame::Raised</enum>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </widget>
-      <widget class="Line" name="line">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>437</y>
-         <width>802</width>
-         <height>3</height>
-        </rect>
-       </property>
-       <property name="sizeIncrement">
-        <size>
-         <width>0</width>
-         <height>1</height>
-        </size>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-      <widget class="QLabel" name="joystickLabel">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>447</y>
-         <width>802</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>JOYSTICK</string>
-       </property>
-      </widget>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
      </widget>
      <widget class="QWidget" name="sshData">
       <attribute name="title">
@@ -772,18 +783,45 @@ border-radius: 75px;
              </property>
             </widget>
            </item>
-           <item alignment="Qt::AlignRight">
-            <widget class="QLabel" name="label_9">
-             <property name="text">
-              <string>EXECUTE VIA SSH</string>
+           <item>
+            <widget class="QGroupBox" name="groupBox_2">
+             <property name="maximumSize">
+              <size>
+               <width>200</width>
+               <height>16777215</height>
+              </size>
              </property>
-            </widget>
-           </item>
-           <item alignment="Qt::AlignRight">
-            <widget class="QLabel" name="label_8">
-             <property name="text">
-              <string>DELETE</string>
+             <property name="title">
+              <string/>
              </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_11">
+              <item>
+               <widget class="QLabel" name="label_9">
+                <property name="maximumSize">
+                 <size>
+                  <width>130</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>EXECUTE VIA SSH</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_8">
+                <property name="maximumSize">
+                 <size>
+                  <width>55</width>
+                  <height>50</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>DELETE</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </widget>
            </item>
           </layout>
@@ -799,8 +837,11 @@ border-radius: 75px;
               <x>0</x>
               <y>0</y>
               <width>786</width>
-              <height>725</height>
+              <height>707</height>
              </rect>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">background: white;</string>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_2">
              <item>
@@ -832,8 +873,17 @@ border-radius: 75px;
            </widget>
           </widget>
          </item>
-         <item>
+         <item alignment="Qt::AlignHCenter">
           <widget class="QPushButton" name="addNewCommandButtonUI">
+           <property name="maximumSize">
+            <size>
+             <width>200</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">background: lightGray;</string>
+           </property>
            <property name="text">
             <string>ADD NEW COMMAND</string>
            </property>

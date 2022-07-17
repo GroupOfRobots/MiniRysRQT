@@ -20,46 +20,109 @@
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">border:none;
+   <string notr="true">background: white;
+border:none;
 
 
 qlineargradient:(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(255, 255, 255, 255), stop:0.495 rgba(255, 255, 255, 255), stop:0.505 rgba(255, 0, 0, 255), stop:1 rgba(255, 0, 0, 255))</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
-    <widget class="QLineEdit" name="commandNameLineEditUI"/>
-   </item>
-   <item>
-    <widget class="QPlainTextEdit" name="commandTextEditUI"/>
-   </item>
-   <item>
-    <widget class="QCheckBox" name="executeViaSshCheckBoxUI">
-     <property name="text">
-      <string/>
+    <widget class="QLineEdit" name="commandNameLineEditUI">
+     <property name="styleSheet">
+      <string notr="true">background: lightGray;</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="commandDeleteButtonUI">
+    <widget class="QPlainTextEdit" name="commandTextEditUI">
+     <property name="styleSheet">
+      <string notr="true">background: lightGray;</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox">
      <property name="minimumSize">
       <size>
-       <width>10</width>
-       <height>10</height>
+       <width>130</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="title">
+      <string/>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <item alignment="Qt::AlignHCenter">
+       <widget class="QCheckBox" name="executeViaSshCheckBoxUI">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>130</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background: white;</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="minimumSize">
+      <size>
+       <width>55</width>
+       <height>0</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
-       <width>20</width>
-       <height>20</height>
+       <width>55</width>
+       <height>16777215</height>
       </size>
      </property>
-     <property name="text">
+     <property name="title">
       <string/>
      </property>
-     <property name="icon">
-      <iconset>
-       <normaloff>imgs/trash-bin.jpg</normaloff>imgs/trash-bin.jpg</iconset>
-     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QPushButton" name="commandDeleteButtonUI">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>55</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>imgs/trashBin.png</normaloff>imgs/trashBin.png</iconset>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
   </layout>

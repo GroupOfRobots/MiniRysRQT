@@ -20,6 +20,10 @@ class CommandElementWidget(QWidget):
         if self.command:
             self.setupCommand()
 
+        # self.commandDeleteButtonUI.clicked.connect(lambda event: self.widget.deleteCommand(event, self))
+
+        self.commandDeleteButtonUI.clicked.connect(lambda: self.widget.deleteCommand(self))
+
     def loadUi(self):
         _, packagePath = get_resource('packages', 'setup_panel')
         uiFile = os.path.join(packagePath, 'share', 'setup_panel', 'resource', 'command_element.ui')
