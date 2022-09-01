@@ -51,7 +51,20 @@
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QComboBox" name="comboBox"/>
+       <widget class="QComboBox" name="comboBox">
+        <property name="minimumSize">
+         <size>
+          <width>100</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>300</width>
+          <height>16777215</height>
+         </size>
+        </property>
+       </widget>
       </item>
       <item>
        <spacer name="horizontalSpacer">
@@ -80,6 +93,9 @@
           <height>40</height>
          </size>
         </property>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
         <property name="autoFillBackground">
          <bool>false</bool>
         </property>
@@ -92,7 +108,7 @@ background-color:none;</string>
         </property>
         <property name="icon">
          <iconset>
-          <normaloff>imgs/settings1.png</normaloff>imgs/settings1.png</iconset>
+          <normaloff>../../../../../../../../.designer/backup/imgs/settings1.png</normaloff>../../../../../../../../.designer/backup/imgs/settings1.png</iconset>
         </property>
        </widget>
       </item>
@@ -109,8 +125,8 @@ background-color:none;</string>
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>687</width>
-        <height>508</height>
+        <width>691</width>
+        <height>254</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -121,7 +137,7 @@ background-color:none;</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_4">
           <item>
-           <layout class="QVBoxLayout" name="elements"/>
+           <layout class="QVBoxLayout" name="commandsBoxLayoutUI"/>
           </item>
          </layout>
         </widget>
@@ -141,6 +157,13 @@ background-color:none;</string>
        </item>
       </layout>
      </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPlainTextEdit" name="logsPlainTextEditUI">
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
     </widget>
    </item>
   </layout>

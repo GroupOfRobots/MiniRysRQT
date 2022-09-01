@@ -21,11 +21,15 @@ class RunStatusIcon(str, Enum):
     STOP = 'stopIcon.png'
 
 class CommandExecuteElementWidget(QWidget):
-    def __init__(self, command=None):
+    def __init__(self, command=None, data=None, commandOutputSignal=None):
         super(CommandExecuteElementWidget, self).__init__()
         _, self.packagePath = get_resource('packages', 'commands_panel')
 
         self.command = command
+        self.data=data
+        self.commandOutputSignal=commandOutputSignal
+
+        self.process = None
 
         self.loadUi()
         self.isCommandRunning = False
@@ -38,10 +42,8 @@ class CommandExecuteElementWidget(QWidget):
 
     def commandButtonClicked(self):
         if self.isCommandRunning:
-            self.ssh.close()
-            self.commandThread.join()
-            self.isCommandRunning = False
-            self.setRunningStatusIcon(RunStatusIcon.RUN)
+            self.stopCommand()
+            
         else:
             self.setRunningStatusIcon(RunStatusIcon.STOP)
             self.commandThread = threading.Thread(target=self.runCommand)
@@ -51,27 +53,60 @@ class CommandExecuteElementWidget(QWidget):
         iconPath = os.path.join(self.packagePath, 'share', 'commands_panel', 'resource', 'imgs', iconName)
         icon = QPixmap(iconPath)
         self.commandButtonUI.setIcon(QIcon(icon))
+    
+    def stopCommand(self):
+        if self.command.get('executeViaSsh'):
+            self.ssh.close()
+        else:
+            print(self.process)
+            self.process.kill()
+    
+        self.commandThread.join()
+        self.isCommandRunning = False
+        self.setRunningStatusIcon(RunStatusIcon.RUN)
 
     def runCommand(self):
         self.isCommandRunning = True
-        host = "192.168.102.11"
-        port = 22
-        username = "minirys"
-        password = "minirys"
 
-        command = self.command.command
+        if self.command.get('executeViaSsh'):
+            self.executeCommandViaSsh()
+        else:
+            self.executeCommandLocaly()
+        self.isCommandRunning = False
+        self.setRunningStatusIcon(RunStatusIcon.RUN)
+
+    def executeCommandLocaly(self):
+        command = self.command.get('command', '')
+
+        self.process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
+        out, err = self.process.communicate()
+        self.commandOutputSignal.emit(out.decode("utf-8"))
+
+        print(err)
+
+        # self.process.wait()
+
+    def executeCommandViaSsh(self):
+        sshData = self.data.get('ssh', {})
+
+        host = sshData.get('host')
+        port = sshData.get('port')
+        username = sshData.get('username')
+        password = sshData.get('password')
+
+        command = self.command.get('command')
 
         self.ssh = paramiko.SSHClient()
         self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        self.ssh.connect(host, port, username, password)
+        self.ssh.connect(host, port, username, password, timeout=5)
 
         stdin, stdout, stderr = self.ssh.exec_command(command)
         lines = stdout.readlines()
         self.ssh.close()
 
         print('COMMAND EXECUTION LOG:')
-        print(lines)
+        for line in lines:
+            print(line, end='')
         print()
 
-        self.setRunningStatusIcon(RunStatusIcon.RUN)
-
+        self.commandOutputSignal.emit(''.join(lines))

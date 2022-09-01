@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>454</width>
+    <width>515</width>
     <height>518</height>
    </rect>
   </property>
@@ -46,33 +46,33 @@
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QComboBox" name="comboBox"/>
-      </item>
-      <item>
-       <widget class="QFrame" name="frame">
-        <property name="frameShape">
-         <enum>QFrame::StyledPanel</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QFrame" name="frame_2">
-        <property name="maximumSize">
+       <widget class="QComboBox" name="comboBox">
+        <property name="minimumSize">
          <size>
-          <width>40</width>
-          <height>40</height>
+          <width>100</width>
+          <height>0</height>
          </size>
         </property>
-        <property name="frameShape">
-         <enum>QFrame::StyledPanel</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
+        <property name="maximumSize">
+         <size>
+          <width>300</width>
+          <height>16777215</height>
+         </size>
         </property>
        </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
       </item>
      </layout>
     </widget>
@@ -260,6 +260,24 @@ QGroupBox:title {
            <number>30</number>
           </property>
           <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <item alignment="Qt::AlignRight">
+             <widget class="QLabel" name="label_3">
+              <property name="text">
+               <string>MAIN</string>
+              </property>
+             </widget>
+            </item>
+            <item alignment="Qt::AlignRight">
+             <widget class="QLabel" name="label_2">
+              <property name="text">
+               <string>CPU</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
            <layout class="QHBoxLayout" name="horizontalLayout_6">
             <item alignment="Qt::AlignRight">
              <widget class="QLCDNumber" name="temperatureCpuLcd">
@@ -287,24 +305,6 @@ QGroupBox:title {
               </property>
               <property name="styleSheet">
                <string notr="true"/>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_2">
-            <item alignment="Qt::AlignRight">
-             <widget class="QLabel" name="label_3">
-              <property name="text">
-               <string>MAIN</string>
-              </property>
-             </widget>
-            </item>
-            <item alignment="Qt::AlignRight">
-             <widget class="QLabel" name="label_2">
-              <property name="text">
-               <string>CPU</string>
               </property>
              </widget>
             </item>
@@ -557,6 +557,9 @@ QGroupBox:title {
           </item>
           <item>
            <widget class="QPushButton" name="pushButton">
+            <property name="styleSheet">
+             <string notr="true">cursor: pointer;</string>
+            </property>
             <property name="text">
              <string>CLEAR MAP</string>
             </property>
@@ -587,20 +590,55 @@ QGroupBox:title {
        <property name="title">
         <string>ANGLE</string>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout_8">
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
          <widget class="QWidget" name="angleWidget" native="true">
-          <widget class="QLCDNumber" name="lcdNumber_2">
-           <property name="geometry">
-            <rect>
-             <x>200</x>
-             <y>120</y>
-             <width>64</width>
-             <height>23</height>
-            </rect>
-           </property>
-          </widget>
+          <layout class="QVBoxLayout" name="verticalLayout_3"/>
          </widget>
+        </item>
+        <item>
+         <widget class="Line" name="line_5">
+          <property name="styleSheet">
+           <string notr="true">border: 1px solid black</string>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_6">
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>VELOCITY</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLCDNumber" name="lcdNumber"/>
+          </item>
+          <item>
+           <widget class="Line" name="line_6">
+            <property name="styleSheet">
+             <string notr="true">border: 1px solid black</string>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string>POSITION</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLCDNumber" name="lcdNumber_2"/>
+          </item>
+         </layout>
         </item>
        </layout>
       </widget>

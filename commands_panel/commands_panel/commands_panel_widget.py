@@ -13,8 +13,11 @@ from python_qt_binding import loadUi
 
 from .command_execute_element import CommandExecuteElementWidget
 
+from python_qt_binding.QtCore import pyqtSignal, QObject
 
 class CommandsPanelWidget(BaseWidget):
+    commandOutputSignal = pyqtSignal(object, name="commandExecutionOutput")
+
     def __init__(self, stack=None, node=None):
         super(CommandsPanelWidget, self).__init__()
         BaseWidget.__init__(self, stack)
@@ -26,12 +29,21 @@ class CommandsPanelWidget(BaseWidget):
         self.setRobotOnScreen()
 
     def initializeRobotSettings(self):
+        for index in range(self.commandsBoxLayoutUI.count()):
+            self.commandsBoxLayoutUI.itemAt(index).widget().deleteLater()
+
         commands = self.data.get('commands', [])
+        self.commandOutputSignal.connect(self.onCommandOutputSignal)
+
+
         for command in commands:
-            element = CommandExecuteElementWidget(command)
-            self.elements.addWidget(element)
+            element = CommandExecuteElementWidget(command, self.data, self.commandOutputSignal)
+            self.commandsBoxLayoutUI.addWidget(element)
 
     def loadUI(self):
         _, packagePath = get_resource('packages', 'commands_panel')
         uiFile = os.path.join(packagePath, 'share', 'commands_panel', 'resource', 'commands_panel.ui')
         loadUi(uiFile, self)
+
+    def onCommandOutputSignal(self, commandOutput):
+        self.logsPlainTextEditUI.setPlainText(commandOutput)

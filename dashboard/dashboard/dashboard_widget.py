@@ -2,7 +2,7 @@
 import math
 import os
 from python_qt_binding.QtCore import Qt
-from python_qt_binding.QtGui import QPainter
+from python_qt_binding.QtGui import QPainter, QPen
 from ament_index_python import get_resource
 from python_qt_binding import loadUi
 from shared.base_widget.base_widget import BaseWidget
@@ -49,18 +49,18 @@ class DashboardWidget(BaseWidget):
         # self.paintRobotAngle('b')
         # self.paintRobotAngle('c')
 
-    def paintEvent(self, event):
-        # self.paintRobotAngle(event)
-        # self.angleWidget.update()
-        pass
+    # def paintEvent(self, event):
+    #     # self.paintRobotAngle(event)
+    #     # self.angleWidget.update()
+    #     pass
 
-    def paintRobotAngle(self, event):
-        painter = QPainter(self.angleWidget)
-        # painter.setRenderHint(QPainter.Antialiasing)
-        painter.setPen(Qt.red)
-        painter.setBrush(Qt.white)
-        painter.drawLine(50, 50, 100, 100)
-        painter.end()
+    # def paintRobotAngle(self, event):
+    #     painter = QPainter(self.angleWidget)
+    #     # painter.setRenderHint(QPainter.Antialiasing)
+    #     painter.setPen(Qt.red)
+    #     painter.setBrush(Qt.white)
+    #     painter.drawLine(50, 50, 100, 100)
+    #     painter.end()
 
     def loadUi(self):
         _, packagePath = get_resource('packages', 'dashboard')
@@ -141,3 +141,30 @@ class DashboardWidget(BaseWidget):
         # self.backSensorProgressBar.setValue(range)
         self.backDistanceLcd.display(event.range)
         # self.frontDistanceLcd.display(event.range)
+
+    def paintRobotAngle(self, event):
+        painter = QPainter()
+        painter.begin(self.angleWidget)
+        pos = self.angleWidget.pos()
+        painter.setPen(QPen(Qt.black, 5, Qt.SolidLine))
+        # painter.setBrush(QBrush(Qt.red, Qt.SolidPattern))
+        print("pos")
+        print(pos)
+        print( self.angleWidget.mapToGlobal(pos))
+        print( self.angleWidget.geometry())
+        print(pos.x())
+        pos1= self.angleWidget.mapToGlobal(pos)
+        width=self.angleWidget.width()
+        height=self.angleWidget.height()
+        x1=self.angleWidget.x()+round(width*0.5)
+        y1=self.angleWidget.y()+round(height*0.9)
+        painter.drawLine(x1,y1 , x1,y1-50)
+
+
+        painter.setPen(QPen(Qt.gray, 5, Qt.DotLine))
+
+        x1Bottom=self.angleWidget.x()+round(width*0.2)
+        x2Bottom=self.angleWidget.x()+round(width*0.8)
+        painter.drawLine(x1Bottom,y1,x2Bottom,y1)
+
+        # painter.end()
