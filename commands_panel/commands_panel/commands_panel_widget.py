@@ -31,6 +31,7 @@ class CommandsPanelWidget(BaseWidget):
 
         self.logFormat = self.logsPlainTextEditUI.currentCharFormat()
         self.clearConsoleButtonUI.clicked.connect(self.clearConsole)
+        self.settingsButtonUI.clicked.connect(self.settingsClicked)
 
     def initializeRobotSettings(self):
         for index in range(self.commandsBoxLayoutUI.count()):
@@ -75,3 +76,6 @@ class CommandsPanelWidget(BaseWidget):
         self.logFormat.setForeground(color)
         self.logsPlainTextEditUI.setCurrentCharFormat(self.logFormat)
         self.logsPlainTextEditUI.insertPlainText(log+"\n")
+
+    def settingsClicked(self):
+        self.stack.goToSettings(self.dataFilePath)
