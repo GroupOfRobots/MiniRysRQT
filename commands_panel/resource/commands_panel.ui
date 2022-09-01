@@ -108,7 +108,7 @@ background-color:none;</string>
         </property>
         <property name="icon">
          <iconset>
-          <normaloff>../../../../../../../../.designer/backup/imgs/settings1.png</normaloff>../../../../../../../../.designer/backup/imgs/settings1.png</iconset>
+          <normaloff>imgs/settings1.png</normaloff>imgs/settings1.png</iconset>
         </property>
        </widget>
       </item>
@@ -126,7 +126,7 @@ background-color:none;</string>
         <x>0</x>
         <y>0</y>
         <width>691</width>
-        <height>254</height>
+        <height>242</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -157,6 +157,16 @@ background-color:none;</string>
        </item>
       </layout>
      </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="clearConsoleButtonUI">
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="text">
+      <string>CLEAR</string>
+     </property>
     </widget>
    </item>
    <item>

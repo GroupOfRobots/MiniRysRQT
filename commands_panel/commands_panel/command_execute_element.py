@@ -78,11 +78,16 @@ class CommandExecuteElementWidget(QWidget):
     def executeCommandLocaly(self):
         command = self.command.get('command', '')
 
-        self.process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
+        self.process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         out, err = self.process.communicate()
-        self.commandOutputSignal.emit(out.decode("utf-8"))
 
-        print(err)
+        outputString=out.decode("utf-8")
+        errorsString=""
+        if err is not None:
+            errorsString=err.decode("utf-8")
+
+
+        self.commandOutputSignal.emit([command, outputString, errorsString])
 
         # self.process.wait()
 
@@ -101,12 +106,10 @@ class CommandExecuteElementWidget(QWidget):
         self.ssh.connect(host, port, username, password, timeout=5)
 
         stdin, stdout, stderr = self.ssh.exec_command(command)
-        lines = stdout.readlines()
+        output = stdout.readlines()
+        errors = stderr.readlines()
+        outputString=''.join(output)
+        errorsString = ''.join(errors)
         self.ssh.close()
 
-        print('COMMAND EXECUTION LOG:')
-        for line in lines:
-            print(line, end='')
-        print()
-
-        self.commandOutputSignal.emit(''.join(lines))
+        self.commandOutputSignal.emit([command,outputString, errorsString])
