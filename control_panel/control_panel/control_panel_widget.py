@@ -15,8 +15,7 @@ from std_msgs.msg import Bool
 
 class ControlPanelWidget(BaseWidget):
     def __init__(self, stack=None, node=None):
-        super(ControlPanelWidget, self).__init__()
-        BaseWidget.__init__(self, stack)
+        super(ControlPanelWidget, self).__init__(stack)
 
         self.loadUI()
         self.initializeRobotsOptions()
@@ -117,7 +116,7 @@ class ControlPanelWidget(BaseWidget):
         if forward and right and not (backward or left):
             msg.speed_l = float(self.dynamic['forwardRight']['leftEngine'])
             msg.speed_r = float(self.dynamic['forwardRight']['rightEngine'])
-        elif forward and left and not (backward or left):
+        elif forward and left and not (backward or right):
             msg.speed_l = float(self.dynamic['forwardLeft']['leftEngine'])
             msg.speed_r = float(self.dynamic['forwardLeft']['rightEngine'])
         elif forward and not (right or backward or left):
@@ -128,10 +127,10 @@ class ControlPanelWidget(BaseWidget):
             msg.speed_l = float(self.dynamic['right']['leftEngine'])
             msg.speed_r = float(self.dynamic['right']['rightEngine'])
 
-        if backward and right and not (forward or left):
+        elif backward and right and not (forward or left):
             msg.speed_l = float(self.dynamic['backwardRight']['leftEngine'])
             msg.speed_r = float(self.dynamic['backwardRight']['rightEngine'])
-        elif backward and left and not (forward or left):
+        elif backward and left and not (forward or right):
             msg.speed_l = float(self.dynamic['backwardLeft']['leftEngine'])
             msg.speed_r = float(self.dynamic['backwardLeft']['rightEngine'])
         elif backward and not (right or forward or left):

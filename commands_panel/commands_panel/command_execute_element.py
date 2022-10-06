@@ -24,7 +24,6 @@ class CommandExecuteElementWidget(QWidget):
     def __init__(self, command=None, data=None, commandOutputSignal=None):
         super(CommandExecuteElementWidget, self).__init__()
         _, self.packagePath = get_resource('packages', 'commands_panel')
-
         self.command = command
         self.data=data
         self.commandOutputSignal=commandOutputSignal
@@ -86,7 +85,6 @@ class CommandExecuteElementWidget(QWidget):
         if err is not None:
             errorsString=err.decode("utf-8")
 
-
         self.commandOutputSignal.emit([command, outputString, errorsString])
 
         # self.process.wait()
@@ -103,13 +101,17 @@ class CommandExecuteElementWidget(QWidget):
 
         self.ssh = paramiko.SSHClient()
         self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        self.ssh.connect(host, port, username, password, timeout=5)
 
-        stdin, stdout, stderr = self.ssh.exec_command(command)
-        output = stdout.readlines()
-        errors = stderr.readlines()
-        outputString=''.join(output)
-        errorsString = ''.join(errors)
-        self.ssh.close()
+        try:
+            self.ssh.connect(host, port, username, password, timeout=5)
 
-        self.commandOutputSignal.emit([command,outputString, errorsString])
+            stdin, stdout, stderr = self.ssh.exec_command(command)
+            output = stdout.readlines()
+            errors = stderr.readlines()
+            outputString=''.join(output)
+            errorsString = ''.join(errors)
+            self.ssh.close()
+
+            self.commandOutputSignal.emit([command,outputString, errorsString])
+        except BaseException as exception:
+            self.commandOutputSignal.emit([command, "SSH ERROR",str(exception)])

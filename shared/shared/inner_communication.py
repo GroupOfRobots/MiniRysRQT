@@ -8,6 +8,8 @@ class InnerCommunication(QObject):
     updateRobotSignal = pyqtSignal(object, name="updateRobotSignal")
     closeApp = pyqtSignal()
 
+    updateFanValueSignal = pyqtSignal(object, name="updateFanValue")
+
     def test(self):
         print("InnerCommunication")
 

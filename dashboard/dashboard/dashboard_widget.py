@@ -8,7 +8,7 @@ from python_qt_binding import loadUi
 from shared.base_widget.base_widget import BaseWidget
 
 from rclpy.node import Node
-from minirys_msgs.msg import BatteryStatus
+from minirys_msgs.msg import BatteryStatus, AngularPose
 from sensor_msgs.msg import Range
 
 from python_qt_binding.QtWidgets import QProgressBar
@@ -21,6 +21,7 @@ class DashboardWidget(BaseWidget):
         super(DashboardWidget, self).__init__()
         BaseWidget.__init__(self, stack)
 
+        # node.destroy_node()
         self.loadUi()
 
         self.initializeRobotsOptions()
@@ -35,16 +36,25 @@ class DashboardWidget(BaseWidget):
         self.node.create_subscription(Float32, '/internal/temperature_cpu', self.temperatureCpuCallback, 10)
         self.node.create_subscription(Float32, '/internal/temperature_main', self.temperatureMainCallback, 10)
 
+        self.node.create_subscription(AngularPose, '/internal/angular_pose', self.angularPoseCallback, 10)
+        self.node.create_subscription(AngularPose, '/internal/imu', self.imuCallback, 10)
+
         # TODO pewnie do usuniecia
         self.voltageCell1ProgressBar.setRange(3500, 5500)
         self.voltageCell2ProgressBar.setRange(3500, 5500)
         self.voltageCell3ProgressBar.setRange(3500, 5500)
+
+        self.angularPosition = 0
+        self.sign=1
 
         # self.frontSensorProgressBar.setRange(0, 4000)
 
         self.batteryUnderVoltageFlag = False
 
         self.angleWidget.paintEvent = self.paintRobotAngle
+
+        self.destroyed.connect(DashboardWidget.onDestroyed)
+
         # self.paintRobotAngle('a')
         # self.paintRobotAngle('b')
         # self.paintRobotAngle('c')
@@ -148,17 +158,22 @@ class DashboardWidget(BaseWidget):
         pos = self.angleWidget.pos()
         painter.setPen(QPen(Qt.black, 5, Qt.SolidLine))
         # painter.setBrush(QBrush(Qt.red, Qt.SolidPattern))
-        print("pos")
-        print(pos)
-        print( self.angleWidget.mapToGlobal(pos))
-        print( self.angleWidget.geometry())
-        print(pos.x())
+
         pos1= self.angleWidget.mapToGlobal(pos)
         width=self.angleWidget.width()
         height=self.angleWidget.height()
         x1=self.angleWidget.x()+round(width*0.5)
         y1=self.angleWidget.y()+round(height*0.9)
-        painter.drawLine(x1,y1 , x1,y1-50)
+        xMove=int(math.sin(self.angularPosition)*50)
+        # sign =1
+        #
+        # if self.angularPosition < -math.pi + 0.5 or self.angularPosition > math.pi * 0.5:
+        #     sign = -1
+        # yMove=int(math.cos(self.angularPosition)*50) *self.sign
+        yMove=int(math.cos(self.angularPosition)*50)
+
+
+        painter.drawLine(x1,y1 , x1-xMove,y1-yMove)
 
 
         painter.setPen(QPen(Qt.gray, 5, Qt.DotLine))
@@ -168,3 +183,34 @@ class DashboardWidget(BaseWidget):
         painter.drawLine(x1Bottom,y1,x2Bottom,y1)
 
         # painter.end()
+
+    def angularPoseCallback(self, event):
+        # print(event)
+        self.angularPosition=event.angular_position
+        self.angleWidget.update()
+        # self.angleW
+    def imuCallback(self, event):
+        self.sign =1
+        if event.linear_acceleration.z<0:
+            self.sign = -1
+
+        # print(self.sign)
+
+        # self.angleWidget.update()
+
+    @staticmethod
+    def onDestroyed():
+        # Do stuff here
+        print("CCCCCCCCCCCCLOOOOOOOOOOOSEEEEEEEEEEEEEE333333333")
+        # self.publisher= None
+
+        pass
+
+    def closeEvent(self, event):
+        print("CCCCCCCCCCCCLOOOOOOOOOOOSEEEEEEEEEEEEEE")
+
+    def __del__(self):
+        print('Destructor called, vehicle deleted.')
+
+    def shutdown_plugin(self):
+        print("shutdown_plugin")

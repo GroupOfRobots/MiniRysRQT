@@ -1,5 +1,6 @@
 from python_qt_binding.QtWidgets import QWidget, QTableWidgetItem
 from shared.enums import ControlKeyEnum
+from enum import Enum
 
 
 class Controls(QWidget):
@@ -21,7 +22,6 @@ class Controls(QWidget):
         self.setData()
 
         self.addControlKeysValidators()
-
 
     def validator(self, event, key):
         button = self.keyInputDictionary[key]
@@ -64,7 +64,6 @@ class Controls(QWidget):
         self.keyInputDictionary[ControlKeyEnum.STABLE].textChanged.connect(
             lambda event: self.validator(event, ControlKeyEnum.STABLE))
 
-
     def setData(self):
         self.widget.robotNameInput.setText(self.data['robotName'])
 
@@ -81,45 +80,74 @@ class Controls(QWidget):
         forwardLeftDynamic = dynamic.get('forwardLeft', {})
         forwardRightDynamic = dynamic.get('forwardRight', {})
 
+        rightDynamic = dynamic.get('right', {})
+
         backwardDynamic = dynamic.get('backward', {})
         backwardLeftDynamic = dynamic.get('backwardLeft', {})
         backwardRightDynamic = dynamic.get('backwardRight', {})
 
+        leftDynamic = dynamic.get('left', {})
+        print(dynamic)
+
         # FORWARD
-        self.widget.dynamicTable.setItem(0, 0, QTableWidgetItem(str(forwardDynamic.get('leftEngine'))))
-        self.widget.dynamicTable.setItem(0, 1, QTableWidgetItem(str(forwardDynamic.get('rightEngine'))))
-        self.widget.dynamicTable.setItem(0, 2, QTableWidgetItem(str(forwardDynamic.get('inertia'))))
+        self.widget.dynamicTable.setItem(MotorControlPositionInTableEnum.FORWARD, 0,
+                                         QTableWidgetItem(str(forwardDynamic.get('leftEngine'))))
+        self.widget.dynamicTable.setItem(MotorControlPositionInTableEnum.FORWARD, 1,
+                                         QTableWidgetItem(str(forwardDynamic.get('rightEngine'))))
+        self.widget.dynamicTable.setItem(MotorControlPositionInTableEnum.FORWARD, 2,
+                                         QTableWidgetItem(str(forwardDynamic.get('inertia'))))
 
-        self.widget.dynamicTable.setItem(1, 0, QTableWidgetItem(str(forwardLeftDynamic.get('leftEngine'))))
-        self.widget.dynamicTable.setItem(1, 1, QTableWidgetItem(str(forwardLeftDynamic.get('rightEngine'))))
-        self.widget.dynamicTable.setItem(1, 2, QTableWidgetItem(str(forwardLeftDynamic.get('inertia'))))
+        self.widget.dynamicTable.setItem(MotorControlPositionInTableEnum.FORWARD_LEFT, 0,
+                                         QTableWidgetItem(str(forwardLeftDynamic.get('leftEngine'))))
+        self.widget.dynamicTable.setItem(MotorControlPositionInTableEnum.FORWARD_LEFT, 1,
+                                         QTableWidgetItem(str(forwardLeftDynamic.get('rightEngine'))))
+        self.widget.dynamicTable.setItem(MotorControlPositionInTableEnum.FORWARD_LEFT, 2,
+                                         QTableWidgetItem(str(forwardLeftDynamic.get('inertia'))))
 
-        self.widget.dynamicTable.setItem(2, 0, QTableWidgetItem(str(forwardRightDynamic.get('leftEngine'))))
-        self.widget.dynamicTable.setItem(2, 1, QTableWidgetItem(str(forwardRightDynamic.get('rightEngine'))))
-        self.widget.dynamicTable.setItem(2, 2, QTableWidgetItem(str(forwardRightDynamic.get('inertia'))))
+        self.widget.dynamicTable.setItem(MotorControlPositionInTableEnum.FORWARD_RIGHT, 0,
+                                         QTableWidgetItem(str(forwardRightDynamic.get('leftEngine'))))
+        self.widget.dynamicTable.setItem(MotorControlPositionInTableEnum.FORWARD_RIGHT, 1,
+                                         QTableWidgetItem(str(forwardRightDynamic.get('rightEngine'))))
+        self.widget.dynamicTable.setItem(MotorControlPositionInTableEnum.FORWARD_RIGHT, 2,
+                                         QTableWidgetItem(str(forwardRightDynamic.get('inertia'))))
 
         # RIGHT
-        self.widget.dynamicTable.setItem(3, 0, QTableWidgetItem(str(backwardDynamic.get('leftEngine'))))
-        self.widget.dynamicTable.setItem(3, 1, QTableWidgetItem(str(backwardDynamic.get('rightEngine'))))
-        self.widget.dynamicTable.setItem(3, 2, QTableWidgetItem(str(backwardDynamic.get('inertia'))))
+        self.widget.dynamicTable.setItem(MotorControlPositionInTableEnum.RIGHT, 0,
+                                         QTableWidgetItem(str(rightDynamic.get('leftEngine'))))
+        self.widget.dynamicTable.setItem(MotorControlPositionInTableEnum.RIGHT, 1,
+                                         QTableWidgetItem(str(rightDynamic.get('rightEngine'))))
+        self.widget.dynamicTable.setItem(MotorControlPositionInTableEnum.RIGHT, 2,
+                                         QTableWidgetItem(str(rightDynamic.get('inertia'))))
 
         # BACKWARD
-        self.widget.dynamicTable.setItem(4, 0, QTableWidgetItem(str(backwardLeftDynamic.get('leftEngine'))))
-        self.widget.dynamicTable.setItem(4, 1, QTableWidgetItem(str(backwardLeftDynamic.get('rightEngine'))))
-        self.widget.dynamicTable.setItem(4, 2, QTableWidgetItem(str(backwardLeftDynamic.get('inertia'))))
+        self.widget.dynamicTable.setItem(MotorControlPositionInTableEnum.BACKWARD, 0,
+                                         QTableWidgetItem(str(backwardDynamic.get('leftEngine'))))
+        self.widget.dynamicTable.setItem(MotorControlPositionInTableEnum.BACKWARD, 1,
+                                         QTableWidgetItem(str(backwardDynamic.get('rightEngine'))))
+        self.widget.dynamicTable.setItem(MotorControlPositionInTableEnum.BACKWARD, 2,
+                                         QTableWidgetItem(str(backwardDynamic.get('inertia'))))
 
-        self.widget.dynamicTable.setItem(5, 0, QTableWidgetItem(str(backwardRightDynamic.get('leftEngine'))))
-        self.widget.dynamicTable.setItem(5, 1, QTableWidgetItem(str(backwardRightDynamic.get('rightEngine'))))
-        self.widget.dynamicTable.setItem(5, 2, QTableWidgetItem(str(backwardRightDynamic.get('inertia'))))
+        self.widget.dynamicTable.setItem(MotorControlPositionInTableEnum.BACKWARD_LEFT, 0,
+                                         QTableWidgetItem(str(backwardLeftDynamic.get('leftEngine'))))
+        self.widget.dynamicTable.setItem(MotorControlPositionInTableEnum.BACKWARD_LEFT, 1,
+                                         QTableWidgetItem(str(backwardLeftDynamic.get('rightEngine'))))
+        self.widget.dynamicTable.setItem(MotorControlPositionInTableEnum.BACKWARD_LEFT, 2,
+                                         QTableWidgetItem(str(backwardLeftDynamic.get('inertia'))))
 
-        self.widget.dynamicTable.setItem(6, 0, QTableWidgetItem(str(backwardRightDynamic.get('leftEngine'))))
-        self.widget.dynamicTable.setItem(6, 1, QTableWidgetItem(str(backwardRightDynamic.get('rightEngine'))))
-        self.widget.dynamicTable.setItem(6, 2, QTableWidgetItem(str(backwardRightDynamic.get('inertia'))))
+        self.widget.dynamicTable.setItem(MotorControlPositionInTableEnum.BACKWARD_RIGHT, 0,
+                                         QTableWidgetItem(str(backwardRightDynamic.get('leftEngine'))))
+        self.widget.dynamicTable.setItem(MotorControlPositionInTableEnum.BACKWARD_RIGHT, 1,
+                                         QTableWidgetItem(str(backwardRightDynamic.get('rightEngine'))))
+        self.widget.dynamicTable.setItem(MotorControlPositionInTableEnum.BACKWARD_RIGHT, 2,
+                                         QTableWidgetItem(str(backwardRightDynamic.get('inertia'))))
 
         # LEFT
-        self.widget.dynamicTable.setItem(7, 0, QTableWidgetItem(str(backwardRightDynamic.get('leftEngine'))))
-        self.widget.dynamicTable.setItem(7, 1, QTableWidgetItem(str(backwardRightDynamic.get('rightEngine'))))
-        self.widget.dynamicTable.setItem(7, 2, QTableWidgetItem(str(backwardRightDynamic.get('inertia'))))
+        self.widget.dynamicTable.setItem(MotorControlPositionInTableEnum.LEFT, 0,
+                                         QTableWidgetItem(str(leftDynamic.get('leftEngine'))))
+        self.widget.dynamicTable.setItem(MotorControlPositionInTableEnum.LEFT, 1,
+                                         QTableWidgetItem(str(leftDynamic.get('rightEngine'))))
+        self.widget.dynamicTable.setItem(MotorControlPositionInTableEnum.LEFT, 2,
+                                         QTableWidgetItem(str(leftDynamic.get('inertia'))))
 
         # JOYSTICK
         joystick = self.data['joystick']
@@ -150,29 +178,59 @@ class Controls(QWidget):
         self.widget.data['controlKeys']['stable'] = self.widget.stableKeyInput.text()
 
         # FORWARD
-        self.widget.data['dynamic']['forward']['leftEngine'] = self.widget.dynamicTable.item(0, 0).text()
-        self.widget.data['dynamic']['forward']['rightEngine'] = self.widget.dynamicTable.item(0, 1).text()
+        self.widget.data['dynamic']['forward']['leftEngine'] = self.widget.dynamicTable.item(
+            MotorControlPositionInTableEnum.FORWARD, 0).text()
+        self.widget.data['dynamic']['forward']['rightEngine'] = self.widget.dynamicTable.item(
+            MotorControlPositionInTableEnum.FORWARD, 1).text()
 
-        self.widget.data['dynamic']['forwardLeft']['leftEngine'] = self.widget.dynamicTable.item(1, 0).text()
-        self.widget.data['dynamic']['forwardLeft']['rightEngine'] = self.widget.dynamicTable.item(1, 1).text()
+        self.widget.data['dynamic']['forwardLeft']['leftEngine'] = self.widget.dynamicTable.item(
+            MotorControlPositionInTableEnum.FORWARD_LEFT, 0).text()
+        self.widget.data['dynamic']['forwardLeft']['rightEngine'] = self.widget.dynamicTable.item(
+            MotorControlPositionInTableEnum.FORWARD_LEFT, 1).text()
 
-        self.widget.data['dynamic']['forwardRight']['leftEngine'] = self.widget.dynamicTable.item(2, 0).text()
-        self.widget.data['dynamic']['forwardRight']['rightEngine'] = self.widget.dynamicTable.item(2, 1).text()
+        self.widget.data['dynamic']['forwardRight']['leftEngine'] = self.widget.dynamicTable.item(
+            MotorControlPositionInTableEnum.FORWARD_RIGHT, 0).text()
+        self.widget.data['dynamic']['forwardRight']['rightEngine'] = self.widget.dynamicTable.item(
+            MotorControlPositionInTableEnum.FORWARD_RIGHT, 1).text()
 
         # RIGHT
-        self.widget.data['dynamic']['backward']['leftEngine'] = self.widget.dynamicTable.item(4, 0).text()
-        self.widget.data['dynamic']['backward']['rightEngine'] = self.widget.dynamicTable.item(4, 1).text()
+        self.widget.data['dynamic']['right']['leftEngine'] = self.widget.dynamicTable.item(
+            MotorControlPositionInTableEnum.RIGHT, 0).text()
+        self.widget.data['dynamic']['right']['rightEngine'] = self.widget.dynamicTable.item(
+            MotorControlPositionInTableEnum.RIGHT, 1).text()
 
         # BACKWARD
-        self.widget.data['dynamic']['backwardLeft']['leftEngine'] = self.widget.dynamicTable.item(4, 0).text()
-        self.widget.data['dynamic']['backwardLeft']['rightEngine'] = self.widget.dynamicTable.item(4, 1).text()
+        self.widget.data['dynamic']['backward']['leftEngine'] = self.widget.dynamicTable.item(
+            MotorControlPositionInTableEnum.BACKWARD, 0).text()
+        self.widget.data['dynamic']['backward']['rightEngine'] = self.widget.dynamicTable.item(
+            MotorControlPositionInTableEnum.BACKWARD, 1).text()
 
-        self.widget.data['dynamic']['backwardRight']['leftEngine'] = self.widget.dynamicTable.itemAt(5, 0).text()
-        self.widget.data['dynamic']['backwardRight']['rightEngine'] = self.widget.dynamicTable.itemAt(5, 1).text()
+        self.widget.data['dynamic']['backwardLeft']['leftEngine'] = self.widget.dynamicTable.item(
+            MotorControlPositionInTableEnum.BACKWARD_LEFT, 0).text()
+        self.widget.data['dynamic']['backwardLeft']['rightEngine'] = self.widget.dynamicTable.item(
+            MotorControlPositionInTableEnum.BACKWARD_LEFT, 1).text()
 
-        self.widget.data['dynamic']['backwardRight']['leftEngine'] = self.widget.dynamicTable.itemAt(6, 0).text()
-        self.widget.data['dynamic']['backwardRight']['rightEngine'] = self.widget.dynamicTable.itemAt(6, 1).text()
+        self.widget.data['dynamic']['backwardRight']['leftEngine'] = self.widget.dynamicTable.item(
+            MotorControlPositionInTableEnum.BACKWARD_RIGHT, 0).text()
+        self.widget.data['dynamic']['backwardRight']['rightEngine'] = self.widget.dynamicTable.item(
+            MotorControlPositionInTableEnum.BACKWARD_RIGHT, 1).text()
 
         # LEFT
-        self.widget.data['dynamic']['backwardRight']['leftEngine'] = self.widget.dynamicTable.itemAt(7, 0).text()
-        self.widget.data['dynamic']['backwardRight']['rightEngine'] = self.widget.dynamicTable.itemAt(7, 1).text()
+        self.widget.data['dynamic']['left']['leftEngine'] = self.widget.dynamicTable.item(
+            MotorControlPositionInTableEnum.LEFT, 0).text()
+        self.widget.data['dynamic']['left']['rightEngine'] = self.widget.dynamicTable.item(
+            MotorControlPositionInTableEnum.LEFT, 1).text()
+
+        # print('lf.widget.dynamicTable.items()')
+        # print(self.widget.dynamicTable.items())
+
+
+class MotorControlPositionInTableEnum(int, Enum):
+    FORWARD = 0
+    FORWARD_LEFT = 1
+    FORWARD_RIGHT = 2
+    RIGHT = 3
+    BACKWARD = 4  # position is preserved if stable key is pressed
+    BACKWARD_LEFT = 5
+    BACKWARD_RIGHT = 6
+    LEFT = 7

@@ -20,11 +20,11 @@ class CommandsPanelWidget(BaseWidget):
     commandOutputSignal = pyqtSignal(object, name="commandExecutionOutput")
 
     def __init__(self, stack=None, node=None):
-        super(CommandsPanelWidget, self).__init__()
-        BaseWidget.__init__(self, stack)
+        super( CommandsPanelWidget, self).__init__(stack)
 
         self.loadUI()
         self.initializeRobotsOptions()
+        self.commandOutputSignal.connect(self.onCommandOutputSignal)
 
         self.comboBox.currentIndexChanged.connect(self.setRobotOnScreen)
         self.setRobotOnScreen()
@@ -38,8 +38,6 @@ class CommandsPanelWidget(BaseWidget):
             self.commandsBoxLayoutUI.itemAt(index).widget().deleteLater()
 
         commands = self.data.get('commands', [])
-        self.commandOutputSignal.connect(self.onCommandOutputSignal)
-
 
         for command in commands:
             element = CommandExecuteElementWidget(command, self.data, self.commandOutputSignal)
