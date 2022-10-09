@@ -15,7 +15,6 @@ from shared.enums import ControlKeyEnum
 
 from python_qt_binding.QtWidgets import QWidget
 
-
 class JoystickWidget(BaseWidget):
     BOUNDARY_RADIUS = 0.45
     BOUNDARY_DIAMETER = BOUNDARY_RADIUS * 2

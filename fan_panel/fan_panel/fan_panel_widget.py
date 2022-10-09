@@ -2,8 +2,6 @@
 
 import os
 
-# from PyQt5.QtWidgets import QAbstractSpinBox
-# from python_qt_binding.QtWidgets 
 from python_qt_binding.QtWidgets import QAbstractSpinBox
 from shared.base_widget.base_widget import BaseWidget
 
@@ -12,6 +10,7 @@ from ament_index_python import get_resource
 from python_qt_binding import loadUi
 
 from shared.inner_communication import innerCommunication
+
 
 class FanPanelWidget(BaseWidget):
     def __init__(self, stack=None, node=None, fanPanel=None):
@@ -30,17 +29,15 @@ class FanPanelWidget(BaseWidget):
         self.fanSlider.sliderReleased.connect(self.sliderReleased)
         self.fanSlider.valueChanged.connect(self.sliderValueChanged)
 
-        # self.fanSpinBox.setButtonSymbols(QAbstractSpinBox.NoButtons)
-
         self.spinBox.valueChanged.connect(self.fanSpinBoxValueChanged)
         self.movedBySlider = False
         self.movedBySpinBox = False
 
         self.fanPanel.closePanelSignal.connect(self.onClosePanelSignal)
+
         innerCommunication.updateFanValueSignal.connect(self.onUpdateValueSignal)
 
     def sliderReleased(self):
-        print("sliderReleased")
         self.sendFanValue()
         self.updateFans()
 
@@ -79,18 +76,6 @@ class FanPanelWidget(BaseWidget):
         _, packagePath = get_resource('packages', 'fan_panel')
         uiFile = os.path.join(packagePath, 'share', 'fan_panel', 'resource', 'fan_panel.ui')
         loadUi(uiFile, self)
-
-    @staticmethod
-    def onDestroyed(fanPanelCounter):
-        print("aaaaaaaaaaallllllllll :(")
-        print(fanPanelCounter)
-        # if fanPanelCounter==0:
-
-        # self.publisher = None
-
-    def shutdown_plugin(self):
-
-        print("shutewwwwwwwwwwwwwdown_plugin")
 
     def onClosePanelSignal(self):
         self.value = 0
