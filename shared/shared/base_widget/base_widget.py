@@ -15,6 +15,7 @@ class BaseWidget(QWidget):
         self.stack = stack
         self.currentDataFile = None
         self.data = None
+        self.namespace = ''
 
         self.setFocusPolicy(Qt.ClickFocus)
         self.setFocus()
@@ -74,6 +75,9 @@ class BaseWidget(QWidget):
         dataFile = open(self.dataFilePath)
         self.data = json.load(dataFile)
         dataFile.close()
+
+        self.namespace = self.data.get('namespace', '')
+
 
     def addItemData(self, data, filePath):
         id = data.get('id', None)

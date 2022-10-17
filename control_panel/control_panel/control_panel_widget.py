@@ -10,6 +10,7 @@ from shared.base_widget.base_widget import BaseWidget
 
 from .elements.button import Button
 from minirys_msgs.msg import MotorCommand
+from geometry_msgs import Twist
 
 from std_msgs.msg import Bool
 
@@ -144,6 +145,47 @@ class ControlPanelWidget(BaseWidget):
         elif not (forward or right or backward or left):
             msg.speed_l = 0.0
             msg.speed_r = 0.0
+
+        self.publisher.publish(msg)
+
+    def determineKeyedPressedState1(self):
+        forward = self.pressedKeys[ControlKeyEnum.FORWARD]
+        right = self.pressedKeys[ControlKeyEnum.RIGHT]
+        backward = self.pressedKeys[ControlKeyEnum.BACKWARD]
+        left = self.pressedKeys[ControlKeyEnum.LEFT]
+        msg = Twist()
+
+        if forward and right and not (backward or left):
+            msg.linear.y = float(self.dynamic['forwardRight']['linear'])
+            msg.angle.z = float(self.dynamic['forwardRight']['angle'])
+        elif forward and left and not (backward or right):
+            msg.linear.y = float(self.dynamic['forwardLeft']['linear'])
+            msg.angle.z = float(self.dynamic['forwardLeft']['angle'])
+        elif forward and not (right or backward or left):
+            msg.linear.y = float(self.dynamic['forward']['linear'])
+            msg.angle.z = float(self.dynamic['forward']['angle'])
+
+        elif right and not (forward or backward or left):
+            msg.linear.y = float(self.dynamic['right']['linear'])
+            msg.angle.z = float(self.dynamic['right']['angle'])
+
+        elif backward and right and not (forward or left):
+            msg.linear.y = float(self.dynamic['backwardRight']['linear'])
+            msg.angle.z = float(self.dynamic['backwardRight']['angle'])
+        elif backward and left and not (forward or right):
+            msg.linear.y = float(self.dynamic['backwardLeft']['linear'])
+            msg.angle.z = float(self.dynamic['backwardLeft']['angle'])
+        elif backward and not (right or forward or left):
+            msg.linear.y = float(self.dynamic['backward']['linear'])
+            msg.angle.z = float(self.dynamic['backward']['angle'])
+
+        elif left and not (forward or backward or right):
+            msg.linear.y = float(self.dynamic['left']['linear'])
+            msg.angle.z = float(self.dynamic['left']['angle'])
+
+        elif not (forward or right or backward or left):
+            msg.linear.y= 0.0
+            msg.angle.z = 0.0
 
         self.publisher.publish(msg)
 

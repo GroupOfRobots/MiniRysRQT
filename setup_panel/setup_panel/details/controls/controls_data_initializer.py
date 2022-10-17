@@ -13,12 +13,16 @@ class ControlsDataInitializer:
 
     def setData(self):
         self.setRobotName()
+        self.setNamespace()
         self.setControlKeys()
         self.setMotorsDynamic()
         self.setJoystick()
 
     def setRobotName(self):
-        self.widget.robotNameInput.setText(self.data['robotName'])
+        self.widget.robotNameInput.setText(self.data.get('robotName', ''))
+
+    def setNamespace(self):
+        self.widget.namespaceLineEditUI.setText(self.data.get('namespace', ''))
 
     def setControlKeys(self):
         self.widget.forwardKeyInput.setText(self.controlKeys.get(ControlKeyEnum.FORWARD))
@@ -54,8 +58,8 @@ class ControlsDataInitializer:
             self.setControlsForKeyCombination(motorControlPositionInTable, dynamic)
 
     def setControlsForKeyCombination(self, motorControlPositionInTableEnum, dynamic):
-        dataKey=motorControlPositionToDataKeyMap[motorControlPositionInTableEnum]
-        data= dynamic.get(dataKey, {})
+        dataKey = motorControlPositionToDataKeyMap[motorControlPositionInTableEnum]
+        data = dynamic.get(dataKey, {})
 
         setDynamicTableItem = self.widget.dynamicTable.setItem
         setDynamicTableItem(motorControlPositionInTableEnum, 0, self.createTableItem(data, 'leftEngine'))

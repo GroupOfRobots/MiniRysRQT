@@ -25,19 +25,25 @@ class DashboardWidget(BaseWidget):
         self.loadUi()
 
         self.initializeRobotsOptions()
+        self.setRobotOnScreen()
+
+        print(self.namespace)
 
         self.node = node
-        self.subscription = self.node.create_subscription(BatteryStatus, '/internal/battery_status',
+        self.subscription = self.node.create_subscription(BatteryStatus, self.namespace + '/internal/battery_status',
                                                           self.batteryCallback, 10)
 
-        self.node.create_subscription(Range, '/internal/distance_0', self.frontSensorCallback, 10)
-        self.node.create_subscription(Range, '/internal/distance_1', self.backSensorCallback, 10)
+        self.node.create_subscription(Range, self.namespace + '/internal/distance_0', self.frontSensorCallback, 10)
+        self.node.create_subscription(Range, self.namespace + '/internal/distance_1', self.backSensorCallback, 10)
 
-        self.node.create_subscription(Float32, '/internal/temperature_cpu', self.temperatureCpuCallback, 10)
-        self.node.create_subscription(Float32, '/internal/temperature_main', self.temperatureMainCallback, 10)
+        self.node.create_subscription(Float32, self.namespace + '/internal/temperature_cpu',
+                                      self.temperatureCpuCallback, 10)
+        self.node.create_subscription(Float32, self.namespace + '/internal/temperature_main',
+                                      self.temperatureMainCallback, 10)
 
-        self.node.create_subscription(AngularPose, '/internal/angular_pose', self.angularPoseCallback, 10)
-        self.node.create_subscription(AngularPose, '/internal/imu', self.imuCallback, 10)
+        self.node.create_subscription(AngularPose, self.namespace + '/internal/angular_pose', self.angularPoseCallback,
+                                      10)
+        self.node.create_subscription(AngularPose, self.namespace + '/internal/imu', self.imuCallback, 10)
 
         # TODO pewnie do usuniecia
         self.voltageCell1ProgressBar.setRange(3500, 5500)
@@ -45,7 +51,7 @@ class DashboardWidget(BaseWidget):
         self.voltageCell3ProgressBar.setRange(3500, 5500)
 
         self.angularPosition = 0
-        self.sign=1
+        self.sign = 1
 
         # self.frontSensorProgressBar.setRange(0, 4000)
 
@@ -140,7 +146,7 @@ class DashboardWidget(BaseWidget):
         # self.temperatureMainLcd.setStyleSheet('color: black;')
 
     def frontSensorCallback(self, event):
-        print(event.range)
+        # print(event.range)
         range = int((event.range * 1000))
         self.frontSensorProgressBar.setValue(range)
         self.frontDistanceLcd.display(event.range)
@@ -159,39 +165,38 @@ class DashboardWidget(BaseWidget):
         painter.setPen(QPen(Qt.black, 5, Qt.SolidLine))
         # painter.setBrush(QBrush(Qt.red, Qt.SolidPattern))
 
-        pos1= self.angleWidget.mapToGlobal(pos)
-        width=self.angleWidget.width()
-        height=self.angleWidget.height()
-        x1=self.angleWidget.x()+round(width*0.5)
-        y1=self.angleWidget.y()+round(height*0.9)
-        xMove=int(math.sin(self.angularPosition)*50)
+        pos1 = self.angleWidget.mapToGlobal(pos)
+        width = self.angleWidget.width()
+        height = self.angleWidget.height()
+        x1 = self.angleWidget.x() + round(width * 0.5)
+        y1 = self.angleWidget.y() + round(height * 0.9)
+        xMove = int(math.sin(self.angularPosition) * 50)
         # sign =1
         #
         # if self.angularPosition < -math.pi + 0.5 or self.angularPosition > math.pi * 0.5:
         #     sign = -1
         # yMove=int(math.cos(self.angularPosition)*50) *self.sign
-        yMove=int(math.cos(self.angularPosition)*50)
+        yMove = int(math.cos(self.angularPosition) * 50)
 
-
-        painter.drawLine(x1,y1 , x1-xMove,y1-yMove)
-
+        painter.drawLine(x1, y1, x1 - xMove, y1 - yMove)
 
         painter.setPen(QPen(Qt.gray, 5, Qt.DotLine))
 
-        x1Bottom=self.angleWidget.x()+round(width*0.2)
-        x2Bottom=self.angleWidget.x()+round(width*0.8)
-        painter.drawLine(x1Bottom,y1,x2Bottom,y1)
+        x1Bottom = self.angleWidget.x() + round(width * 0.2)
+        x2Bottom = self.angleWidget.x() + round(width * 0.8)
+        painter.drawLine(x1Bottom, y1, x2Bottom, y1)
 
         # painter.end()
 
     def angularPoseCallback(self, event):
         # print(event)
-        self.angularPosition=event.angular_position
+        self.angularPosition = event.angular_position
         self.angleWidget.update()
         # self.angleW
+
     def imuCallback(self, event):
-        self.sign =1
-        if event.linear_acceleration.z<0:
+        self.sign = 1
+        if event.linear_acceleration.z < 0:
             self.sign = -1
 
         # print(self.sign)

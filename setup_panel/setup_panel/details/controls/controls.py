@@ -19,6 +19,7 @@ class Controls(QWidget):
     def saveControls(self):
         data = self.widget.data
         data['robotName'] = self.widget.robotNameInput.text()
+        data['namespace'] = self.widget.namespaceLineEditUI.text()
         data['controlKeys']['forward'] = self.widget.forwardKeyInput.text()
         data['controlKeys']['backward'] = self.widget.backwardKeyInput.text()
         data['controlKeys']['right'] = self.widget.rightKeyInput.text()
