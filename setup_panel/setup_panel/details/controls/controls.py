@@ -71,6 +71,62 @@ class Controls(QWidget):
             MotorControlPositionInTableEnum.LEFT, 1).text()
 
 
+
+  # FORWARD
+        data['dynamicTwist']={}
+        data['dynamicTwist']['forward']={}
+        data['dynamicTwist']['forward']['linear'] = self.widget.dynamicTwistTableUI.item(
+            MotorControlPositionInTableEnum.FORWARD, 0).text()
+        data['dynamicTwist']['forward']['angle'] = self.widget.dynamicTwistTableUI.item(
+            MotorControlPositionInTableEnum.FORWARD, 1).text()
+
+        data['dynamicTwist']['forwardLeft']={}
+        data['dynamicTwist']['forwardLeft']['linear'] = self.widget.dynamicTwistTableUI.item(
+            MotorControlPositionInTableEnum.FORWARD_LEFT, 0).text()
+        data['dynamicTwist']['forwardLeft']['angle'] = self.widget.dynamicTwistTableUI.item(
+            MotorControlPositionInTableEnum.FORWARD_LEFT, 1).text()
+
+        data['dynamicTwist']['forwardRight']={}
+        data['dynamicTwist']['forwardRight']['linear'] = self.widget.dynamicTwistTableUI.item(
+            MotorControlPositionInTableEnum.FORWARD_RIGHT, 0).text()
+        data['dynamicTwist']['forwardRight']['angle'] = self.widget.dynamicTwistTableUI.item(
+            MotorControlPositionInTableEnum.FORWARD_RIGHT, 1).text()
+
+        # RIGHT
+        data['dynamicTwist']['right']= {}
+        data['dynamicTwist']['right']= {}
+        data['dynamicTwist']['right']['linear'] = self.widget.dynamicTwistTableUI.item(
+            MotorControlPositionInTableEnum.RIGHT, 0).text()
+        data['dynamic']['right']['angle'] = self.widget.dynamicTwistTableUI.item(
+            MotorControlPositionInTableEnum.RIGHT, 1).text()
+
+        # BACKWARD
+        data['dynamicTwist']['backward']={}
+        data['dynamicTwist']['backward']['linear'] = self.widget.dynamicTwistTableUI.item(
+            MotorControlPositionInTableEnum.BACKWARD, 0).text()
+        data['dynamicTwist']['backward']['angle'] = self.widget.dynamicTwistTableUI.item(
+            MotorControlPositionInTableEnum.BACKWARD, 1).text()
+
+        data['dynamicTwist']['backwardLeft']={}
+        data['dynamicTwist']['backwardLeft']['linear'] = self.widget.dynamicTwistTableUI.item(
+            MotorControlPositionInTableEnum.BACKWARD_LEFT, 0).text()
+        data['dynamicTwist']['backwardLeft']['angle'] = self.widget.dynamicTwistTableUI.item(
+            MotorControlPositionInTableEnum.BACKWARD_LEFT, 1).text()
+
+        data['dynamicTwist']['backwardRight']={}
+        data['dynamicTwist']['backwardRight']['linear'] = self.widget.dynamicTwistTableUI.item(
+            MotorControlPositionInTableEnum.BACKWARD_RIGHT, 0).text()
+        data['dynamicTwist']['backwardRight']['angle'] = self.widget.dynamicTwistTableUI.item(
+            MotorControlPositionInTableEnum.BACKWARD_RIGHT, 1).text()
+
+        # LEFT
+        data['dynamicTwist']['left']={}
+        data['dynamicTwist']['left']['linear'] = self.widget.dynamicTwistTableUI.item(
+            MotorControlPositionInTableEnum.LEFT, 0).text()
+        data['dynamicTwist']['left']['angle'] = self.widget.dynamicTwistTableUI.item(
+            MotorControlPositionInTableEnum.LEFT, 1).text()
+
+
 class MotorControlPositionInTableEnum(int, Enum):
     FORWARD = 0
     FORWARD_LEFT = 1

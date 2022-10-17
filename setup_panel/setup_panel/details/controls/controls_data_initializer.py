@@ -53,9 +53,11 @@ class ControlsDataInitializer:
 
     def setMotorsDynamic(self):
         dynamic = self.data.get('dynamic', {})
+        dynamicTwist = self.data.get('dynamicTwist', {})
 
         for motorControlPositionInTable in MotorControlPositionInTableEnum:
             self.setControlsForKeyCombination(motorControlPositionInTable, dynamic)
+            self.setTwistControlsForKeyCombination(motorControlPositionInTable, dynamicTwist)
 
     def setControlsForKeyCombination(self, motorControlPositionInTableEnum, dynamic):
         dataKey = motorControlPositionToDataKeyMap[motorControlPositionInTableEnum]
@@ -65,6 +67,15 @@ class ControlsDataInitializer:
         setDynamicTableItem(motorControlPositionInTableEnum, 0, self.createTableItem(data, 'leftEngine'))
         setDynamicTableItem(motorControlPositionInTableEnum, 1, self.createTableItem(data, 'rightEngine'))
         setDynamicTableItem(motorControlPositionInTableEnum, 2, self.createTableItem(data, 'inertia'))
+
+    def setTwistControlsForKeyCombination(self, motorControlPositionInTableEnum, dynamicTwist):
+        dataKey = motorControlPositionToDataKeyMap[motorControlPositionInTableEnum]
+        data = dynamicTwist.get(dataKey, {})
+
+        setDynamicTableItem = self.widget.dynamicTwistTableUI.setItem
+        setDynamicTableItem(motorControlPositionInTableEnum, 0, self.createTableItem(data, 'linear'))
+        setDynamicTableItem(motorControlPositionInTableEnum, 1, self.createTableItem(data, 'angle'))
+        # setDynamicTableItem(motorControlPositionInTableEnum, 2, self.createTableItem(data, 'inertia'))
 
     def createTableItem(self, data, key, default=None):
         return QTableWidgetItem(str(data.get(key, default)))

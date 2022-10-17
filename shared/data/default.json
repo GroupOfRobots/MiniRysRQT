@@ -49,6 +49,48 @@
       "inertia": 1
     }
   },
+  "dynamicTwist": {
+    "forward": {
+      "linear": 100,
+      "angle": 100,
+      "inertia": 1
+    },
+    "forwardLeft": {
+      "linear": 100,
+      "angle": 100,
+      "inertia": 1
+    },
+    "forwardRight": {
+      "linear": 100,
+      "angle": 100,
+      "inertia": 1
+    },
+    "right": {
+      "linear": 100,
+      "angle": 100,
+      "inertia": 1
+    },
+    "backward": {
+      "linear": 100,
+      "angle": 100,
+      "inertia": 1
+    },
+   "backwardLeft": {
+      "linear": 100,
+      "angle": 100,
+      "inertia": 1
+    },
+    "backwardRight": {
+      "linear": 100,
+      "angle": 100,
+      "inertia": 1
+    },
+    "left": {
+      "linear": 100,
+      "angle": 100,
+      "inertia": 1
+    }
+  },
   "joystick": {
     "forward": {
       "leftEngine": 90,

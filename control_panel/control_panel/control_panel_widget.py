@@ -10,9 +10,10 @@ from shared.base_widget.base_widget import BaseWidget
 
 from .elements.button import Button
 from minirys_msgs.msg import MotorCommand
-from geometry_msgs import Twist
+from geometry_msgs.msg import Twist
 
 from std_msgs.msg import Bool
+
 
 class ControlPanelWidget(BaseWidget):
     def __init__(self, stack=None, node=None):
@@ -29,8 +30,9 @@ class ControlPanelWidget(BaseWidget):
 
         self.initPressesKeys()
 
-        self.publisher = node.create_publisher(MotorCommand, '/internal/motor_command', 10)
-        self.balancePublisher = node.create_publisher(Bool, '/balance_mode', 10)
+        self.publisherTwist = node.create_publisher(Twist, self.namespace + '/internal/cmd_vel', 10)
+        self.publisher = node.create_publisher(MotorCommand, self.namespace + '/internal/motor_command', 10)
+        self.balancePublisher = node.create_publisher(Bool,  self.namespace +'/balance_mode', 10)
 
     def loadUI(self):
         _, packagePath = get_resource('packages', 'control_panel')
@@ -41,10 +43,10 @@ class ControlPanelWidget(BaseWidget):
         msg = Bool()
 
         if state == 0:
-            msg.data=False
+            msg.data = False
             self.balancePublisher.publish(msg)
             return
-        msg.data=True
+        msg.data = True
         self.balancePublisher.publish(msg)
 
     def initPressesKeys(self):
@@ -57,7 +59,7 @@ class ControlPanelWidget(BaseWidget):
 
     def initializeRobotSettings(self):
         self.controlKeys = self.data.get('controlKeys', {})
-        self.dynamic = self.data.get('dynamic',{})
+        self.dynamic = self.data.get('dynamic', {})
 
         for key in self.controlKeys:
             controlValue = self.controlKeys[key].upper()
@@ -103,7 +105,7 @@ class ControlPanelWidget(BaseWidget):
             self.pressedKeys[ControlKeyEnum.LEFT] = False
             self.leftButtonElement.releasedKeyState()
 
-        self.determineKeyedPressedState()
+        self.determineKeyedPressedState1()
 
         event.accept()
 
@@ -157,37 +159,37 @@ class ControlPanelWidget(BaseWidget):
 
         if forward and right and not (backward or left):
             msg.linear.y = float(self.dynamic['forwardRight']['linear'])
-            msg.angle.z = float(self.dynamic['forwardRight']['angle'])
+            msg.angular.z = float(self.dynamic['forwardRight']['angle'])
         elif forward and left and not (backward or right):
             msg.linear.y = float(self.dynamic['forwardLeft']['linear'])
-            msg.angle.z = float(self.dynamic['forwardLeft']['angle'])
+            msg.angular.z = float(self.dynamic['forwardLeft']['angle'])
         elif forward and not (right or backward or left):
             msg.linear.y = float(self.dynamic['forward']['linear'])
-            msg.angle.z = float(self.dynamic['forward']['angle'])
+            msg.angular.z = float(self.dynamic['forward']['angle'])
 
         elif right and not (forward or backward or left):
             msg.linear.y = float(self.dynamic['right']['linear'])
-            msg.angle.z = float(self.dynamic['right']['angle'])
+            msg.angular.z = float(self.dynamic['right']['angle'])
 
         elif backward and right and not (forward or left):
             msg.linear.y = float(self.dynamic['backwardRight']['linear'])
-            msg.angle.z = float(self.dynamic['backwardRight']['angle'])
+            msg.angular.z = float(self.dynamic['backwardRight']['angle'])
         elif backward and left and not (forward or right):
             msg.linear.y = float(self.dynamic['backwardLeft']['linear'])
-            msg.angle.z = float(self.dynamic['backwardLeft']['angle'])
+            msg.angular.z = float(self.dynamic['backwardLeft']['angle'])
         elif backward and not (right or forward or left):
             msg.linear.y = float(self.dynamic['backward']['linear'])
-            msg.angle.z = float(self.dynamic['backward']['angle'])
+            msg.angular.z = float(self.dynamic['backward']['angle'])
 
         elif left and not (forward or backward or right):
             msg.linear.y = float(self.dynamic['left']['linear'])
-            msg.angle.z = float(self.dynamic['left']['angle'])
+            msg.angular.z = float(self.dynamic['left']['angle'])
 
         elif not (forward or right or backward or left):
-            msg.linear.y= 0.0
-            msg.angle.z = 0.0
+            msg.linear.y = 0.0
+            msg.angular.z = 0.0
 
-        self.publisher.publish(msg)
+        self.publisherTwist.publish(msg)
 
     def settingsClicked(self):
         self.stack.goToSettings(self.dataFilePath)
