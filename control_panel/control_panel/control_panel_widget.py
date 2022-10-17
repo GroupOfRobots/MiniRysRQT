@@ -30,7 +30,7 @@ class ControlPanelWidget(BaseWidget):
 
         self.initPressesKeys()
 
-        self.publisherTwist = node.create_publisher(Twist, self.namespace + '/internal/cmd_vel', 10)
+        self.publisherTwist = node.create_publisher(Twist, self.namespace + '/cmd_vel', 10)
         self.publisher = node.create_publisher(MotorCommand, self.namespace + '/internal/motor_command', 10)
         self.balancePublisher = node.create_publisher(Bool,  self.namespace +'/balance_mode', 10)
 
@@ -83,7 +83,7 @@ class ControlPanelWidget(BaseWidget):
             self.pressedKeys[ControlKeyEnum.LEFT] = True
             self.leftButtonElement.pressedKeyState()
 
-        self.determineKeyedPressedState()
+        self.determineKeyedPressedState1()
 
         event.accept()
 
@@ -156,6 +156,9 @@ class ControlPanelWidget(BaseWidget):
         backward = self.pressedKeys[ControlKeyEnum.BACKWARD]
         left = self.pressedKeys[ControlKeyEnum.LEFT]
         msg = Twist()
+
+        self.dynamic = self.data.get('dynamicTwist', {})
+
 
         if forward and right and not (backward or left):
             msg.linear.y = float(self.dynamic['forwardRight']['linear'])

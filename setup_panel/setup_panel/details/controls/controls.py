@@ -94,10 +94,9 @@ class Controls(QWidget):
 
         # RIGHT
         data['dynamicTwist']['right']= {}
-        data['dynamicTwist']['right']= {}
         data['dynamicTwist']['right']['linear'] = self.widget.dynamicTwistTableUI.item(
             MotorControlPositionInTableEnum.RIGHT, 0).text()
-        data['dynamic']['right']['angle'] = self.widget.dynamicTwistTableUI.item(
+        data['dynamicTwist']['right']['angle'] = self.widget.dynamicTwistTableUI.item(
             MotorControlPositionInTableEnum.RIGHT, 1).text()
 
         # BACKWARD

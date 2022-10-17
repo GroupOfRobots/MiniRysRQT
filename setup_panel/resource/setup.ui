@@ -457,7 +457,7 @@
              </row>
              <row>
               <property name="text">
-               <string>New Row</string>
+               <string>BACKWARD+LEFT</string>
               </property>
              </row>
              <row>
