@@ -79,3 +79,5 @@ class MotorControlPositionInTableEnum(int, Enum):
     BACKWARD_LEFT = 5
     BACKWARD_RIGHT = 6
     LEFT = 7
+
+

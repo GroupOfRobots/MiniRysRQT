@@ -1,5 +1,5 @@
 from shared.enums import ControlKeyEnum
-from shared.enums import MotorControlPositionInTableEnum
+from shared.enums import MotorControlPositionInTableEnum, motorControlPositionToDataKeyMap
 
 from python_qt_binding.QtWidgets import QTableWidgetItem
 
@@ -50,40 +50,13 @@ class ControlsDataInitializer:
     def setMotorsDynamic(self):
         dynamic = self.data.get('dynamic', {})
 
-        self.setForwardMotorsCombinations(dynamic)
-        self.setRightMotorsCombinations(dynamic)
-        self.setBackwardMotorsCombinations(dynamic)
-        self.setLeftMotorsCombinations(dynamic)
+        for motorControlPositionInTable in MotorControlPositionInTableEnum:
+            self.setControlsForKeyCombination(motorControlPositionInTable, dynamic)
 
-    def setForwardMotorsCombinations(self, dynamic):
-        forwardDynamic = dynamic.get('forward', {})
-        forwardLeftDynamic = dynamic.get('forwardLeft', {})
-        forwardRightDynamic = dynamic.get('forwardRight', {})
+    def setControlsForKeyCombination(self, motorControlPositionInTableEnum, dynamic):
+        dataKey=motorControlPositionToDataKeyMap[motorControlPositionInTableEnum]
+        data= dynamic.get(dataKey, {})
 
-        self.setControlsForKeyCombination(MotorControlPositionInTableEnum.FORWARD, forwardDynamic)
-        self.setControlsForKeyCombination(MotorControlPositionInTableEnum.FORWARD_LEFT, forwardLeftDynamic)
-        self.setControlsForKeyCombination(MotorControlPositionInTableEnum.FORWARD_RIGHT, forwardRightDynamic)
-
-    def setRightMotorsCombinations(self, dynamic):
-        rightDynamic = dynamic.get('right', {})
-
-        self.setControlsForKeyCombination(MotorControlPositionInTableEnum.RIGHT, rightDynamic)
-
-    def setBackwardMotorsCombinations(self, dynamic):
-        backwardDynamic = dynamic.get('backward', {})
-        backwardLeftDynamic = dynamic.get('backwardLeft', {})
-        backwardRightDynamic = dynamic.get('backwardRight', {})
-
-        self.setControlsForKeyCombination(MotorControlPositionInTableEnum.BACKWARD, backwardDynamic)
-        self.setControlsForKeyCombination(MotorControlPositionInTableEnum.BACKWARD_LEFT, backwardLeftDynamic)
-        self.setControlsForKeyCombination(MotorControlPositionInTableEnum.BACKWARD_RIGHT, backwardRightDynamic)
-
-    def setLeftMotorsCombinations(self, dynamic):
-        leftDynamic = dynamic.get('left', {})
-
-        self.setControlsForKeyCombination(MotorControlPositionInTableEnum.LEFT, leftDynamic)
-
-    def setControlsForKeyCombination(self, motorControlPositionInTableEnum, data):
         setDynamicTableItem = self.widget.dynamicTable.setItem
         setDynamicTableItem(motorControlPositionInTableEnum, 0, self.createTableItem(data, 'leftEngine'))
         setDynamicTableItem(motorControlPositionInTableEnum, 1, self.createTableItem(data, 'rightEngine'))

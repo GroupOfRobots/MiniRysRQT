@@ -6,7 +6,8 @@ class ControlKeyEnum(str, Enum):
     RIGHT = 'right'
     BACKWARD = 'backward'
     LEFT = 'left'
-    STABLE = 'stable' # position is preserved if stable key is pressed
+    STABLE = 'stable'  # position is preserved if stable key is pressed
+
 
 class MotorControlPositionInTableEnum(int, Enum):
     FORWARD = 0
@@ -17,3 +18,15 @@ class MotorControlPositionInTableEnum(int, Enum):
     BACKWARD_LEFT = 5
     BACKWARD_RIGHT = 6
     LEFT = 7
+
+
+motorControlPositionToDataKeyMap = {
+    MotorControlPositionInTableEnum.FORWARD: 'forward',
+    MotorControlPositionInTableEnum.FORWARD_LEFT: 'forwardLeft',
+    MotorControlPositionInTableEnum.FORWARD_RIGHT: 'forwardRight',
+    MotorControlPositionInTableEnum.RIGHT: 'right',
+    MotorControlPositionInTableEnum.BACKWARD: 'backward',
+    MotorControlPositionInTableEnum.BACKWARD_LEFT: 'backwardLeft',
+    MotorControlPositionInTableEnum.BACKWARD_RIGHT: 'backwardRight',
+    MotorControlPositionInTableEnum.LEFT: 'left'
+}

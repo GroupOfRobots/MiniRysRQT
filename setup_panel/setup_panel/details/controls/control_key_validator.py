@@ -16,23 +16,14 @@ class ControlKeyValidator:
 
         self.addControlKeysValidators()
 
-
     def validator(self, event, key):
         button = self.keyInputDictionary[key]
         newValue = event.upper()
         button.setText(newValue)
         self.controlKeys[key] = newValue
 
-        valuesMap = {}
-
-        for key, value in self.controlKeys.items():
-            if value in valuesMap:
-                valuesMap[value].append(key)
-            else:
-                valuesMap[value] = [key]
-
         disableSaveButton = False
-        for _, buttonKeys in valuesMap.items():
+        for _, buttonKeys in self.createValuesMapItems():
             if len(buttonKeys) > 1:
                 for inputKey in buttonKeys:
                     color = '#EB5535'  # red
@@ -45,6 +36,15 @@ class ControlKeyValidator:
             self.widget.saveButton.setEnabled(False)
         else:
             self.widget.saveButton.setEnabled(True)
+
+    def createValuesMapItems(self):
+        valuesMap = {}
+        for key, value in self.controlKeys.items():
+            if value in valuesMap:
+                valuesMap[value].append(key)
+            else:
+                valuesMap[value] = [key]
+        return valuesMap.items()
 
     def addControlKeysValidators(self):
         self.keyInputDictionary[ControlKeyEnum.FORWARD].textChanged.connect(
