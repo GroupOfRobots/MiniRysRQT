@@ -74,7 +74,7 @@ class SetupWidget(QWidget):
 
     def saveClicked(self):
         self.commands.saveCommands()
-        self.controlsTest.saveControls()
+        self.controlsTest.controlsDataSaver.save()
         self.pidWidget.savePidData()
         self.sshData.saveSshData()
 
