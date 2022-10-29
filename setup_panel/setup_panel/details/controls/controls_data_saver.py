@@ -1,5 +1,5 @@
 from shared.enums import ControlKeyEnum
-from shared.enums import MotorControlPositionInTableEnum, motorControlPositionToDataKeyMap
+from shared.enums import MotorControlPositionEnum, motorControlPositionToDataKeyMap
 
 from python_qt_binding.QtWidgets import QTableWidgetItem
 
@@ -28,31 +28,31 @@ class ControlsDataSaver:
         dynamic = {}
         dynamicTwist = {}
 
-        for motorControlPositionInTable in MotorControlPositionInTableEnum:
-            self.saveControlsForKeyCombination(motorControlPositionInTable, dynamic)
-            self.saveTwistControlsForKeyCombination(motorControlPositionInTable, dynamicTwist)
+        for motorControlPosition in MotorControlPositionEnum:
+            self.saveControlsForKeyCombination(motorControlPosition, dynamic)
+            self.saveTwistControlsForKeyCombination(motorControlPosition, dynamicTwist)
 
         self.data['dynamic']= dynamic
         self.data['dynamicTwist'] = dynamicTwist
 
-    def saveControlsForKeyCombination(self, motorControlPositionInTableEnum, dynamic):
+    def saveControlsForKeyCombination(self, motorControlPosition, dynamic):
         dataKey = motorControlPositionToDataKeyMap[motorControlPositionInTableEnum]
 
         dynamic[dataKey] = {}
-        dynamic[dataKey]['leftEngine'] = self.saveDynamicTableItem(motorControlPositionInTableEnum, 0)
-        dynamic[dataKey]['rightEngine'] = self.saveDynamicTableItem(motorControlPositionInTableEnum, 1)
+        dynamic[dataKey]['leftEngine'] = self.saveDynamicTableItem(motorControlPosition, 0)
+        dynamic[dataKey]['rightEngine'] = self.saveDynamicTableItem(motorControlPosition, 1)
         # dynamic[dataKey]['angle'] = self.saveDynamicTableItem(motorControlPositionInTableEnum, 2)
 
 
-    def saveTwistControlsForKeyCombination(self, motorControlPositionInTableEnum, dynamicTwist):
+    def saveTwistControlsForKeyCombination(self, motorControlPosition, dynamicTwist):
         dataKey = motorControlPositionToDataKeyMap[motorControlPositionInTableEnum]
 
         dynamicTwist[dataKey] = {}
-        dynamicTwist[dataKey]['linear'] = self.saveDynamicTwistTableItem(motorControlPositionInTableEnum, 0)
-        dynamicTwist[dataKey]['angle'] = self.saveDynamicTwistTableItem(motorControlPositionInTableEnum, 1)
+        dynamicTwist[dataKey]['linear'] = self.saveDynamicTwistTableItem(motorControlPosition, 0)
+        dynamicTwist[dataKey]['angle'] = self.saveDynamicTwistTableItem(motorControlPosition, 1)
 
-    def saveDynamicTwistTableItem(self, motorControlPositionInTableEnum, index):
-        return self.widget.dynamicTwistTableUI.item(motorControlPositionInTableEnum, index).text()
+    def saveDynamicTwistTableItem(self, motorControlPosition, index):
+        return self.widget.dynamicTwistTableUI.item(motorControlPosition, index).text()
 
-    def saveDynamicTableItem(self, motorControlPositionInTableEnum, index):
-        return self.widget.dynamicTable.item(motorControlPositionInTableEnum, index).text()
+    def saveDynamicTableItem(self, motorControlPosition, index):
+        return self.widget.dynamicTable.item(motorControlPosition, index).text()

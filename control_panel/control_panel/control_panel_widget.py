@@ -5,7 +5,7 @@ import os
 from ament_index_python import get_resource
 from python_qt_binding import QtCore
 from python_qt_binding import loadUi
-from shared.enums import ControlKeyEnum
+from shared.enums import ControlKeyEnum, MotorControlPositionEnum, motorControlPositionToDataKeyMap
 from shared.base_widget.base_widget import BaseWidget
 
 from .elements.button import Button
@@ -13,11 +13,14 @@ from minirys_msgs.msg import MotorCommand
 from geometry_msgs.msg import Twist
 
 from std_msgs.msg import Bool
+from collections import namedtuple
 
 
 class ControlPanelWidget(BaseWidget):
     def __init__(self, stack=None, node=None):
         super(ControlPanelWidget, self).__init__(stack)
+
+        self.node = node
 
         self.loadUI()
         self.initializeRobotsOptions()
@@ -28,16 +31,27 @@ class ControlPanelWidget(BaseWidget):
         self.comboBox.currentIndexChanged.connect(self.setRobotOnScreen)
         self.balanceCheckBoxUI.stateChanged.connect(self.balanceStateChanged)
 
-        self.initPressesKeys()
+        self.initPressedKeys()
 
-        self.publisherTwist = node.create_publisher(Twist, self.namespace + '/cmd_vel', 10)
-        self.publisher = node.create_publisher(MotorCommand, self.namespace + '/internal/motor_command', 10)
-        self.balancePublisher = node.create_publisher(Bool,  self.namespace +'/balance_mode', 10)
+        self.balancePublisher = node.create_publisher(Bool, self.namespace + '/balance_mode', 10)
+
+        self.messageTypeComboBoxUI.currentIndexChanged.connect(self.changeMessageFunction)
+        self.messageFunction = self.setupTwistMessage
+        self.publisher = node.create_publisher(Twist, self.namespace + '/cmd_vel', 10)
 
     def loadUI(self):
         _, packagePath = get_resource('packages', 'control_panel')
         uiFile = os.path.join(packagePath, 'share', 'control_panel', 'resource', 'control_panel.ui')
         loadUi(uiFile, self)
+
+    def changeMessageFunction(self, event):
+        if event == 0:
+            self.messageFunction = self.setupTwistMessage
+            self.publisher = self.node.create_publisher(Twist, self.namespace + '/cmd_vel', 10)
+
+        elif event == 1:
+            self.messageFunction = self.setupMotorCommandMessage
+            self.publisher = self.node.create_publisher(MotorCommand, self.namespace + '/internal/motor_command', 10)
 
     def balanceStateChanged(self, state):
         msg = Bool()
@@ -49,7 +63,7 @@ class ControlPanelWidget(BaseWidget):
         msg.data = True
         self.balancePublisher.publish(msg)
 
-    def initPressesKeys(self):
+    def initPressedKeys(self):
         self.pressedKeys = {
             ControlKeyEnum.FORWARD: False,
             ControlKeyEnum.RIGHT: False,
@@ -60,6 +74,7 @@ class ControlPanelWidget(BaseWidget):
     def initializeRobotSettings(self):
         self.controlKeys = self.data.get('controlKeys', {})
         self.dynamic = self.data.get('dynamic', {})
+        self.dynamicTwist = self.data.get('dynamicTwist', {})
 
         for key in self.controlKeys:
             controlValue = self.controlKeys[key].upper()
@@ -83,7 +98,7 @@ class ControlPanelWidget(BaseWidget):
             self.pressedKeys[ControlKeyEnum.LEFT] = True
             self.leftButtonElement.pressedKeyState()
 
-        self.determineKeyedPressedState1()
+        self.determineKeyedPressedState()
 
         event.accept()
 
@@ -105,109 +120,81 @@ class ControlPanelWidget(BaseWidget):
             self.pressedKeys[ControlKeyEnum.LEFT] = False
             self.leftButtonElement.releasedKeyState()
 
-        self.determineKeyedPressedState1()
+        self.determineKeyedPressedState()
 
         event.accept()
 
-    def determineKeyedPressedState(self):
+    def getKeyState(self):
         forward = self.pressedKeys[ControlKeyEnum.FORWARD]
         right = self.pressedKeys[ControlKeyEnum.RIGHT]
         backward = self.pressedKeys[ControlKeyEnum.BACKWARD]
         left = self.pressedKeys[ControlKeyEnum.LEFT]
+
+        keyState = KeyState(forward, right, backward, left)
+        return keyState
+
+    def determineKeyedPressedState(self):
+        keyState = self.getKeyState()
+
+        msg = self.messageFunction(keyState)
+
+        if msg is not None:
+            self.publisher.publish(msg)
+
+    def setupMotorCommandMessage(self, keyState):
         msg = MotorCommand()
+        dataKey = KeyStateMap.get(keyState)
 
-        if forward and right and not (backward or left):
-            msg.speed_l = float(self.dynamic['forwardRight']['leftEngine'])
-            msg.speed_r = float(self.dynamic['forwardRight']['rightEngine'])
-        elif forward and left and not (backward or right):
-            msg.speed_l = float(self.dynamic['forwardLeft']['leftEngine'])
-            msg.speed_r = float(self.dynamic['forwardLeft']['rightEngine'])
-        elif forward and not (right or backward or left):
-            msg.speed_l = float(self.dynamic['forward']['leftEngine'])
-            msg.speed_r = float(self.dynamic['forward']['rightEngine'])
+        if dataKey is None:
+            return
 
-        elif right and not (forward or backward or left):
-            msg.speed_l = float(self.dynamic['right']['leftEngine'])
-            msg.speed_r = float(self.dynamic['right']['rightEngine'])
-
-        elif backward and right and not (forward or left):
-            msg.speed_l = float(self.dynamic['backwardRight']['leftEngine'])
-            msg.speed_r = float(self.dynamic['backwardRight']['rightEngine'])
-        elif backward and left and not (forward or right):
-            msg.speed_l = float(self.dynamic['backwardLeft']['leftEngine'])
-            msg.speed_r = float(self.dynamic['backwardLeft']['rightEngine'])
-        elif backward and not (right or forward or left):
-            msg.speed_l = float(self.dynamic['backward']['leftEngine'])
-            msg.speed_r = float(self.dynamic['backward']['rightEngine'])
-
-        elif left and not (forward or backward or right):
-            msg.speed_l = float(self.dynamic['left']['leftEngine'])
-            msg.speed_r = float(self.dynamic['left']['rightEngine'])
-
-        elif not (forward or right or backward or left):
+        if dataKey is not None:
+            msg.speed_l = float(self.dynamic[dataKey]['leftEngine'])
+            msg.speed_r = float(self.dynamic[dataKey]['rightEngine'])
+        elif not keyState.forward or keyState.right or keyState.backward or keyState.left:
             msg.speed_l = 0.0
             msg.speed_r = 0.0
 
-        self.publisher.publish(msg)
-
-    def determineKeyedPressedState1(self):
-        forward = self.pressedKeys[ControlKeyEnum.FORWARD]
-        right = self.pressedKeys[ControlKeyEnum.RIGHT]
-        backward = self.pressedKeys[ControlKeyEnum.BACKWARD]
-        left = self.pressedKeys[ControlKeyEnum.LEFT]
+    def setupTwistMessage(self, keyState):
         msg = Twist()
+        dataKey = KeyStateMap.get(keyState, None)
 
-        self.dynamic = self.data.get('dynamicTwist', {})
+        if dataKey is None:
+            return
 
-
-        if forward and right and not (backward or left):
-            msg.linear.y = float(self.dynamic['forwardRight']['linear'])
-            msg.angular.z = float(self.dynamic['forwardRight']['angle'])
-        elif forward and left and not (backward or right):
-            msg.linear.y = float(self.dynamic['forwardLeft']['linear'])
-            msg.angular.z = float(self.dynamic['forwardLeft']['angle'])
-        elif forward and not (right or backward or left):
-            msg.linear.y = float(self.dynamic['forward']['linear'])
-            msg.angular.z = float(self.dynamic['forward']['angle'])
-
-        elif right and not (forward or backward or left):
-            msg.linear.y = float(self.dynamic['right']['linear'])
-            msg.angular.z = float(self.dynamic['right']['angle'])
-
-        elif backward and right and not (forward or left):
-            msg.linear.y = float(self.dynamic['backwardRight']['linear'])
-            msg.angular.z = float(self.dynamic['backwardRight']['angle'])
-        elif backward and left and not (forward or right):
-            msg.linear.y = float(self.dynamic['backwardLeft']['linear'])
-            msg.angular.z = float(self.dynamic['backwardLeft']['angle'])
-        elif backward and not (right or forward or left):
-            msg.linear.y = float(self.dynamic['backward']['linear'])
-            msg.angular.z = float(self.dynamic['backward']['angle'])
-
-        elif left and not (forward or backward or right):
-            msg.linear.y = float(self.dynamic['left']['linear'])
-            msg.angular.z = float(self.dynamic['left']['angle'])
-
-        elif not (forward or right or backward or left):
+        if dataKey is not None:
+            msg.linear.y = float(self.dynamicTwist[dataKey]['linear'])
+            msg.angular.z = float(self.dynamicTwist[dataKey]['angle'])
+        elif not keyState.forward or keyState.right or keyState.backward or keyState.left:
             msg.linear.y = 0.0
             msg.angular.z = 0.0
 
-        self.publisherTwist.publish(msg)
+        return msg
 
     def settingsClicked(self):
         self.stack.goToSettings(self.dataFilePath)
 
-    def buttonClicked(self):
-        pass
+    def buttonClicked(self, isPressed,  controlKeyEnum):
+        self.pressedKeys[controlKeyEnum] = isPressed
+        self.determineKeyedPressedState()
 
     def defineButtons(self):
+        self.settingsButton.clicked.connect(self.settingsClicked)
+
         self.forwardButtonElement = Button(self.forwardButton)
         self.rightButtonElement = Button(self.rightButton)
         self.backwardButtonElement = Button(self.backwardButton)
         self.leftButtonElement = Button(self.leftButton)
 
-        self.settingsButton.clicked.connect(self.settingsClicked)
-        self.forwardButton.clicked.connect(self.buttonClicked)
+        self.forwardButton.pressed.connect(lambda: self.buttonClicked(True, ControlKeyEnum.FORWARD))
+        self.rightButton.pressed.connect(lambda: self.buttonClicked(True, ControlKeyEnum.RIGHT))
+        self.backwardButton.pressed.connect(lambda: self.buttonClicked(True, ControlKeyEnum.BACKWARD))
+        self.leftButton.pressed.connect(lambda: self.buttonClicked(True, ControlKeyEnum.LEFT))
+
+        self.forwardButton.released.connect(lambda: self.buttonClicked(False, ControlKeyEnum.FORWARD))
+        self.rightButton.released.connect(lambda: self.buttonClicked(False, ControlKeyEnum.RIGHT))
+        self.backwardButton.released.connect(lambda: self.buttonClicked(False, ControlKeyEnum.BACKWARD))
+        self.leftButton.released.connect(lambda: self.buttonClicked(False, ControlKeyEnum.LEFT))
 
     def resizeEvent(self, event):
         self.setIconSize()
@@ -215,7 +202,22 @@ class ControlPanelWidget(BaseWidget):
     def setIconSize(self):
         width = int(self.backwardButton.size().width() * 0.9)
         height = int(self.backwardButton.size().height() * 0.9)
+
         self.forwardButtonElement.resizeIcon(width, height)
         self.leftButtonElement.resizeIcon(width, height)
         self.rightButtonElement.resizeIcon(width, height)
         self.backwardButtonElement.resizeIcon(width, height)
+
+
+KeyState = namedtuple('KeyState', ["forward", "right", "backward", "left"])
+
+KeyStateMap = {
+    KeyState(True, False, False, False): motorControlPositionToDataKeyMap[MotorControlPositionEnum.FORWARD],
+    KeyState(True, True, False, False): motorControlPositionToDataKeyMap[MotorControlPositionEnum.FORWARD_RIGHT],
+    KeyState(True, False, False, True): motorControlPositionToDataKeyMap[MotorControlPositionEnum.FORWARD_LEFT],
+    KeyState(False, True, False, False): motorControlPositionToDataKeyMap[MotorControlPositionEnum.RIGHT],
+    KeyState(False, False, True, False): motorControlPositionToDataKeyMap[MotorControlPositionEnum.BACKWARD],
+    KeyState(False, True, True, False): motorControlPositionToDataKeyMap[MotorControlPositionEnum.BACKWARD_RIGHT],
+    KeyState(False, False, True, True): motorControlPositionToDataKeyMap[MotorControlPositionEnum.BACKWARD_LEFT],
+    KeyState(False, False, False, True): motorControlPositionToDataKeyMap[MotorControlPositionEnum.LEFT]
+}
