@@ -16,6 +16,9 @@ from python_qt_binding.QtWidgets import QProgressBar
 from std_msgs.msg import Float32, String
 
 
+import time
+
+
 class DashboardWidget(BaseWidget):
     def __init__(self, stack=None, node=Node):
         super(DashboardWidget, self).__init__()

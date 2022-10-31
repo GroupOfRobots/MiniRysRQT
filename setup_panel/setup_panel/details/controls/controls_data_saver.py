@@ -36,7 +36,7 @@ class ControlsDataSaver:
         self.data['dynamicTwist'] = dynamicTwist
 
     def saveControlsForKeyCombination(self, motorControlPosition, dynamic):
-        dataKey = motorControlPositionToDataKeyMap[motorControlPositionInTableEnum]
+        dataKey = motorControlPositionToDataKeyMap[motorControlPosition]
 
         dynamic[dataKey] = {}
         dynamic[dataKey]['leftEngine'] = self.saveDynamicTableItem(motorControlPosition, 0)
@@ -45,7 +45,7 @@ class ControlsDataSaver:
 
 
     def saveTwistControlsForKeyCombination(self, motorControlPosition, dynamicTwist):
-        dataKey = motorControlPositionToDataKeyMap[motorControlPositionInTableEnum]
+        dataKey = motorControlPositionToDataKeyMap[motorControlPosition]
 
         dynamicTwist[dataKey] = {}
         dynamicTwist[dataKey]['linear'] = self.saveDynamicTwistTableItem(motorControlPosition, 0)
