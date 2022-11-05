@@ -22,6 +22,8 @@ class ControlPanelWidget(BaseWidget):
 
         self.node = node
 
+        self.currentMessageTypeComboBoxIndex=0;
+
         self.loadUI()
         self.initializeRobotsOptions()
         self.setRobotOnScreen()
@@ -47,6 +49,7 @@ class ControlPanelWidget(BaseWidget):
     def changeMessageFunction(self, event):
         print(event)
         print(self.namespace)
+        self.currentMessageTypeComboBoxIndex=event
         if event == 0:
             self.messageFunction = self.setupTwistMessage
             self.publisher = self.node.create_publisher(Twist, self.namespace + '/cmd_vel', 10)
@@ -78,53 +81,47 @@ class ControlPanelWidget(BaseWidget):
         self.dynamic = self.data.get('dynamic', {})
         self.dynamicTwist = self.data.get('dynamicTwist', {})
 
+        if self.currentMessageTypeComboBoxIndex is not None:
+            self.changeMessageFunction(self.currentMessageTypeComboBoxIndex)
+
         for key in self.controlKeys:
             controlValue = self.controlKeys[key].upper()
             self.controlKeys[key] = QtCore.Qt.Key(ord(controlValue))
 
-    def keyPressEvent(self, event):
+
+    def keyEvent(self, event, state):
         if event.isAutoRepeat():
             return
-        key = QtCore.Qt.Key(event.key())
-
-        if key == self.controlKeys[ControlKeyEnum.FORWARD]:
-            self.forwardButtonElement.pressedKeyState()
-            self.pressedKeys[ControlKeyEnum.FORWARD] = True
-        elif event.key() == self.controlKeys[ControlKeyEnum.RIGHT]:
-            self.pressedKeys[ControlKeyEnum.RIGHT] = True
-            self.rightButtonElement.pressedKeyState()
-        elif event.key() == self.controlKeys[ControlKeyEnum.BACKWARD]:
-            self.pressedKeys[ControlKeyEnum.BACKWARD] = True
-            self.backwardButtonElement.pressedKeyState()
-        elif event.key() == self.controlKeys[ControlKeyEnum.LEFT]:
-            self.pressedKeys[ControlKeyEnum.LEFT] = True
-            self.leftButtonElement.pressedKeyState()
-
-        self.determineKeyedPressedState()
-
-        event.accept()
-
-    def keyReleaseEvent(self, event):
-        if event.isAutoRepeat():
-            return
+        button = None
         key = event.key()
 
+
         if key == self.controlKeys[ControlKeyEnum.FORWARD]:
-            self.pressedKeys[ControlKeyEnum.FORWARD] = False
-            self.forwardButtonElement.releasedKeyState()
-        elif event.key() == self.controlKeys[ControlKeyEnum.RIGHT]:
-            self.pressedKeys[ControlKeyEnum.RIGHT] = False
-            self.rightButtonElement.releasedKeyState()
-        elif event.key() == self.controlKeys[ControlKeyEnum.BACKWARD]:
-            self.pressedKeys[ControlKeyEnum.BACKWARD] = False
-            self.backwardButtonElement.releasedKeyState()
-        elif event.key() == self.controlKeys[ControlKeyEnum.LEFT]:
-            self.pressedKeys[ControlKeyEnum.LEFT] = False
-            self.leftButtonElement.releasedKeyState()
+            self.pressedKeys[ControlKeyEnum.FORWARD] = state
+            button = self.forwardButtonElement
+        elif key == self.controlKeys[ControlKeyEnum.RIGHT]:
+            self.pressedKeys[ControlKeyEnum.RIGHT] = state
+            button = self.rightButtonElement
+        elif key == self.controlKeys[ControlKeyEnum.BACKWARD]:
+            self.pressedKeys[ControlKeyEnum.BACKWARD] = state
+            button = self.backwardButtonElement
+        elif key == self.controlKeys[ControlKeyEnum.LEFT]:
+            self.pressedKeys[ControlKeyEnum.LEFT] = state
+            button = self.leftButtonElement
 
-        self.determineKeyedPressedState()
-
+        if button:
+            self.determineKeyedPressedState()
+            if state:
+                button.pressedKeyState()
+            else:
+                button.releasedKeyState()
         event.accept()
+
+    def keyPressEvent(self, event):
+       self.keyEvent(event, True)
+
+    def keyReleaseEvent(self, event):
+        self.keyEvent(event, False)
 
     def getKeyState(self):
         forward = self.pressedKeys[ControlKeyEnum.FORWARD]
