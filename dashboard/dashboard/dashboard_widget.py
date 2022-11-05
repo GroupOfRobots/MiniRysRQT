@@ -11,52 +11,31 @@ from rclpy.node import Node
 from minirys_msgs.msg import BatteryStatus, AngularPose
 from sensor_msgs.msg import Range
 
-from python_qt_binding.QtWidgets import QProgressBar
-
 from std_msgs.msg import Float32, String
 
-
 import time
+from collections import namedtuple
 
 
 class DashboardWidget(BaseWidget):
     def __init__(self, stack=None, node=Node):
         super(DashboardWidget, self).__init__()
-        BaseWidget.__init__(self, stack)
+
+        self.node = node
+        self.predefineSubscribers()
+        print(self.namespace)
 
         # node.destroy_node()
         self.loadUi()
 
+        self.test = None
         self.initializeRobotsOptions()
         self.setRobotOnScreen()
 
         print(self.namespace)
 
-        self.node = node
-        self.subscription = self.node.create_subscription(BatteryStatus, self.namespace + '/internal/battery_status',
-                                                          self.batteryCallback, 10)
-
-        self.node.create_subscription(Range, self.namespace + '/internal/distance_0', self.frontSensorCallback, 10)
-        self.node.create_subscription(Range, self.namespace + '/internal/distance_1', self.backSensorCallback, 10)
-
-        self.node.create_subscription(Float32, self.namespace + '/internal/temperature_cpu',
-                                      self.temperatureCpuCallback, 10)
-        self.node.create_subscription(Float32, self.namespace + '/internal/temperature_main',
-                                      self.temperatureMainCallback, 10)
-
-        self.node.create_subscription(AngularPose, self.namespace + '/internal/angular_pose', self.angularPoseCallback,
-                                      10)
-        self.node.create_subscription(AngularPose, self.namespace + '/internal/imu', self.imuCallback, 10)
-
-        # TODO pewnie do usuniecia
-        self.voltageCell1ProgressBar.setRange(3500, 5500)
-        self.voltageCell2ProgressBar.setRange(3500, 5500)
-        self.voltageCell3ProgressBar.setRange(3500, 5500)
-
         self.angularPosition = 0
         self.sign = 1
-
-        # self.frontSensorProgressBar.setRange(0, 4000)
 
         self.batteryUnderVoltageFlag = False
 
@@ -64,52 +43,47 @@ class DashboardWidget(BaseWidget):
 
         self.destroyed.connect(DashboardWidget.onDestroyed)
 
-        # self.paintRobotAngle('a')
-        # self.paintRobotAngle('b')
-        # self.paintRobotAngle('c')
-
-    # def paintEvent(self, event):
-    #     # self.paintRobotAngle(event)
-    #     # self.angleWidget.update()
-    #     pass
-
-    # def paintRobotAngle(self, event):
-    #     painter = QPainter(self.angleWidget)
-    #     # painter.setRenderHint(QPainter.Antialiasing)
-    #     painter.setPen(Qt.red)
-    #     painter.setBrush(Qt.white)
-    #     painter.drawLine(50, 50, 100, 100)
-    #     painter.end()
-
     def loadUi(self):
         _, packagePath = get_resource('packages', 'dashboard')
         uiFile = os.path.join(packagePath, 'share', 'dashboard', 'resource', 'dashboard.ui')
         loadUi(uiFile, self)
 
-    def initializeSettings(self):
+    def predefineSubscribers(self):
+        self.subscriberParams = [
+            SubscriberParam(None, BatteryStatus, '/internal/battery_status', self.batteryCallback),
+            SubscriberParam(None, Range, '/internal/distance_0', self.frontSensorCallback),
+            SubscriberParam(None, Range, '/internal/distance_1', self.backSensorCallback),
+            SubscriberParam(None, Float32, '/internal/temperature_cpu', self.temperatureCpuCallback),
+            SubscriberParam(None, Float32, '/internal/temperature_main', self.temperatureMainCallback),
+            SubscriberParam(None, AngularPose, '/internal/angular_pose', self.angularPoseCallback)]
+
+    def resetSubscribers(self):
+        for subscriberParam in self.subscriberParams:
+
+            subscriber = subscriberParam.subscriber
+            if subscriber is not None:
+                self.node.destroy_subscription(subscriber)
+
+    def initializeSubscribers(self):
+        self.resetSubscribers()
+        for index, subscriberParam in enumerate(self.subscriberParams):
+            subscriberInstance = self.node.create_subscription(subscriberParam.messageType,
+                                                               self.namespace + subscriberParam.topic,
+                                                               subscriberParam.callback, 10)
+            subscriberParam = subscriberParam._replace(subscriber=subscriberInstance)
+            self.subscriberParams[index]=subscriberParam
+
+    def log(self, event):
+        print("log")
+
+    def initializeRobotSettings(self):
         print('initializeSettings')
+        self.initializeSubscribers()
 
     def batteryCallback(self, event):
-        # print('event')
-        # print(event)
-        # # print( event.voltage_cell3)
-
         voltageCell1 = float('{:.3f}'.format(event.voltage_cell1))
         voltageCell2 = float('{:.3f}'.format(event.voltage_cell2))
         voltageCell3 = float('{:.3f}'.format(event.voltage_cell3))
-
-        undervoltageWarning = event.undervoltage_warning
-        undervoltageError = event.undervoltage_error
-
-        voltageCell1P = int(voltageCell1 * 1000)
-        voltageCell2P = int(voltageCell2 * 1000)
-        voltageCell3P = int(voltageCell3 * 1000)
-
-        # print(voltageCell1P)
-
-        # self.voltageCell1ProgressBar.setValue(voltageCell1P)
-        # self.voltageCell2ProgressBar.setValue(voltageCell2P)
-        # self.voltageCell2ProgressBar.setValue(voltageCell3P)
 
         self.voltageCell1Lcd.display(voltageCell1)
         self.voltageCell2Lcd.display(voltageCell2)
@@ -146,20 +120,13 @@ class DashboardWidget(BaseWidget):
     def temperatureMainCallback(self, event):
         self.temperatureMainLcd.display(event.data)
 
-        # self.temperatureMainLcd.setStyleSheet('color: black;')
-
     def frontSensorCallback(self, event):
-        # print(event.range)
-        range = int((event.range * 1000))
-        self.frontSensorProgressBar.setValue(range)
         self.frontDistanceLcd.display(event.range)
 
     def backSensorCallback(self, event):
         # print(event)
         range = int((event.range * 1000))
-        # self.backSensorProgressBar.setValue(range)
         self.backDistanceLcd.display(event.range)
-        # self.frontDistanceLcd.display(event.range)
 
     def paintRobotAngle(self, event):
         painter = QPainter()
@@ -222,3 +189,25 @@ class DashboardWidget(BaseWidget):
 
     def shutdown_plugin(self):
         print("shutdown_plugin")
+
+
+# self.batteryStatusSubscriber = self.node.create_subscription(BatteryStatus, self.namespace + '/internal/battery_status',
+#                                                         self.batteryCallback, 10)
+#
+#
+#       self.distance0Subscriber  = self.node.create_subscription(Range, self.namespace + '/internal/distance_0',
+#                                                 self.frontSensorCallback, 10)
+#
+#       self.distance1Subscriber = self.node.create_subscription(Range, self.namespace + '/internal/distance_1', self.backSensorCallback, 10)
+#
+#       self.temperatureCpuSubscriber = self.node.create_subscription(Float32, self.namespace + '/internal/temperature_cpu',
+#                                     self.temperatureCpuCallback, 10)
+#
+#       self.temperatureMainSubscriber = self.node.create_subscription(Float32, self.namespace + '/internal/temperature_main',
+#                                     self.temperatureMainCallback, 10)
+#
+#       self.node.create_subscription(AngularPose, self.namespace + '/internal/angular_pose', self.angularPoseCallback,
+#                                     10)
+#       self.node.create_subscription(AngularPose, self.namespace + '/internal/imu', self.imuCallback, 10)
+
+SubscriberParam = namedtuple('SubscriberParam', ["subscriber", "messageType", "topic", "callback"])

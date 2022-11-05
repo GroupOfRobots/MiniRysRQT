@@ -124,7 +124,7 @@ QGroupBox:title {
            <number>30</number>
           </property>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="1,0,4">
+           <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="1,0">
             <item>
              <widget class="QLabel" name="voltageCell1Label">
               <property name="maximumSize">
@@ -145,13 +145,6 @@ QGroupBox:title {
               </property>
              </widget>
             </item>
-            <item>
-             <widget class="QProgressBar" name="voltageCell1ProgressBar">
-              <property name="value">
-               <number>24</number>
-              </property>
-             </widget>
-            </item>
            </layout>
           </item>
           <item>
@@ -165,7 +158,7 @@ QGroupBox:title {
            </widget>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="0,0,4">
+           <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="0,0">
             <item>
              <widget class="QLabel" name="voltageCell2Label">
               <property name="maximumSize">
@@ -182,13 +175,6 @@ QGroupBox:title {
             <item>
              <widget class="QLCDNumber" name="voltageCell2Lcd"/>
             </item>
-            <item>
-             <widget class="QProgressBar" name="voltageCell2ProgressBar">
-              <property name="value">
-               <number>24</number>
-              </property>
-             </widget>
-            </item>
            </layout>
           </item>
           <item>
@@ -202,7 +188,7 @@ QGroupBox:title {
            </widget>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="0,0,0">
+           <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="0,0">
             <item>
              <widget class="QLabel" name="voltageCell3Label">
               <property name="maximumSize">
@@ -220,13 +206,6 @@ QGroupBox:title {
              <widget class="QLCDNumber" name="voltageCell3Lcd">
               <property name="styleSheet">
                <string notr="true"/>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QProgressBar" name="voltageCell3ProgressBar">
-              <property name="value">
-               <number>24</number>
               </property>
              </widget>
             </item>
@@ -280,19 +259,6 @@ QGroupBox:title {
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_6">
             <item alignment="Qt::AlignRight">
-             <widget class="QLCDNumber" name="temperatureCpuLcd">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>25</height>
-               </size>
-              </property>
-              <property name="styleSheet">
-               <string notr="true"/>
-              </property>
-             </widget>
-            </item>
-            <item alignment="Qt::AlignRight">
              <widget class="QLCDNumber" name="temperatureMainLcd">
               <property name="minimumSize">
                <size>
@@ -302,6 +268,19 @@ QGroupBox:title {
               </property>
               <property name="autoFillBackground">
                <bool>false</bool>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLCDNumber" name="temperatureCpuLcd">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>25</height>
+               </size>
               </property>
               <property name="styleSheet">
                <string notr="true"/>
@@ -340,7 +319,7 @@ QGroupBox:title {
          <number>30</number>
         </property>
         <item>
-         <layout class="QHBoxLayout" name="frontSensor" stretch="1,0,4">
+         <layout class="QHBoxLayout" name="frontSensor" stretch="1,0">
           <property name="topMargin">
            <number>10</number>
           </property>
@@ -361,16 +340,6 @@ QGroupBox:title {
             </property>
            </widget>
           </item>
-          <item>
-           <widget class="QProgressBar" name="frontSensorProgressBar">
-            <property name="maximum">
-             <number>4</number>
-            </property>
-            <property name="value">
-             <number>0</number>
-            </property>
-           </widget>
-          </item>
          </layout>
         </item>
         <item>
@@ -384,7 +353,7 @@ QGroupBox:title {
          </widget>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="backSensor" stretch="1,0,4">
+         <layout class="QHBoxLayout" name="backSensor" stretch="1,0">
           <item>
            <widget class="QLabel" name="backSensorLabel">
             <property name="text">
@@ -396,16 +365,6 @@ QGroupBox:title {
            <widget class="QLCDNumber" name="backDistanceLcd">
             <property name="digitCount">
              <number>4</number>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QProgressBar" name="backSensorProgressBar">
-            <property name="maximum">
-             <number>4000</number>
-            </property>
-            <property name="value">
-             <number>24</number>
             </property>
            </widget>
           </item>
@@ -422,18 +381,11 @@ QGroupBox:title {
          </widget>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="topSensorProgressBar" stretch="1,4">
+         <layout class="QHBoxLayout" name="topSensorProgressBar" stretch="1">
           <item>
            <widget class="QLabel" name="topSensorLabel">
             <property name="text">
              <string>TOP  </string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QProgressBar" name="topSensorProgressBar_2">
-            <property name="value">
-             <number>24</number>
             </property>
            </widget>
           </item>
@@ -450,18 +402,11 @@ QGroupBox:title {
          </widget>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="leftSensor" stretch="1,4">
+         <layout class="QHBoxLayout" name="leftSensor" stretch="1">
           <item>
            <widget class="QLabel" name="leftSensorLabel">
             <property name="text">
              <string>LEFT</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QProgressBar" name="leftSensorProgressBar">
-            <property name="value">
-             <number>24</number>
             </property>
            </widget>
           </item>
@@ -478,18 +423,11 @@ QGroupBox:title {
          </widget>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="rightSensor" stretch="1,4">
+         <layout class="QHBoxLayout" name="rightSensor" stretch="1">
           <item>
            <widget class="QLabel" name="rightSensorLabel">
             <property name="text">
              <string>RIGHT</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QProgressBar" name="rightSensorProgressBar">
-            <property name="value">
-             <number>24</number>
             </property>
            </widget>
           </item>
