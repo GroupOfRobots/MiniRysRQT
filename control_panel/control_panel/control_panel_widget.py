@@ -35,7 +35,7 @@ class ControlPanelWidget(BaseWidget):
 
         self.initPressedKeys()
 
-        self.balancePublisher = node.create_publisher(Bool, self.namespace + '/balance_mode', 10)
+        # self.balancePublisher = node.create_publisher(Bool, self.namespace + '/balance_mode', 10)
 
         self.messageTypeComboBoxUI.currentIndexChanged.connect(self.changeMessageFunction)
         self.messageFunction = self.setupTwistMessage
@@ -80,6 +80,8 @@ class ControlPanelWidget(BaseWidget):
         self.controlKeys = self.data.get('controlKeys', {})
         self.dynamic = self.data.get('dynamic', {})
         self.dynamicTwist = self.data.get('dynamicTwist', {})
+
+        self.balancePublisher = self.node.create_publisher(Bool, self.namespace + '/balance_mode', 10)
 
         if self.currentMessageTypeComboBoxIndex is not None:
             self.changeMessageFunction(self.currentMessageTypeComboBoxIndex)

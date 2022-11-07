@@ -32,7 +32,9 @@ class DashboardWidget(BaseWidget):
         self.initializeRobotsOptions()
         self.setRobotOnScreen()
 
-        print(self.namespace)
+        # print(self.namespace)
+        self.comboBox.currentIndexChanged.connect(self.setRobotOnScreen)
+
 
         self.angularPosition = 0
         self.sign = 1
