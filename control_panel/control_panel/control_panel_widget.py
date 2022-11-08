@@ -9,10 +9,11 @@ from shared.enums import ControlKeyEnum, MotorControlPositionEnum, motorControlP
 from shared.base_widget.base_widget import BaseWidget
 
 from .elements.button import Button
+from .elements.balance_publisher import BalancePublisher
 from minirys_msgs.msg import MotorCommand
 from geometry_msgs.msg import Twist
 
-from std_msgs.msg import Bool
+# from std_msgs.msg import Bool
 from collections import namedtuple
 
 
@@ -21,12 +22,11 @@ class ControlPanelWidget(BaseWidget):
         super(ControlPanelWidget, self).__init__(stack)
 
         self.node = node
+        self.balancePublisher = BalancePublisher( self.balanceCheckBoxUI, self.node)
 
         self.setRobotOnScreen()
 
         self.defineButtons()
-
-        self.balanceCheckBoxUI.stateChanged.connect(self.balanceStateChanged)
 
         self.initPressedKeys()
 
@@ -48,16 +48,6 @@ class ControlPanelWidget(BaseWidget):
             self.messageFunction = self.setupMotorCommandMessage
             self.publisher = self.node.create_publisher(MotorCommand, self.namespace + '/internal/motor_command', 10)
 
-    def balanceStateChanged(self, state):
-        msg = Bool()
-
-        if state == 0:
-            msg.data = False
-            self.balancePublisher.publish(msg)
-            return
-        msg.data = True
-        self.balancePublisher.publish(msg)
-
     def initPressedKeys(self):
         self.pressedKeys = {
             ControlKeyEnum.FORWARD: False,
@@ -71,7 +61,7 @@ class ControlPanelWidget(BaseWidget):
         self.dynamic = self.data.get('dynamic', {})
         self.dynamicTwist = self.data.get('dynamicTwist', {})
 
-        self.balancePublisher = self.node.create_publisher(Bool, self.namespace + '/balance_mode', 10)
+        self.balancePublisher.setTopic(self.namespace)
 
         self.changeMessageFunction(self.comboBox.currentIndex())
 

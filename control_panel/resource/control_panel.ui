@@ -124,7 +124,7 @@ background-color:none;</string>
         </property>
         <property name="icon">
          <iconset>
-          <normaloff>../../../../../../../../../../../.designer/backup/imgs/settings1.png</normaloff>../../../../../../../../../../../.designer/backup/imgs/settings1.png</iconset>
+          <normaloff>imgs/settings1.png</normaloff>imgs/settings1.png</iconset>
         </property>
        </widget>
       </item>
