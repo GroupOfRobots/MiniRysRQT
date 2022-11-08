@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>515</width>
-    <height>518</height>
+    <width>599</width>
+    <height>626</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -314,7 +314,7 @@ QGroupBox:title {
        <property name="title">
         <string>RANGE SENSORS</string>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0,0,0,0,0,0,0">
+       <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0,0,0,0,0,0,0,0,0">
         <property name="topMargin">
          <number>30</number>
         </property>
@@ -334,7 +334,7 @@ QGroupBox:title {
            </widget>
           </item>
           <item>
-           <widget class="QLCDNumber" name="frontDistanceLcd">
+           <widget class="QLCDNumber" name="frontDistanceLcdUI">
             <property name="digitCount">
              <number>4</number>
             </property>
@@ -362,7 +362,7 @@ QGroupBox:title {
            </widget>
           </item>
           <item>
-           <widget class="QLCDNumber" name="backDistanceLcd">
+           <widget class="QLCDNumber" name="backDistanceLcdUI">
             <property name="digitCount">
              <number>4</number>
             </property>
@@ -381,13 +381,16 @@ QGroupBox:title {
          </widget>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="topSensorProgressBar" stretch="1">
+         <layout class="QHBoxLayout" name="topSensorProgressBar" stretch="1,0">
           <item>
            <widget class="QLabel" name="topSensorLabel">
             <property name="text">
              <string>TOP  </string>
             </property>
            </widget>
+          </item>
+          <item>
+           <widget class="QLCDNumber" name="topDistanceLcdUI"/>
           </item>
          </layout>
         </item>
@@ -402,13 +405,16 @@ QGroupBox:title {
          </widget>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="leftSensor" stretch="1">
+         <layout class="QHBoxLayout" name="leftSensor" stretch="1,0">
           <item>
            <widget class="QLabel" name="leftSensorLabel">
             <property name="text">
              <string>LEFT</string>
             </property>
            </widget>
+          </item>
+          <item>
+           <widget class="QLCDNumber" name="leftDistanceLcdUI"/>
           </item>
          </layout>
         </item>
@@ -423,13 +429,46 @@ QGroupBox:title {
          </widget>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="rightSensor" stretch="1">
+         <layout class="QHBoxLayout" name="rightSensor" stretch="0,0">
           <item>
            <widget class="QLabel" name="rightSensorLabel">
             <property name="text">
              <string>RIGHT</string>
             </property>
            </widget>
+          </item>
+          <item alignment="Qt::AlignRight">
+           <widget class="QLCDNumber" name="rightDistanceLcdUI"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="Line" name="line_10">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">border: 1px dashed black;</string>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <item>
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>BOTTOM</string>
+            </property>
+           </widget>
+          </item>
+          <item alignment="Qt::AlignRight">
+           <widget class="QLCDNumber" name="lcdNumber_3"/>
           </item>
          </layout>
         </item>
@@ -508,10 +547,12 @@ QGroupBox:title {
        </layout>
       </widget>
      </item>
-     <item row="2" column="1">
-      <widget class="QGroupBox" name="groupBox_5">
-       <property name="styleSheet">
-        <string notr="true"> QGroupBox {
+    </layout>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox_5">
+     <property name="styleSheet">
+      <string notr="true"> QGroupBox {
  background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
                                    stop: 0 #bbbbbb, stop: 1 #eeeeee);
  border: 2px solid #222222;
@@ -524,64 +565,62 @@ QGroupBox:title {
 	top: 10px;
 	left:10px;
 }</string>
-       </property>
-       <property name="title">
-        <string>ANGLE</string>
-       </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_3">
+     </property>
+     <property name="title">
+      <string>ANGLE</string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <item>
+       <widget class="QWidget" name="angleWidget" native="true">
+        <layout class="QVBoxLayout" name="verticalLayout_3"/>
+       </widget>
+      </item>
+      <item>
+       <widget class="Line" name="line_5">
+        <property name="styleSheet">
+         <string notr="true">border: 1px solid black</string>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_6">
         <item>
-         <widget class="QWidget" name="angleWidget" native="true">
-          <layout class="QVBoxLayout" name="verticalLayout_3"/>
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>VELOCITY</string>
+          </property>
          </widget>
         </item>
         <item>
-         <widget class="Line" name="line_5">
+         <widget class="QLCDNumber" name="lcdNumber"/>
+        </item>
+        <item>
+         <widget class="Line" name="line_6">
           <property name="styleSheet">
            <string notr="true">border: 1px solid black</string>
           </property>
           <property name="orientation">
-           <enum>Qt::Vertical</enum>
+           <enum>Qt::Horizontal</enum>
           </property>
          </widget>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_6">
-          <item>
-           <widget class="QLabel" name="label">
-            <property name="text">
-             <string>VELOCITY</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLCDNumber" name="lcdNumber"/>
-          </item>
-          <item>
-           <widget class="Line" name="line_6">
-            <property name="styleSheet">
-             <string notr="true">border: 1px solid black</string>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="label_4">
-            <property name="text">
-             <string>POSITION</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLCDNumber" name="lcdNumber_2"/>
-          </item>
-         </layout>
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>POSITION</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLCDNumber" name="lcdNumber_2"/>
         </item>
        </layout>
-      </widget>
-     </item>
-    </layout>
+      </item>
+     </layout>
+    </widget>
    </item>
   </layout>
  </widget>

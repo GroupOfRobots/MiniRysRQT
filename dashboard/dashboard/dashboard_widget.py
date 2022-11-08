@@ -44,9 +44,13 @@ class DashboardWidget(BaseWidget):
 
     def predefineSubscribers(self):
         self.subscriberParams = [
+            SubscriberParam(None, Range, '/internal/distance_0', self.topDistanceSensorCallback),
+            SubscriberParam(None, Range, '/internal/distance_1', self.bottomDistanceSensorCallback),
+            SubscriberParam(None, Range, '/internal/distance_2', self.rightDistanceSensorCallback),
+            SubscriberParam(None, Range, '/internal/distance_3', self.backDistanceSensorCallback),
+            SubscriberParam(None, Range, '/internal/distance_4', self.frontDistanceSensorCallback),
+            SubscriberParam(None, Range, '/internal/distance_5', self.leftDistanceSensorCallback),
             SubscriberParam(None, BatteryStatus, '/internal/battery_status', self.batteryCallback),
-            SubscriberParam(None, Range, '/internal/distance_0', self.frontSensorCallback),
-            SubscriberParam(None, Range, '/internal/distance_1', self.backSensorCallback),
             SubscriberParam(None, Float32, '/internal/temperature_cpu', self.temperatureCpuCallback),
             SubscriberParam(None, Float32, '/internal/temperature_main', self.temperatureMainCallback),
             SubscriberParam(None, AngularPose, '/internal/angular_pose', self.angularPoseCallback)]
@@ -114,13 +118,28 @@ class DashboardWidget(BaseWidget):
     def temperatureMainCallback(self, event):
         self.temperatureMainLcd.display(event.data)
 
-    def frontSensorCallback(self, event):
-        self.frontDistanceLcd.display(event.range)
+        # 0 - top
+        # 1 - bottom
+        # 2 - right
+        # 3 - back
+        # 4 - front
+        # 5 - left
+
+    def topDistanceSensorCallback(self, event):
+        self.topDistanceLcdUI.display(event.range)
+    def bottomDistanceSensorCallback(self, event):
+        self.bottomDistanceLcdUI.display(event.range)
+    def rightDistanceSensorCallback(self, event):
+        self.rightDistanceLcdUI.display(event.range)
+    def backDistanceSensorCallback(self, event):
+        self.backDistanceLcdUI.display(event.range)
+    def frontDistanceSensorCallback(self, event):
+        self.frontDistanceLcdUI.display(event.range)
+    def leftDistanceSensorCallback(self, event):
+        self.leftDistanceLcdUI.display(event.range)
 
     def backSensorCallback(self, event):
-        # print(event)
-        range = int((event.range * 1000))
-        self.backDistanceLcd.display(event.range)
+        self.backDistanceLcdUI.display(event.range)
 
     def paintRobotAngle(self, event):
         painter = QPainter()
@@ -184,24 +203,5 @@ class DashboardWidget(BaseWidget):
     def shutdown_plugin(self):
         print("shutdown_plugin")
 
-
-# self.batteryStatusSubscriber = self.node.create_subscription(BatteryStatus, self.namespace + '/internal/battery_status',
-#                                                         self.batteryCallback, 10)
-#
-#
-#       self.distance0Subscriber  = self.node.create_subscription(Range, self.namespace + '/internal/distance_0',
-#                                                 self.frontSensorCallback, 10)
-#
-#       self.distance1Subscriber = self.node.create_subscription(Range, self.namespace + '/internal/distance_1', self.backSensorCallback, 10)
-#
-#       self.temperatureCpuSubscriber = self.node.create_subscription(Float32, self.namespace + '/internal/temperature_cpu',
-#                                     self.temperatureCpuCallback, 10)
-#
-#       self.temperatureMainSubscriber = self.node.create_subscription(Float32, self.namespace + '/internal/temperature_main',
-#                                     self.temperatureMainCallback, 10)
-#
-#       self.node.create_subscription(AngularPose, self.namespace + '/internal/angular_pose', self.angularPoseCallback,
-#                                     10)
-#       self.node.create_subscription(AngularPose, self.namespace + '/internal/imu', self.imuCallback, 10)
 
 SubscriberParam = namedtuple('SubscriberParam', ["subscriber", "messageType", "topic", "callback"])

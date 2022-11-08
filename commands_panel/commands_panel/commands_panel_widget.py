@@ -16,14 +16,15 @@ from .command_execute_element import CommandExecuteElementWidget
 from python_qt_binding.QtCore import pyqtSignal, QObject
 from python_qt_binding.QtGui import QColor, QFont
 
+
 class CommandsPanelWidget(BaseWidget):
     commandOutputSignal = pyqtSignal(object, name="commandExecutionOutput")
 
     def __init__(self, stack=None, node=None):
-        super( CommandsPanelWidget, self).__init__(stack)
+        super(CommandsPanelWidget, self).__init__(stack)
 
-        self.loadUI()
-        self.initializeRobotsOptions()
+        # self.loadUI()
+        # self.initializeRobotsOptions()
         self.commandOutputSignal.connect(self.onCommandOutputSignal)
 
         self.comboBox.currentIndexChanged.connect(self.setRobotOnScreen)
@@ -52,14 +53,14 @@ class CommandsPanelWidget(BaseWidget):
         self.logsPlainTextEditUI.clear()
 
     def onCommandOutputSignal(self, commandOutput):
-        [command, output, errors]=commandOutput
+        [command, output, errors] = commandOutput
 
         self.logFormat.setFontWeight(QFont.Bold)
         self.insertLog("black", "COMMAND:")
         self.logFormat.setFontWeight(QFont.Normal)
 
-        if(len(command)):
-            self.insertLog("blue", command+"\n")
+        if (len(command)):
+            self.insertLog("blue", command + "\n")
 
         if len(output):
             self.insertLog("black", output)
@@ -73,7 +74,7 @@ class CommandsPanelWidget(BaseWidget):
         color = QColor(colorName)
         self.logFormat.setForeground(color)
         self.logsPlainTextEditUI.setCurrentCharFormat(self.logFormat)
-        self.logsPlainTextEditUI.insertPlainText(log+"\n")
+        self.logsPlainTextEditUI.insertPlainText(log + "\n")
 
     def settingsClicked(self):
         self.stack.goToSettings(self.dataFilePath)
