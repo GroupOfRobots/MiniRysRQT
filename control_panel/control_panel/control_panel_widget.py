@@ -22,20 +22,13 @@ class ControlPanelWidget(BaseWidget):
 
         self.node = node
 
-        self.currentMessageTypeComboBoxIndex=0;
-
-        self.loadUI()
-        self.initializeRobotsOptions()
         self.setRobotOnScreen()
 
         self.defineButtons()
 
-        self.comboBox.currentIndexChanged.connect(self.setRobotOnScreen)
         self.balanceCheckBoxUI.stateChanged.connect(self.balanceStateChanged)
 
         self.initPressedKeys()
-
-        # self.balancePublisher = node.create_publisher(Bool, self.namespace + '/balance_mode', 10)
 
         self.messageTypeComboBoxUI.currentIndexChanged.connect(self.changeMessageFunction)
         self.messageFunction = self.setupTwistMessage
@@ -47,9 +40,6 @@ class ControlPanelWidget(BaseWidget):
         loadUi(uiFile, self)
 
     def changeMessageFunction(self, event):
-        print(event)
-        print(self.namespace)
-        self.currentMessageTypeComboBoxIndex=event
         if event == 0:
             self.messageFunction = self.setupTwistMessage
             self.publisher = self.node.create_publisher(Twist, self.namespace + '/cmd_vel', 10)
@@ -83,20 +73,23 @@ class ControlPanelWidget(BaseWidget):
 
         self.balancePublisher = self.node.create_publisher(Bool, self.namespace + '/balance_mode', 10)
 
-        if self.currentMessageTypeComboBoxIndex is not None:
-            self.changeMessageFunction(self.currentMessageTypeComboBoxIndex)
+        self.changeMessageFunction(self.comboBox.currentIndex())
 
         for key in self.controlKeys:
             controlValue = self.controlKeys[key].upper()
             self.controlKeys[key] = QtCore.Qt.Key(ord(controlValue))
 
+    def keyPressEvent(self, event):
+        self.keyEvent(event, True)
+
+    def keyReleaseEvent(self, event):
+        self.keyEvent(event, False)
 
     def keyEvent(self, event, state):
         if event.isAutoRepeat():
             return
         button = None
         key = event.key()
-
 
         if key == self.controlKeys[ControlKeyEnum.FORWARD]:
             self.pressedKeys[ControlKeyEnum.FORWARD] = state
@@ -119,11 +112,13 @@ class ControlPanelWidget(BaseWidget):
                 button.releasedKeyState()
         event.accept()
 
-    def keyPressEvent(self, event):
-       self.keyEvent(event, True)
+    def determineKeyedPressedState(self):
+        keyState = self.getKeyState()
 
-    def keyReleaseEvent(self, event):
-        self.keyEvent(event, False)
+        msg = self.messageFunction(keyState)
+
+        if msg is not None:
+            self.publisher.publish(msg)
 
     def getKeyState(self):
         forward = self.pressedKeys[ControlKeyEnum.FORWARD]
@@ -133,14 +128,6 @@ class ControlPanelWidget(BaseWidget):
 
         keyState = KeyState(forward, right, backward, left)
         return keyState
-
-    def determineKeyedPressedState(self):
-        keyState = self.getKeyState()
-
-        msg = self.messageFunction(keyState)
-
-        if msg is not None:
-            self.publisher.publish(msg)
 
     def setupMotorCommandMessage(self, keyState):
         msg = MotorCommand()
@@ -173,7 +160,7 @@ class ControlPanelWidget(BaseWidget):
     def settingsClicked(self):
         self.stack.goToSettings(self.dataFilePath)
 
-    def buttonClicked(self, isPressed,  controlKeyEnum):
+    def buttonClicked(self, isPressed, controlKeyEnum):
         self.pressedKeys[controlKeyEnum] = isPressed
         self.determineKeyedPressedState()
 

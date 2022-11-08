@@ -23,18 +23,10 @@ class DashboardWidget(BaseWidget):
 
         self.node = node
         self.predefineSubscribers()
-        print(self.namespace)
 
-        # node.destroy_node()
-        self.loadUi()
 
         self.test = None
-        self.initializeRobotsOptions()
         self.setRobotOnScreen()
-
-        # print(self.namespace)
-        self.comboBox.currentIndexChanged.connect(self.setRobotOnScreen)
-
 
         self.angularPosition = 0
         self.sign = 1
@@ -45,7 +37,7 @@ class DashboardWidget(BaseWidget):
 
         self.destroyed.connect(DashboardWidget.onDestroyed)
 
-    def loadUi(self):
+    def loadUI(self):
         _, packagePath = get_resource('packages', 'dashboard')
         uiFile = os.path.join(packagePath, 'share', 'dashboard', 'resource', 'dashboard.ui')
         loadUi(uiFile, self)

@@ -17,6 +17,10 @@ class BaseWidget(QWidget):
         self.data = None
         self.namespace = ''
 
+        self.loadUI()
+        self.initializeRobotsOptions()
+        self.comboBox.currentIndexChanged.connect(self.setRobotOnScreen)
+
         self.setFocusPolicy(Qt.ClickFocus)
         self.setFocus()
 
@@ -94,5 +98,10 @@ class BaseWidget(QWidget):
 
     @abstractmethod
     def initializeRobotSettings(self):
+        print('abstractmethod')
+        pass
+
+    @abstractmethod
+    def loadUI(self):
         print('abstractmethod')
         pass

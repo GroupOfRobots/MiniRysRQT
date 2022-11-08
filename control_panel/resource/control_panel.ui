@@ -54,43 +54,21 @@
        <widget class="QComboBox" name="comboBox"/>
       </item>
       <item>
-       <spacer name="horizontalSpacer_2">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item alignment="Qt::AlignRight">
-       <widget class="QCheckBox" name="balanceCheckBoxUI">
-        <property name="layoutDirection">
-         <enum>Qt::RightToLeft</enum>
-        </property>
-        <property name="text">
-         <string>balance</string>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QCheckBox" name="balanceCheckBoxUI">
+          <property name="layoutDirection">
+           <enum>Qt::RightToLeft</enum>
+          </property>
+          <property name="text">
+           <string>balance</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
-        <item>
-         <spacer name="horizontalSpacer_3">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
         <item>
          <widget class="QLabel" name="label">
           <property name="text">
@@ -121,16 +99,6 @@
        </layout>
       </item>
       <item>
-       <widget class="QCheckBox" name="keyboardCheckBoxUI">
-        <property name="layoutDirection">
-         <enum>Qt::RightToLeft</enum>
-        </property>
-        <property name="text">
-         <string>keyboard</string>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QPushButton" name="settingsButton">
         <property name="minimumSize">
          <size>
@@ -156,7 +124,7 @@ background-color:none;</string>
         </property>
         <property name="icon">
          <iconset>
-          <normaloff>imgs/settings1.png</normaloff>imgs/settings1.png</iconset>
+          <normaloff>../../../../../../../../../../../.designer/backup/imgs/settings1.png</normaloff>../../../../../../../../../../../.designer/backup/imgs/settings1.png</iconset>
         </property>
        </widget>
       </item>
