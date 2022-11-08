@@ -1,4 +1,3 @@
-
 from python_qt_binding.QtWidgets import QWidget
 from std_msgs.msg import Bool
 
