@@ -1,12 +1,12 @@
 <library path="lib">
   <class name="Dashboard" type="dashboard.dashboard.Dashboard" base_class_type="rqt_gui_py::Plugin">
     <description>
-      Control panel control gui
+      Dashboard panel control gui
     </description>
     <qtgui>
 <!--      &lt;!&ndash; optional grouping...-->
 <!--      <group>-->
-<!--        <label>Group</label>-->
+<!--        <label>Dashboard</label>-->
 <!--      </group>-->
 <!--      <group>-->
 <!--        <label>Subgroup</label>-->

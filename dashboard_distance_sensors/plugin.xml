@@ -1,0 +1,23 @@
+<library path="lib">
+  <class name="DashboardDistanceSensors" type="dashboard_distance_sensors.dashboard_distance_sensors.DashboardDistanceSensors" base_class_type="rqt_gui_py::Plugin">
+    <description>
+      Dashboard panel control gui
+    </description>
+    <qtgui>
+<!--      <group>-->
+<!--        <label>Dashboard panel 3</label>-->
+<!--      </group>-->
+<!--      &lt;!&ndash; optional grouping...-->
+<!--      <group>-->
+<!--        <label>Group</label>-->
+<!--      </group>-->
+<!--      <group>-->
+<!--        <label>Subgroup</label>-->
+<!--      </group>-->
+<!--      &ndash;&gt;-->
+      <label>Distance sensors panel</label>
+      <icon type="theme">accessories-calculator</icon>
+      <statustip>Dashboard distance sensors panel interface</statustip>
+    </qtgui>
+  </class>
+</library>
