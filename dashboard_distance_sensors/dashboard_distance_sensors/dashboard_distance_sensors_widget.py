@@ -110,10 +110,6 @@ class DashboardDistanceSensorsWidget(BaseWidget):
 
     def resetSubscribers(self):
         for subscriberParam in self.subscriberParams:
-
-            # print(subscriberParam)
-            # print(subscriberParam.subscriber)
-            # print("")
             subscriber = subscriberParam.subscriber
             if subscriber is not None:
                 self.node.destroy_subscription(subscriber)
@@ -182,6 +178,10 @@ class DashboardDistanceSensorsWidget(BaseWidget):
             textNewPoint = QPoint(newX, newY)
 
             subscriberParam.text.setPos(textNewPoint)
+
+            point1 = QPoint(subscriberParam.QLineF.x1() * xScaleFactor, subscriberParam.QLineF.y1() * yScaleFactor)
+            point2 = QPoint(subscriberParam.QLineF.x2() * xScaleFactor, subscriberParam.QLineF.y2() * yScaleFactor)
+            subscriberParam.line.setPoints(point1, point2)
 
 
 SubscriberParam = namedtuple('SubscriberParam',
