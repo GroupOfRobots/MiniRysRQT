@@ -18,7 +18,7 @@ class FanPanelWidget(BaseWidget):
 
         self.fanPanel = fanPanel
 
-        self.loadUI()
+        # self.loadUI()
         self.initializeRobotsOptions()
 
         self.publisher = node.create_publisher(Float32, '/internal/fan_output', 10)

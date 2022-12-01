@@ -23,8 +23,6 @@ class CommandsPanelWidget(BaseWidget):
     def __init__(self, stack=None, node=None):
         super(CommandsPanelWidget, self).__init__(stack)
 
-        # self.loadUI()
-        # self.initializeRobotsOptions()
         self.commandOutputSignal.connect(self.onCommandOutputSignal)
 
         self.comboBox.currentIndexChanged.connect(self.setRobotOnScreen)

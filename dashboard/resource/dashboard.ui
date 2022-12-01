@@ -468,7 +468,7 @@ QGroupBox:title {
            </widget>
           </item>
           <item alignment="Qt::AlignRight">
-           <widget class="QLCDNumber" name="lcdNumber_3"/>
+           <widget class="QLCDNumber" name="bottomDistanceLcdUI"/>
           </item>
          </layout>
         </item>

@@ -128,6 +128,7 @@ class DashboardWidget(BaseWidget):
     def topDistanceSensorCallback(self, event):
         self.topDistanceLcdUI.display(event.range)
     def bottomDistanceSensorCallback(self, event):
+        print(event)
         self.bottomDistanceLcdUI.display(event.range)
     def rightDistanceSensorCallback(self, event):
         self.rightDistanceLcdUI.display(event.range)
