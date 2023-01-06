@@ -11,7 +11,6 @@ class BalancePublisher(QWidget):
     def setTopic(self, namespace):
         self.balancePublisher = self.node.create_publisher(Bool, namespace + '/balance_mode', 10)
 
-
     def balanceStateChanged(self, state):
         msg = Bool()
 

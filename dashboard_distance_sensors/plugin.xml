@@ -16,7 +16,7 @@
 <!--      </group>-->
 <!--      &ndash;&gt;-->
       <label>Distance sensors panel</label>
-      <icon type="theme">accessories-calculator</icon>
+      <icon type="theme">user-desktop</icon>
       <statustip>Dashboard distance sensors panel interface</statustip>
     </qtgui>
   </class>

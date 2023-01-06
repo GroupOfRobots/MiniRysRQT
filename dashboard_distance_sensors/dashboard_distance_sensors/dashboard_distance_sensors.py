@@ -1,6 +1,6 @@
 from rqt_gui_py.plugin import Plugin
 from .dashboard_distance_sensors_stack import DashboardStack
-from .dashboard_distance_sensors_widget import DashboardDistanceSensorsWidget
+from shared.utils.serial_number import setWidgetSerialNumber
 
 class DashboardDistanceSensors(Plugin):
     def __init__(self, context):
@@ -11,9 +11,8 @@ class DashboardDistanceSensors(Plugin):
 
         self._stack = DashboardStack(context.node)
 
-        if context.serial_number() > 1:
-            self._stack.setWindowTitle(
-                self._stack.windowTitle() + (' (%d)' % context.serial_number()))
+        setWidgetSerialNumber(context, self._stack)
+
         context.add_widget(self._stack)
 
     def shutdown_plugin(self):

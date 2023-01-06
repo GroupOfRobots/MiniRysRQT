@@ -1,6 +1,7 @@
 from rqt_gui_py.plugin import Plugin
 from .dashboard_stack import DashboardStack
 from .dashboard_widget import DashboardWidget
+from shared.utils.serial_number import setWidgetSerialNumber
 
 class Dashboard(Plugin):
     def __init__(self, context):
@@ -12,9 +13,8 @@ class Dashboard(Plugin):
 
         self._stack = DashboardStack(context.node)
 
-        if context.serial_number() > 1:
-            self._stack.setWindowTitle(
-                self._stack.windowTitle() + (' (%d)' % context.serial_number()))
+        setWidgetSerialNumber(context, self._stack)
+
         context.add_widget(self._stack)
 
     def shutdown_plugin(self):

@@ -122,6 +122,11 @@ class CommandExecuteElementWidget(QWidget):
         try:
             self.ssh.connect(host, port, username, password, timeout=5)
 
+            transport = self.ssh.get_transport()
+            channel = transport.open_session()
+            # channel.exec_command("tail -f /var/log/everything/current")
+            # stdin, stdout, stderr = channel.exec_command(command)
+            # ODKOMENTOWAC
             stdin, stdout, stderr = self.ssh.exec_command(command)
             output = stdout.readlines()
             errors = stderr.readlines()

@@ -13,7 +13,8 @@
 <!--      </group>-->
 <!--      &ndash;&gt;-->
       <label>Fan</label>
-      <icon type="theme">face-cool</icon>
+      <icon type="theme">face-angel
+      </icon>
       <statustip>Fan panel interface</statustip>
     </qtgui>
   </class>

@@ -1,4 +1,6 @@
 from rqt_gui_py.plugin import Plugin
+
+from shared.utils.serial_number import setWidgetSerialNumber
 from .control_panel_stack import ControlPanelStack
 
 class ControlPanel(Plugin):
@@ -6,10 +8,9 @@ class ControlPanel(Plugin):
         super(ControlPanel, self).__init__(context)
         self.setObjectName('ControlPanel')
 
-        self._widget = ControlPanelStack(node=context.node)
-        self._widget.setWindowTitle('Control Panel')
+        self._stack = ControlPanelStack(node=context.node)
+        self._stack.setWindowTitle('Control Panel')
 
-        if context.serial_number() > 1:
-            self._widget.setWindowTitle(
-                self._widget.windowTitle() + (' (%d)' % context.serial_number()))
-        context.add_widget(self._widget)
+        setWidgetSerialNumber(context, self._stack)
+
+        context.add_widget(self._stack)

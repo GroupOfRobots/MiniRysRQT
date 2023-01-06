@@ -3,10 +3,10 @@ from python_qt_binding.QtWidgets import QPushButton
 
 
 class Button(QPushButton):
-    baseStyle= 'border: none;'
-    keyPressedStyle='background-color: rgb(100, 200, 200);'
-    mousePressedStyle= 'background-color: rgb(100, 100, 100);'
-    idleStyle= 'background-color: rgb(200, 200, 200);'
+    baseStyle = 'border: none;'
+    keyPressedStyle = 'background-color: rgb(100, 200, 200);'
+    mousePressedStyle = 'background-color: rgb(100, 100, 100);'
+    idleStyle = 'background-color: rgb(200, 200, 200);'
 
     def __init__(self, button):
         super(Button, self).__init__()
@@ -14,40 +14,39 @@ class Button(QPushButton):
         self.button.pressed.connect(self.mousePressedState)
         self.button.released.connect(self.mouseReleasedState)
 
-        self.isKeyPressed=False
-        self.isMousePressed=False
-
+        self.isKeyPressed = False
+        self.isMousePressed = False
 
     def size(self):
         return self.button.size()
 
-    def resizeIcon(self, width,height):
+    def resizeIcon(self, width, height):
         self.button.setIconSize(QSize(width, height))
 
     def pressedKeyState(self):
         self.setKeyPressedColor()
-        self.isKeyPressed=True
+        self.isKeyPressed = True
 
     def releasedKeyState(self):
         if self.isMousePressed:
             self.setPressedColor()
         else:
             self.setIdleStyle()
-        self.isKeyPressed=False
+        self.isKeyPressed = False
 
     def setKeyPressedColor(self):
         self.button.setStyleSheet(Button.baseStyle + Button.keyPressedStyle)
 
     def mousePressedState(self):
         self.setPressedColor()
-        self.isMousePressed=True
+        self.isMousePressed = True
 
     def mouseReleasedState(self):
         if self.isKeyPressed:
             self.setKeyPressedColor()
         else:
             self.setIdleStyle()
-        self.isMousePressed=False
+        self.isMousePressed = False
 
     def setPressedColor(self):
         self.button.setStyleSheet(Button.baseStyle + Button.mousePressedStyle)

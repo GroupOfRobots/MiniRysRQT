@@ -3,6 +3,7 @@ from .fan_panel_stack import FanPanelStack
 from .fan_panel_widget import FanPanelWidget
 from python_qt_binding.QtCore import pyqtSignal
 
+from shared.utils.serial_number import setWidgetSerialNumber
 
 class FanPanel(Plugin):
     fanPanelCounter = 0
@@ -13,13 +14,12 @@ class FanPanel(Plugin):
         self.name = 'FanPanel' + str(context.serial_number())
         self.setObjectName(self.name)
 
-        self._widget = FanPanelStack(node=context.node, fanPanel=self)
-        self._widget.setWindowTitle('Fan Panel')
+        self._stack = FanPanelStack(node=context.node, fanPanel=self)
+        self._stack.setWindowTitle('Fan Panel')
 
-        if context.serial_number() > 1:
-            self._widget.setWindowTitle(
-                self._widget.windowTitle() + (' (%d)' % context.serial_number()))
-        context.add_widget(self._widget)
+        setWidgetSerialNumber(context, self._stack)
+
+        context.add_widget(self._stack)
         FanPanel.fanPanelCounter += 1
 
     def shutdown_plugin(self):

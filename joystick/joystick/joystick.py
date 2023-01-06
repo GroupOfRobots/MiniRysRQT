@@ -1,6 +1,7 @@
 from rqt_gui_py.plugin import Plugin
 
 from .joystick_stack import JoystickStack
+from shared.utils.serial_number import setWidgetSerialNumber
 
 
 class Joystick(Plugin):
@@ -11,9 +12,8 @@ class Joystick(Plugin):
 
         self.setObjectName('Test')
 
-        self._widget = JoystickStack()
+        self._stack = JoystickStack()
 
-        if context.serial_number() > 1:
-            self._widget.setWindowTitle(
-                self._widget.windowTitle() + (' (%d)' % context.serial_number()))
-        context.add_widget(self._widget)
+        setWidgetSerialNumber(context, self._stack)
+
+        context.add_widget(self._stack)

@@ -1,9 +1,11 @@
 # This Python file uses the following encoding: utf-8
 import os
 
-from ament_index_python import get_resource
-from python_qt_binding import QtCore
+from python_qt_binding.QtCore import Qt
 from python_qt_binding import loadUi
+
+from ament_index_python import get_resource
+
 from shared.enums import ControlKeyEnum
 from shared.base_widget.base_widget import BaseWidget
 
@@ -48,7 +50,7 @@ class ControlPanelWidget(BaseWidget):
 
         for key in self.controlKeys:
             controlValue = self.controlKeys[key].upper()
-            self.controlKeys[key] = QtCore.Qt.Key(ord(controlValue))
+            self.controlKeys[key] = Qt.Key(ord(controlValue))
 
     def keyPressEvent(self, event):
         self.keyEvent(event, True)
@@ -56,34 +58,34 @@ class ControlPanelWidget(BaseWidget):
     def keyReleaseEvent(self, event):
         self.keyEvent(event, False)
 
-    def keyEvent(self, event, state):
+    def keyEvent(self, event, isButtonPressed):
         if event.isAutoRepeat():
             return
         button = None
         key = event.key()
 
         if key == self.controlKeys[ControlKeyEnum.FORWARD]:
-            self.pressedKeys[ControlKeyEnum.FORWARD] = state
+            self.pressedKeys[ControlKeyEnum.FORWARD] = isButtonPressed
             button = self.forwardButtonElement
         elif key == self.controlKeys[ControlKeyEnum.RIGHT]:
-            self.pressedKeys[ControlKeyEnum.RIGHT] = state
+            self.pressedKeys[ControlKeyEnum.RIGHT] = isButtonPressed
             button = self.rightButtonElement
         elif key == self.controlKeys[ControlKeyEnum.BACKWARD]:
-            self.pressedKeys[ControlKeyEnum.BACKWARD] = state
+            self.pressedKeys[ControlKeyEnum.BACKWARD] = isButtonPressed
             button = self.backwardButtonElement
         elif key == self.controlKeys[ControlKeyEnum.LEFT]:
-            self.pressedKeys[ControlKeyEnum.LEFT] = state
+            self.pressedKeys[ControlKeyEnum.LEFT] = isButtonPressed
             button = self.leftButtonElement
 
         if button:
-            self.determineKeyedPressedState()
-            if state:
+            self.sendMessageOnKeyStateBase()
+            if isButtonPressed:
                 button.pressedKeyState()
             else:
                 button.releasedKeyState()
         event.accept()
 
-    def determineKeyedPressedState(self):
+    def sendMessageOnKeyStateBase(self):
         keyState = getKeyState(self.pressedKeys)
 
         msg = self.messageService.messageFunction(keyState)
@@ -96,7 +98,7 @@ class ControlPanelWidget(BaseWidget):
 
     def buttonClicked(self, isPressed, controlKeyEnum):
         self.pressedKeys[controlKeyEnum] = isPressed
-        self.determineKeyedPressedState()
+        self.sendMessageOnKeyStateBase()
 
     def defineButtons(self):
         self.settingsButton.clicked.connect(self.settingsClicked)
