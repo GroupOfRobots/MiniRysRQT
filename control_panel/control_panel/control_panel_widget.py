@@ -2,11 +2,8 @@
 import os
 
 from python_qt_binding.QtCore import Qt
-from python_qt_binding import loadUi
 
-from ament_index_python import get_resource
-
-from shared.enums import ControlKeyEnum
+from shared.enums import ControlKeyEnum, PackageNameEnum
 from shared.base_widget.base_widget import BaseWidget
 
 from .elements.button import Button
@@ -17,7 +14,7 @@ from .elements.message_service import MessageService
 
 class ControlPanelWidget(BaseWidget):
     def __init__(self, stack=None, node=None):
-        super(ControlPanelWidget, self).__init__(stack)
+        super(ControlPanelWidget, self).__init__(stack, PackageNameEnum.ControlPanel)
 
         self.node = node
         self.balancePublisher = BalancePublisher(self.balanceCheckBoxUI, self.node)
@@ -28,11 +25,6 @@ class ControlPanelWidget(BaseWidget):
         self.defineButtons()
 
         self.initPressedKeys()
-
-    def loadUI(self):
-        _, packagePath = get_resource('packages', 'control_panel')
-        uiFile = os.path.join(packagePath, 'share', 'control_panel', 'resource', 'control_panel.ui')
-        loadUi(uiFile, self)
 
     def initPressedKeys(self):
         self.pressedKeys = {

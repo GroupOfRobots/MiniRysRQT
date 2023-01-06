@@ -7,7 +7,6 @@ class SetupPanel(Plugin):
         super(SetupPanel, self).__init__(context)
         self._stack = SetupDashboardStackWidget()
         self._stack.setObjectName('SetupPanel')
-
         self._stack.setWindowTitle('Setup Panel')
 
         setWidgetSerialNumber(context, self._stack)

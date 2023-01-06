@@ -30,3 +30,20 @@ motorControlPositionToDataKeyMap = {
     MotorControlPositionEnum.BACKWARD_RIGHT: 'backwardRight',
     MotorControlPositionEnum.LEFT: 'left'
 }
+
+
+class PackageNameEnum(str, Enum):
+    ControlPanel = 'control_panel',
+    Joystick = 'joystick',
+    CommandsPanel = 'commands_panel',
+    SetupPanel = 'setup_panel',
+    FanPanel = 'fan_panel'
+
+
+packageNameToUIFileMap = {
+    PackageNameEnum.ControlPanel: 'control_panel.ui',
+    PackageNameEnum.Joystick: 'joystick.ui',
+    PackageNameEnum.CommandsPanel: 'commands_panel.ui',
+    PackageNameEnum.SetupPanel: 'setup_dashboard.ui',
+    PackageNameEnum.FanPanel: 'fan_panel.ui'
+}

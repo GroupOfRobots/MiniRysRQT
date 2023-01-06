@@ -5,14 +5,14 @@ from shared.utils.serial_number import setWidgetSerialNumber
 
 
 class Joystick(Plugin):
-
     def __init__(self, context):
         super(Joystick, self).__init__(context)
         self._node = context.node
 
-        self.setObjectName('Test')
+        self.setObjectName('Joystick')
 
         self._stack = JoystickStack()
+        self._stack.setWindowTitle('Joystick')
 
         setWidgetSerialNumber(context, self._stack)
 

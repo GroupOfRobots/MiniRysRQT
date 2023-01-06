@@ -11,6 +11,7 @@ from std_msgs.msg import Float32
 from ament_index_python import get_resource
 from python_qt_binding import loadUi
 
+from shared.enums import PackageNameEnum
 from .command_execute_element import CommandExecuteElementWidget
 
 from python_qt_binding.QtCore import pyqtSignal, QObject
@@ -21,7 +22,7 @@ class CommandsPanelWidget(BaseWidget):
     commandOutputSignal = pyqtSignal(object, name="commandExecutionOutput")
 
     def __init__(self, stack=None, node=None):
-        super(CommandsPanelWidget, self).__init__(stack)
+        super(CommandsPanelWidget, self).__init__(stack, PackageNameEnum.CommandsPanel)
 
         self.commandOutputSignal.connect(self.onCommandOutputSignal)
 
@@ -41,11 +42,6 @@ class CommandsPanelWidget(BaseWidget):
         for command in commands:
             element = CommandExecuteElementWidget(command, self.data, self.commandOutputSignal)
             self.commandsBoxLayoutUI.addWidget(element)
-
-    def loadUI(self):
-        _, packagePath = get_resource('packages', 'commands_panel')
-        uiFile = os.path.join(packagePath, 'share', 'commands_panel', 'resource', 'commands_panel.ui')
-        loadUi(uiFile, self)
 
     def clearConsole(self):
         self.logsPlainTextEditUI.clear()

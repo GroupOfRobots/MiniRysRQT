@@ -15,6 +15,9 @@ from shared.enums import ControlKeyEnum
 
 from python_qt_binding.QtWidgets import QWidget
 
+from shared.enums import PackageNameEnum
+
+
 class JoystickWidget(BaseWidget):
     BOUNDARY_RADIUS = 0.45
     BOUNDARY_DIAMETER = BOUNDARY_RADIUS * 2
@@ -24,12 +27,10 @@ class JoystickWidget(BaseWidget):
     MARGIN_HORIZONTAL = 2 * MARGIN
 
     def __init__(self, stack=None):
-        super(JoystickWidget, self).__init__()
-        BaseWidget.__init__(self, stack)
+        super(JoystickWidget, self).__init__(stack, PackageNameEnum.Joystick)
 
         self.stack = stack
 
-        self.loadUI()
         self.initializeRobotsOptions()
 
         self.pressedKeys = []
@@ -220,7 +221,7 @@ class JoystickWidget(BaseWidget):
 
         event.accept()
 
-    def loadUI(self):
-        _, package_path = get_resource('packages', 'joystick')
-        ui_file = os.path.join(package_path, 'share', 'joystick', 'resource', 'joystick.ui')
-        loadUi(ui_file, self)
+    # def loadUI(self):
+    #     _, package_path = get_resource('packages', 'joystick')
+    #     ui_file = os.path.join(package_path, 'share', 'joystick', 'resource', 'joystick.ui')
+    #     loadUi(ui_file, self)

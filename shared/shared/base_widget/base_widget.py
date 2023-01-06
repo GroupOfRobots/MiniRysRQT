@@ -7,12 +7,19 @@ from ament_index_python import get_resource
 from python_qt_binding.QtCore import Qt
 from python_qt_binding.QtWidgets import QWidget
 from shared.inner_communication import innerCommunication
+from python_qt_binding import loadUi
+
+from ament_index_python import get_resource
+
+from shared.enums import packageNameToUIFileMap
+
 
 class BaseWidget(QWidget):
-    def __init__(self, stack=None):
-        super(BaseWidget, self).__init__()
-
+    def __init__(self, stack=None, packageName =None):
+        super(BaseWidget, self).__init__(stack, )
         self.stack = stack
+        self.packageName = packageName
+
         self.currentDataFile = None
         self.data = None
         self.namespace = ''
@@ -64,7 +71,7 @@ class BaseWidget(QWidget):
 
     def onAddRobotSignal(self, signalData):
         self.loadData(signalData)
-        self.addItemData( self.data, signaldData['filePath'])
+        self.addItemData( self.data, signalData['filePath'])
 
     def setRobotOnScreen(self):
         currentData = self.comboBox.currentData()
@@ -101,7 +108,7 @@ class BaseWidget(QWidget):
         print('abstractmethod')
         pass
 
-    @abstractmethod
     def loadUI(self):
-        print('abstractmethod')
-        pass
+        _, packagePath = get_resource('packages', self.packageName)
+        uiFile = os.path.join(packagePath, 'share', self.packageName, 'resource', packageNameToUIFileMap[self.packageName])
+        loadUi(uiFile, self)

@@ -11,10 +11,12 @@ from python_qt_binding import loadUi
 
 from shared.inner_communication import innerCommunication
 
+from shared.enums import PackageNameEnum
+
 
 class FanPanelWidget(BaseWidget):
     def __init__(self, stack=None, node=None, fanPanel=None):
-        super(FanPanelWidget, self).__init__(stack)
+        super(FanPanelWidget, self).__init__(stack, PackageNameEnum.FanPanel)
 
         self.fanPanel = fanPanel
 
@@ -72,10 +74,10 @@ class FanPanelWidget(BaseWidget):
             self.spinBox.setValue(event)
             self.value = event / 100
 
-    def loadUI(self):
-        _, packagePath = get_resource('packages', 'fan_panel')
-        uiFile = os.path.join(packagePath, 'share', 'fan_panel', 'resource', 'fan_panel.ui')
-        loadUi(uiFile, self)
+    # def loadUI(self):
+    #     _, packagePath = get_resource('packages', 'fan_panel')
+    #     uiFile = os.path.join(packagePath, 'share', 'fan_panel', 'resource', 'fan_panel.ui')
+    #     loadUi(uiFile, self)
 
     def onClosePanelSignal(self):
         self.value = 0
