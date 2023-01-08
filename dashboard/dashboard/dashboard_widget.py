@@ -12,6 +12,7 @@ from minirys_msgs.msg import BatteryStatus, AngularPose
 from sensor_msgs.msg import Range
 
 from std_msgs.msg import Float32, String
+from shared.enums import ControlKeyEnum, PackageNameEnum
 
 import time
 from collections import namedtuple
@@ -19,13 +20,12 @@ from collections import namedtuple
 
 class DashboardWidget(BaseWidget):
     def __init__(self, stack=None, node=Node):
-        super(DashboardWidget, self).__init__()
+        super(DashboardWidget, self).__init__(stack, PackageNameEnum.Dashboard)
 
         self.node = node
         self.predefineSubscribers()
 
 
-        self.test = None
         self.setRobotOnScreen()
 
         self.angularPosition = 0
@@ -36,11 +36,6 @@ class DashboardWidget(BaseWidget):
         self.angleWidget.paintEvent = self.paintRobotAngle
 
         self.destroyed.connect(DashboardWidget.onDestroyed)
-
-    def loadUI(self):
-        _, packagePath = get_resource('packages', 'dashboard')
-        uiFile = os.path.join(packagePath, 'share', 'dashboard', 'resource', 'dashboard.ui')
-        loadUi(uiFile, self)
 
     def predefineSubscribers(self):
         self.subscriberParams = [
@@ -62,6 +57,10 @@ class DashboardWidget(BaseWidget):
             if subscriber is not None:
                 self.node.destroy_subscription(subscriber)
 
+    def initializeRobotSettings(self):
+        print('initializeSettings')
+        self.initializeSubscribers()
+
     def initializeSubscribers(self):
         self.resetSubscribers()
         for index, subscriberParam in enumerate(self.subscriberParams):
@@ -74,9 +73,6 @@ class DashboardWidget(BaseWidget):
     def log(self, event):
         print("log")
 
-    def initializeRobotSettings(self):
-        print('initializeSettings')
-        self.initializeSubscribers()
 
     def batteryCallback(self, event):
         voltageCell1 = float('{:.3f}'.format(event.voltage_cell1))

@@ -6,7 +6,6 @@ from python_qt_binding.QtCore import pyqtSignal
 from shared.utils.serial_number import setWidgetSerialNumber
 
 class FanPanel(Plugin):
-    fanPanelCounter = 0
     closePanelSignal = pyqtSignal(bool, name="closePanelSignal")
 
     def __init__(self, context):
@@ -20,9 +19,6 @@ class FanPanel(Plugin):
         setWidgetSerialNumber(context, self._stack)
 
         context.add_widget(self._stack)
-        FanPanel.fanPanelCounter += 1
 
     def shutdown_plugin(self):
-        FanPanel.fanPanelCounter -= 1
-        if FanPanel.fanPanelCounter == 0:
-            self.closePanelSignal.emit(True)
+        self.closePanelSignal.emit(True)

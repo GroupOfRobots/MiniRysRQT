@@ -22,8 +22,8 @@ class StackWidget(QWidget):
         self.stack.addWidget(self.deletedRobotScreenWidget)
         self.stack.setCurrentWidget(self.deletedRobotScreenWidget)
 
-    def onDeletedRobotScreenReturn(self, data):
-        self.mainChildWidget.setRobotOnScreen(data)
+    def onDeletedRobotScreenReturn(self):
+        self.mainChildWidget.setRobotOnScreen()
         self.stack.setCurrentWidget(self.mainChildWidget)
         self.stack.removeWidget(self.deletedRobotScreenWidget)
         self.deletedRobotScreenWidget.deleteLater()

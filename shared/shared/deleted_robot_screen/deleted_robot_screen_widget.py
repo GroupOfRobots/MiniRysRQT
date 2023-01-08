@@ -1,28 +1,15 @@
 # This Python file uses the following encoding: utf-8
-import os
-
-from ament_index_python import get_resource
-from python_qt_binding import loadUi
 from shared.base_widget.base_widget import BaseWidget
+from shared.enums import PackageNameEnum
+
 
 class DeletedRobotScreenWidget(BaseWidget):
     def __init__(self, stack=None):
-        super(DeletedRobotScreenWidget, self).__init__()
-        BaseWidget.__init__(self, stack)
+        super(DeletedRobotScreenWidget, self).__init__(stack, PackageNameEnum.DeletedRobotScreenWidget)
+        self.comboBox.currentIndexChanged.disconnect()
 
-        _, packagePath = get_resource('packages', 'shared')
-        uiFile = os.path.join(packagePath, 'share', 'shared', 'resource', 'deleted_robot.ui')
-        loadUi(uiFile, self)
+        self.stack = stack
+        self.comboBox.insertItem(0, '')
+        self.comboBox.setCurrentIndex(0)
 
-        self.comboBox.addItem('')
-        self.initializeRobotsOptions()
-
-        self.comboBox.currentIndexChanged.connect(self.onChoosenRobotChange)
-
-    def onChoosenRobotChange(self, event):
-        data = self.comboBox.currentData()
-        self.stack.onDeletedRobotScreenReturn(data)
-
-    def onDeleteRobotSignal(self, data):
-        indexOfElementToBeRemoved = self.comboBox.findData(data)
-        self.comboBox.removeItem(indexOfElementToBeRemoved)
+        self.comboBox.currentIndexChanged.connect(self.stack.onDeletedRobotScreenReturn)

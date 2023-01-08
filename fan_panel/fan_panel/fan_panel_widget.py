@@ -15,21 +15,22 @@ from shared.enums import PackageNameEnum
 
 
 class FanPanelWidget(BaseWidget):
+    activeRobotsMap = {}
+
     def __init__(self, stack=None, node=None, fanPanel=None):
         super(FanPanelWidget, self).__init__(stack, PackageNameEnum.FanPanel)
 
         self.fanPanel = fanPanel
+        self.id = None
+        self.setRobotOnScreen()
 
-        # self.loadUI()
-        self.initializeRobotsOptions()
+        # self.initializeRobotsOptions()
 
         self.publisher = node.create_publisher(Float32, '/internal/fan_output', 10)
         self.msg = Float32()
         self.value = 0
 
-        self.fanSlider.setRange(0, 100)
-        self.fanSlider.sliderReleased.connect(self.sliderReleased)
-        self.fanSlider.valueChanged.connect(self.sliderValueChanged)
+        self.setupFanSlider()
 
         self.spinBox.valueChanged.connect(self.fanSpinBoxValueChanged)
         self.movedBySlider = False
@@ -39,6 +40,30 @@ class FanPanelWidget(BaseWidget):
 
         innerCommunication.updateFanValueSignal.connect(self.onUpdateValueSignal)
 
+    def setRobotOnScreen(self):
+        self.checkIfRobotExists()
+        super().setRobotOnScreen()
+
+        self.id = self.data.get('id')
+        if FanPanelWidget.activeRobotsMap.get(self.id) is None:
+            FanPanelWidget.activeRobotsMap[self.id] = 1
+        else:
+            FanPanelWidget.activeRobotsMap[self.id] += 1
+
+    def onDeleteRobotSignal(self, signalData):
+        self.checkIfRobotExists()
+        super().onDeleteRobotSignal(signalData)
+
+    def checkIfRobotExists(self):
+        if self.id is not None:
+            FanPanelWidget.activeRobotsMap[self.id] -= 1
+            if FanPanelWidget.activeRobotsMap[self.id] == 0:
+                self.turnOffFan()
+
+    def setupFanSlider(self):
+        self.fanSlider.sliderReleased.connect(self.sliderReleased)
+        self.fanSlider.valueChanged.connect(self.sliderValueChanged)
+
     def sliderReleased(self):
         self.sendFanValue()
         self.updateFans()
@@ -46,6 +71,7 @@ class FanPanelWidget(BaseWidget):
     def updateFans(self):
         fanData = {
             "panelName": self.fanPanel.name,
+            "id": self.data.get('id'),
             "value": self.value
         }
 
@@ -74,19 +100,21 @@ class FanPanelWidget(BaseWidget):
             self.spinBox.setValue(event)
             self.value = event / 100
 
-    # def loadUI(self):
-    #     _, packagePath = get_resource('packages', 'fan_panel')
-    #     uiFile = os.path.join(packagePath, 'share', 'fan_panel', 'resource', 'fan_panel.ui')
-    #     loadUi(uiFile, self)
-
-    def onClosePanelSignal(self):
+    def turnOffFan(self):
+        print('turnOffFan')
         self.value = 0
         self.msg.data = float(self.value)
         self.publisher.publish(self.msg)
 
+    def onClosePanelSignal(self):
+        self.checkIfRobotExists()
+        self.turnOffFan()
+
     def onUpdateValueSignal(self, event):
         panelName = event.get('panelName')
-        if panelName != self.fanPanel.name:
+        eventId = event.get('id')
+        currentId = self.data.get('id')
+        if panelName != self.fanPanel.name and eventId == currentId:
             newValue = event.get('value')
             self.value = newValue
             valueToDisplay = int(newValue * 100)

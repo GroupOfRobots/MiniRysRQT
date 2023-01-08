@@ -37,7 +37,10 @@ class PackageNameEnum(str, Enum):
     Joystick = 'joystick',
     CommandsPanel = 'commands_panel',
     SetupPanel = 'setup_panel',
-    FanPanel = 'fan_panel'
+    FanPanel = 'fan_panel',
+    Dashboard = 'dashboard'
+    DashboardDistanceSensors = 'dashboard_distance_sensors',
+    DeletedRobotScreenWidget = 'shared'
 
 
 packageNameToUIFileMap = {
@@ -45,5 +48,8 @@ packageNameToUIFileMap = {
     PackageNameEnum.Joystick: 'joystick.ui',
     PackageNameEnum.CommandsPanel: 'commands_panel.ui',
     PackageNameEnum.SetupPanel: 'setup_dashboard.ui',
-    PackageNameEnum.FanPanel: 'fan_panel.ui'
+    PackageNameEnum.FanPanel: 'fan_panel.ui',
+    PackageNameEnum.Dashboard: 'dashboard.ui',
+    PackageNameEnum.DashboardDistanceSensors: 'dashboard_distance_sensors.ui',
+    PackageNameEnum.DeletedRobotScreenWidget: 'deleted_robot.ui'
 }

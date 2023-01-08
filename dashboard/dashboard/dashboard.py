@@ -7,7 +7,6 @@ class Dashboard(Plugin):
     def __init__(self, context):
         super(Dashboard, self).__init__(context)
         self._node = context.node
-        print(context)
         self.context= context
         self.setObjectName('Test')
 

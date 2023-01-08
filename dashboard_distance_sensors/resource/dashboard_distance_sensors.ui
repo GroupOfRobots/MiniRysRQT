@@ -78,9 +78,6 @@
     </widget>
    </item>
    <item>
-    <widget class="QLCDNumber" name="lcdNumber"/>
-   </item>
-   <item>
     <layout class="QGridLayout" name="cardsWrapper">
      <property name="leftMargin">
       <number>0</number>

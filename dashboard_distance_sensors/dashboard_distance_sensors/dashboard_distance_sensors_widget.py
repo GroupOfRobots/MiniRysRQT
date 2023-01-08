@@ -23,6 +23,7 @@ from collections import namedtuple
 from python_qt_binding.QtWidgets import QGraphicsScene, QGraphicsPixmapItem, QFileDialog
 from python_qt_binding.QtGui import QImage, QPixmap, QTransform
 
+from shared.enums import ControlKeyEnum, PackageNameEnum
 
 # from python_qt_binding.Qt import AspectRatioMode
 
@@ -31,7 +32,7 @@ class DashboardDistanceSensorsWidget(BaseWidget):
     signal = pyqtSignal(object, name="updateFanValue111")
 
     def __init__(self, stack=None, node=Node):
-        super(DashboardDistanceSensorsWidget, self).__init__()
+        super(DashboardDistanceSensorsWidget, self).__init__(stack, PackageNameEnum.DashboardDistanceSensors)
         print(self.namespace)
 
         self.node = node
@@ -51,11 +52,11 @@ class DashboardDistanceSensorsWidget(BaseWidget):
         self.pic.setOpacity(0.5)
         self.scene.addItem(self.pic)
 
-        self.text = self.scene.addText('')
-        self.text.setPos(100, 200)
-        self.text.setHtml('<div>FRONT </div><div>b</div><div>c</div>')
-
-        self.scene.addLine(0, 0, 100, 100)
+        # self.text = self.scene.addText('')
+        # self.text.setPos(100, 200)
+        # self.text.setHtml('<div>FRONT </div><div>b</div><div>c</div>')
+        #
+        # self.scene.addLine(0, 0, 100, 100)
 
         for index, subscriberParam in enumerate(self.subscriberParams):
             line = self.scene.addLine(subscriberParam.QLineF)
@@ -74,39 +75,34 @@ class DashboardDistanceSensorsWidget(BaseWidget):
 
         self.setRobotOnScreen()
 
-    def loadUI(self):
-        _, packagePath = get_resource('packages', 'dashboard_distance_sensors')
-        uiFile = os.path.join(packagePath, 'share', 'dashboard_distance_sensors', 'resource',
-                              'dashboard_distance_sensors.ui')
-        loadUi(uiFile, self)
 
     def predefineSubscribers(self):
         self.topSensorSubsciberParam = SubscriberParam(None, Range, '/internal/distance_0',
                                                        self.topDistanceSensorCallback, QPoint(250, 0), None, 'TOP',
-                                                       QLineF(10, 20, 30, 40), None)
+                                                       QLineF(260, 30, 260, 140), None)
 
         self.bottomSensorSubsciberParam = SubscriberParam(None, Range, '/internal/distance_1',
-                                                          self.bottomDistanceSensorCallback, QPoint(250, 400),
-                                                          None, 'BOTTOM', QLineF(10, 20, 30, 40), None)
+                                                          self.bottomDistanceSensorCallback, QPoint(220, 460),
+                                                          None, 'BOTTOM', QLineF(250, 410, 250, 460), None)
 
         self.rightSensorSubsciberParam = SubscriberParam(None, Range, '/internal/distance_2',
-                                                         self.rightDistanceSensorCallback, QPoint(400, 250),
-                                                         None, 'RIGHT', QLineF(10, 20, 30, 40), None)
+                                                         self.rightDistanceSensorCallback, QPoint(450, 190),
+                                                         None, 'RIGHT', QLineF(380, 200, 450, 200), None)
 
         self.backSensorSubsciberParam = SubscriberParam(None, Range, '/internal/distance_3',
                                                         self.backDistanceSensorCallback,
-                                                        QPoint(400, 200),
-                                                        None, 'BACK', QLineF(10, 20, 30, 40), None)
+                                                        QPoint(450, 50),
+                                                        None, 'BACK', QLineF(450, 60, 340, 140), None)
 
         self.frontSensorSubsciberParam = SubscriberParam(None, Range, '/internal/distance_4',
                                                          self.frontDistanceSensorCallback,
-                                                         QPoint(200, 200),
-                                                         None, 'FRONT', QLineF(10, 20, 30, 40), None)
+                                                         QPoint(50, 50),
+                                                         None, 'FRONT', QLineF(90, 60, 200, 200), None)
 
         self.leftSensorSubsciberParam = SubscriberParam(None, Range, '/internal/distance_5',
                                                         self.leftDistanceSensorCallback,
-                                                        QPoint(0, 250), None, 'LEFT',
-                                                        QLineF(10, 20, 30, 40), None)
+                                                        QPoint(20, 190), None, 'LEFT',
+                                                        QLineF(70, 200, 100, 200), None)
 
         self.subscriberParams = [
             self.topSensorSubsciberParam,
@@ -161,9 +157,10 @@ class DashboardDistanceSensorsWidget(BaseWidget):
         # self.test(event)
 
     def test(self, event):
-        self.subscriberParams[0].text.setHtml('<div>FRONT </div><div>' + str(round(event.range, 2)) + '</div>')
+        pass
+        # self.subscriberParams[0].text.setHtml('<div>FRONT </div><div>' + str(round(event.range, 2)) + '</div>')
         # self.text.setPlainText('aaaaa')
-        self.scene.addLine(0, 100, 100, 100)
+        # self.scene.addLine(0, 100, 100, 100)
 
     def bottomDistanceSensorCallback(self, event):
         # self.bottomDistanceLcdUI.display(event.range)

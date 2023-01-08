@@ -47,13 +47,13 @@ class DashboardElementWidget(QWidget):
         if reply == QMessageBox.Yes:
             os.remove(self.dataFilePath)
 
-        itemData = {
-            "fileName": None,
-            "filePath": self.dataFilePath,
-            "id": self.id,
-        }
+            itemData = {
+                "fileName": None,
+                "filePath": self.dataFilePath,
+                "id": self.id,
+            }
 
-        innerCommunication.deleteRobotSignal.emit(itemData)
+            innerCommunication.deleteRobotSignal.emit(itemData)
 
     def modifyButtonClicked(self):
         self.stack.goToSettings(self.dataFilePath)

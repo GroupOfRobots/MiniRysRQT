@@ -16,7 +16,7 @@ from shared.enums import packageNameToUIFileMap
 
 class BaseWidget(QWidget):
     def __init__(self, stack=None, packageName =None):
-        super(BaseWidget, self).__init__(stack, )
+        super(BaseWidget, self).__init__()
         self.stack = stack
         self.packageName = packageName
 
