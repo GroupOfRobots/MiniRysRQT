@@ -8,8 +8,7 @@ class DeletedRobotScreenWidget(BaseWidget):
         super(DeletedRobotScreenWidget, self).__init__(stack, PackageNameEnum.DeletedRobotScreenWidget)
         self.comboBox.currentIndexChanged.disconnect()
 
-        self.stack = stack
         self.comboBox.insertItem(0, '')
         self.comboBox.setCurrentIndex(0)
 
-        self.comboBox.currentIndexChanged.connect(self.stack.onDeletedRobotScreenReturn)
+        self.comboBox.currentIndexChanged.connect(stack.onDeletedRobotScreenReturn)

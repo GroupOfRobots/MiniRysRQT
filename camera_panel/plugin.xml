@@ -1,0 +1,20 @@
+<library path="lib">
+  <class name="CameraPanel" type="camera_panel.camera_panel.CameraPanel" base_class_type="rqt_gui_py::Plugin">
+    <description>
+      Camera panel gui
+    </description>
+    <qtgui>
+<!--      &lt;!&ndash; optional grouping...-->
+<!--      <group>-->
+<!--        <label>Group</label>-->
+<!--      </group>-->
+<!--      <group>-->
+<!--        <label>Subgroup</label>-->
+<!--      </group>-->
+<!--      &ndash;&gt;-->
+      <label>Camera</label>
+      <icon type="theme">face-cool</icon>
+      <statustip>Camera panel interface</statustip>
+    </qtgui>
+  </class>
+</library>

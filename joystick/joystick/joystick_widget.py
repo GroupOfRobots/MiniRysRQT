@@ -31,7 +31,7 @@ class JoystickWidget(BaseWidget):
 
         self.stack = stack
 
-        self.initializeRobotsOptions()
+        # self.initializeRobotsOptions()
 
         self.pressedKeys = []
         self.xMove = 0

@@ -9,7 +9,7 @@ class ControlPanel(Plugin):
         self.setObjectName('ControlPanel')
 
         self._stack = ControlPanelStack(node=context.node)
-        self._stack.setWindowTitle('Control Panel')
+        self._stack.setWindowTitle('Control Panel123')
 
         setWidgetSerialNumber(context, self._stack)
 

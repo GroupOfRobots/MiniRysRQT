@@ -101,7 +101,6 @@ class FanPanelWidget(BaseWidget):
             self.value = event / 100
 
     def turnOffFan(self):
-        print('turnOffFan')
         self.value = 0
         self.msg.data = float(self.value)
         self.publisher.publish(self.msg)

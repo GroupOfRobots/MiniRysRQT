@@ -3,14 +3,14 @@ from .dashboard_stack import DashboardStack
 from .dashboard_widget import DashboardWidget
 from shared.utils.serial_number import setWidgetSerialNumber
 
+
 class Dashboard(Plugin):
     def __init__(self, context):
         super(Dashboard, self).__init__(context)
-        self._node = context.node
-        self.context= context
-        self.setObjectName('Test')
+        self.setObjectName('DashboardPanel')
 
-        self._stack = DashboardStack(context.node)
+        self._stack = DashboardStack(node=context.node)
+        self._stack.setWindowTitle('Dashboard Panel')
 
         setWidgetSerialNumber(context, self._stack)
 
