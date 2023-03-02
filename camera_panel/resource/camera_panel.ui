@@ -136,6 +136,12 @@ background-color:none;</string>
           <layout class="QVBoxLayout" name="verticalLayout_7">
            <item alignment="Qt::AlignHCenter">
             <widget class="QLabel" name="label_2">
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>20</height>
+              </size>
+             </property>
              <property name="text">
               <string>WIDTH</string>
              </property>
@@ -144,14 +150,27 @@ background-color:none;</string>
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_6">
              <item>
-              <widget class="QSlider" name="horizontalSlider_2">
+              <widget class="QSlider" name="imageWidthSliderUI">
+               <property name="minimum">
+                <number>100</number>
+               </property>
+               <property name="maximum">
+                <number>3280</number>
+               </property>
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QSpinBox" name="spinBox_2"/>
+              <widget class="QSpinBox" name="imageWidthSpinBoxUI">
+               <property name="minimum">
+                <number>100</number>
+               </property>
+               <property name="maximum">
+                <number>3280</number>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>
@@ -161,6 +180,18 @@ background-color:none;</string>
           <layout class="QVBoxLayout" name="verticalLayout_8">
            <item alignment="Qt::AlignHCenter">
             <widget class="QLabel" name="label">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>20</height>
+              </size>
+             </property>
              <property name="text">
               <string>HEIGHT</string>
              </property>
@@ -169,14 +200,27 @@ background-color:none;</string>
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_5">
              <item>
-              <widget class="QSlider" name="horizontalSlider">
+              <widget class="QSlider" name="imageHeightSliderUI">
+               <property name="minimum">
+                <number>100</number>
+               </property>
+               <property name="maximum">
+                <number>2464</number>
+               </property>
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QSpinBox" name="spinBox"/>
+              <widget class="QSpinBox" name="imageHeightSpinBoxUI">
+               <property name="minimum">
+                <number>100</number>
+               </property>
+               <property name="maximum">
+                <number>3280</number>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>

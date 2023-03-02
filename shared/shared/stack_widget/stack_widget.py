@@ -1,7 +1,7 @@
 # This Python file uses the following encoding: utf-8
 
 from python_qt_binding.QtWidgets import QWidget, QStackedWidget, QStackedLayout
-from shared.deleted_robot_screen.deleted_robot_screen import DeletedRobotScreenWidget
+from ..deleted_robot_screen.deleted_robot_screen_widget import DeletedRobotScreenWidget
 from setup_panel.details.setup_widget import SetupWidget
 
 
