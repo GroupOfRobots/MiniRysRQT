@@ -40,8 +40,6 @@ class DashboardDistanceSensorsWidget(BaseWidget):
 
         self.scene = QGraphicsScene()
 
-        print('aaaaaaaaaaaaaaaaaaaaaaaaaaaa')
-
         _, packagePath = get_resource('packages', 'dashboard_distance_sensors')
         file_name = os.path.join(packagePath, 'share', 'dashboard_distance_sensors', 'resource', 'imgs', 'rys.png')
 

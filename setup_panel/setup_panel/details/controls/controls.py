@@ -1,6 +1,4 @@
 from python_qt_binding.QtWidgets import QWidget, QTableWidgetItem
-from shared.enums import ControlKeyEnum
-from enum import Enum
 from .control_key_validator import ControlKeyValidator
 from .controls_data_initializer import ControlsDataInitializer
 from .controls_data_saver import ControlsDataSaver

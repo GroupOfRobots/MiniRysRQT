@@ -13,6 +13,7 @@ class ControlsDataSaver:
     def save(self):
         self.saveControls()
         self.saveMotorsDynamic()
+        self.saveJoystickDynamic()
 
     def saveControls(self):
         data = self.widget.data
@@ -32,7 +33,7 @@ class ControlsDataSaver:
             self.saveControlsForKeyCombination(motorControlPosition, dynamic)
             self.saveTwistControlsForKeyCombination(motorControlPosition, dynamicTwist)
 
-        self.data['dynamic']= dynamic
+        self.data['dynamic'] = dynamic
         self.data['dynamicTwist'] = dynamicTwist
 
     def saveControlsForKeyCombination(self, motorControlPosition, dynamic):
@@ -42,7 +43,6 @@ class ControlsDataSaver:
         dynamic[dataKey]['leftEngine'] = self.saveDynamicTableItem(motorControlPosition, 0)
         dynamic[dataKey]['rightEngine'] = self.saveDynamicTableItem(motorControlPosition, 1)
         # dynamic[dataKey]['angle'] = self.saveDynamicTableItem(motorControlPositionInTableEnum, 2)
-
 
     def saveTwistControlsForKeyCombination(self, motorControlPosition, dynamicTwist):
         dataKey = motorControlPositionToDataKeyMap[motorControlPosition]
@@ -56,3 +56,19 @@ class ControlsDataSaver:
 
     def saveDynamicTableItem(self, motorControlPosition, index):
         return self.widget.dynamicTable.item(motorControlPosition, index).text()
+
+    def saveJoystickDynamic(self):
+        data = self.widget.data
+        print(data)
+
+        data["joystick"]["forward"]["leftEngine"] = self.widget.joystickForward.item(0, 0).text()
+        data["joystick"]["forward"]["rightEngine"] = self.widget.joystickForward.item(0, 1).text()
+
+        data["joystick"]["right"]["leftEngine"] = self.widget.joystickRight.item(0, 0).text()
+        data["joystick"]["right"]["rightEngine"] = self.widget.joystickRight.item(0, 1).text()
+
+        data["joystick"]["backward"]["leftEngine"] = self.widget.joystickBackward.item(0, 0).text()
+        data["joystick"]["backward"]["rightEngine"] = self.widget.joystickBackward.item(0, 1).text()
+
+        data["joystick"]["left"]["leftEngine"] = self.widget.joystickLeft.item(0, 0).text()
+        data["joystick"]["left"]["rightEngine"] = self.widget.joystickLeft.item(0, 1).text()

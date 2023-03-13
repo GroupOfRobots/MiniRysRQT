@@ -25,11 +25,9 @@ class DashboardWidget(BaseWidget):
         self.node = node
         self.predefineSubscribers()
 
-
         self.setRobotOnScreen()
 
         self.angularPosition = 0
-        self.sign = 1
 
         self.batteryUnderVoltageFlag = False
 
@@ -68,11 +66,7 @@ class DashboardWidget(BaseWidget):
                                                                self.namespace + subscriberParam.topic,
                                                                subscriberParam.callback, 10)
             subscriberParam = subscriberParam._replace(subscriber=subscriberInstance)
-            self.subscriberParams[index]=subscriberParam
-
-    def log(self, event):
-        print("log")
-
+            self.subscriberParams[index] = subscriberParam
 
     def batteryCallback(self, event):
         voltageCell1 = float('{:.3f}'.format(event.voltage_cell1))
@@ -123,15 +117,19 @@ class DashboardWidget(BaseWidget):
 
     def topDistanceSensorCallback(self, event):
         self.topDistanceLcdUI.display(event.range)
+
     def bottomDistanceSensorCallback(self, event):
-        print(event)
         self.bottomDistanceLcdUI.display(event.range)
+
     def rightDistanceSensorCallback(self, event):
         self.rightDistanceLcdUI.display(event.range)
+
     def backDistanceSensorCallback(self, event):
         self.backDistanceLcdUI.display(event.range)
+
     def frontDistanceSensorCallback(self, event):
         self.frontDistanceLcdUI.display(event.range)
+
     def leftDistanceSensorCallback(self, event):
         self.leftDistanceLcdUI.display(event.range)
 
@@ -151,11 +149,7 @@ class DashboardWidget(BaseWidget):
         x1 = self.angleWidget.x() + round(width * 0.5)
         y1 = self.angleWidget.y() + round(height * 0.9)
         xMove = int(math.sin(self.angularPosition) * 50)
-        # sign =1
-        #
-        # if self.angularPosition < -math.pi + 0.5 or self.angularPosition > math.pi * 0.5:
-        #     sign = -1
-        # yMove=int(math.cos(self.angularPosition)*50) *self.sign
+
         yMove = int(math.cos(self.angularPosition) * 50)
 
         painter.drawLine(x1, y1, x1 - xMove, y1 - yMove)
@@ -173,15 +167,6 @@ class DashboardWidget(BaseWidget):
         self.angularPosition = event.angular_position
         self.angleWidget.update()
         # self.angleW
-
-    def imuCallback(self, event):
-        self.sign = 1
-        if event.linear_acceleration.z < 0:
-            self.sign = -1
-
-        # print(self.sign)
-
-        # self.angleWidget.update()
 
     @staticmethod
     def onDestroyed():

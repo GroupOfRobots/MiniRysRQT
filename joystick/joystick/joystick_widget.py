@@ -29,28 +29,22 @@ class JoystickWidget(BaseWidget):
     def __init__(self, stack=None):
         super(JoystickWidget, self).__init__(stack, PackageNameEnum.Joystick)
 
-        self.stack = stack
-
-        # self.initializeRobotsOptions()
-
         self.pressedKeys = []
         self.xMove = 0
         self.yMove = 0
         self.keyPressedThread = threading.Thread()
 
-        self.joystickWidget.mouseMoveEvent = self.joystickWidgetMouseMove
         self.setMouseTracking(False)
 
-        self.comboBox.currentIndexChanged.connect(self.setRobotOnScreen)
         self.setRobotOnScreen()
+
+        self.comboBox.currentIndexChanged.connect(self.setRobotOnScreen)
+        self.joystickWidget.mouseMoveEvent = self.joystickWidgetMouseMove
 
         self.settingsButton.clicked.connect(self.settingsClicked)
 
     def settingsClicked(self):
-        currentData = self.comboBox.currentData()
-        if currentData:
-            dataFilePath = currentData['filePath']
-            self.stack.goToSettings(dataFilePath)
+        self.stack.goToSettings(self.dataFilePath)
 
     def joystickWidgetMouseMove(self, event):
         self.joystickPosition = event.pos()
@@ -61,7 +55,7 @@ class JoystickWidget(BaseWidget):
             self.update()
 
     def initializeRobotSettings(self):
-        self.controlKeys = self.data['controlKeys']
+        self.controlKeys = self.data.get('controlKeys')
 
         for key in self.controlKeys:
             controlValue = self.controlKeys[key].upper()
@@ -118,6 +112,9 @@ class JoystickWidget(BaseWidget):
         self.innerEllipseRx = self.widgetRx - self.joystickRx
         self.innerEllipseRy = self.widgetRy - self.joystickRy
 
+    def getValue(self, data, fieldName):
+        return int(data.get(fieldName, 0))
+
     def calculateKeyPressed(self):
         while self.keyPressedFlag:
             x = self.joystickPosition.x() + self.xMove
@@ -133,11 +130,62 @@ class JoystickWidget(BaseWidget):
 
                 angle = math.radians(math.atan2(cartesianPositionY, cartesianPositionX) / math.pi * 180)
 
+                print(angle)
+
                 ellipseR = self.innerEllipseRx * self.innerEllipseRy * 0.25 / (math.sqrt(
                     (self.innerEllipseRx * 0.5) ** 2 * math.sin(angle) ** 2 + (
-                                self.innerEllipseRy * 0.5) ** 2 * math.cos(angle) ** 2))
+                            self.innerEllipseRy * 0.5) ** 2 * math.cos(angle) ** 2))
                 joystickR = math.sqrt(cartesianPositionX ** 2 + cartesianPositionY ** 2)
 
+                print(angle, ellipseR, joystickR)
+
+                joystickData = self.data.get("joystick", {})
+                joystickForwardData = joystickData.get("forward", {})
+                joystickRightData = joystickData.get("right", {})
+                joystickBackwartdData = joystickData.get("backward", {})
+                joystickLeftData = joystickData.get("right", {})
+
+                joystickDeflection = joystickR / ellipseR
+
+                leftEngine = 0
+                rightEngine = 0
+
+                if angle > 0 and (angle <= math.pi * 0.5):
+                    angleFactor = angle / (math.pi * 0.5)
+                    leftEngine = self.getValue(joystickRightData, "leftEngine") * (1 - angleFactor) \
+                                 + self.getValue(joystickForwardData, "leftEngine") * angleFactor
+
+                    rightEngine = self.getValue(joystickRightData, "rightEngine") * (1 - angleFactor) \
+                                  + self.getValue(joystickForwardData, "rightEngine") * angleFactor
+                elif angle > math.pi * 0.5:
+                    angleFactor = (angle - (math.pi * 0.5)) / (math.pi * 0.5)
+                    leftEngine = self.getValue(joystickForwardData, "leftEngine") * (1 - angleFactor) \
+                                 + self.getValue(sa, "leftEngine") * angleFactor
+
+                    rightEngine = self.getValue(joystickForwardData, "rightEngine") * (1 - angleFactor) \
+                                  + self.getValue(joystickLeftData, "rightEngine") * angleFactor
+
+
+                elif angle < 0 and (angle >= -math.pi * 0.5):
+                    angleFactor = abs(angle / (math.pi * 0.5))
+                    leftEngine = self.getValue(joystickRightData, "leftEngine") * (1 - angleFactor) \
+                                 + self.getValue(joystickBackwartdData, "leftEngine") * angleFactor
+
+                    rightEngine = self.getValue(joystickRightData, "rightEngine") * (1 - angleFactor) \
+                                  + self.getValue(joystickBackwartdData, "rightEngine") * angleFactor
+
+
+
+                elif angle < (-math.pi * 0.5):
+                    angleFactor = abs((angle + (math.pi * 0.5)) / (math.pi * 0.5))
+                    leftEngine = self.getValue(joystickBackwartdData, "leftEngine") * (1 - angleFactor) \
+                                 + self.getValue(joystickLeftData, "leftEngine") * angleFactor
+
+                    rightEngine = self.getValue(joystickBackwartdData, "rightEngine") * (1 - angleFactor) \
+                                  + self.getValue(joystickLeftData, "rightEngine") * angleFactor
+
+                print("engine", leftEngine, rightEngine)
+                print("engine", leftEngine*joystickDeflection, rightEngine*joystickDeflection)
                 self.update()
                 time.sleep(0.001)
             else:
@@ -220,8 +268,3 @@ class JoystickWidget(BaseWidget):
             self.returnToCenter()
 
         event.accept()
-
-    # def loadUI(self):
-    #     _, package_path = get_resource('packages', 'joystick')
-    #     ui_file = os.path.join(package_path, 'share', 'joystick', 'resource', 'joystick.ui')
-    #     loadUi(ui_file, self)

@@ -60,6 +60,7 @@ class CommandExecuteElementWidget(QWidget):
             print('awwwwww')
             # stdin, stdout, stderr = self.ssh.exec_command(chr(3))
             stdin, stdout, stderr = self.ssh.exec_command('\x003' )
+            # stdin.close()
             # stdin, stdout, stderr = paramiko.send(chr(3))
             output = stdout.readlines()
             errors = stderr.readlines()

@@ -16,6 +16,7 @@ from python_qt_binding.QtGui import QColor, QFont, QPixmap, QImage
 
 import requests
 import time
+from datetime import datetime
 
 
 class Thread(QThread):
@@ -24,53 +25,19 @@ class Thread(QThread):
     exceptionCounter = 0
     timestamp = 0
 
-    def __init__(self, host, displayFramerateUI, counterLabelUI, imageWidthSliderUI, imageHeightSliderUI,
-                 imageWidthSpinBoxUI, imageHeightSpinBoxUI):
+    def __init__(self, host, displayFramerateUI, counterLabelUI, imageWidth, imageHeight):
         super(QThread, self).__init__()
         self.url = 'http://' + host + ':8000/stream.mjpg'
         self.displayFramerateUI = displayFramerateUI
         self.counterLabelUI = counterLabelUI
-        self.imageWidthSliderUI = imageWidthSliderUI
-        self.imageHeightSliderUI = imageHeightSliderUI
 
-        self.imageWidthSpinBoxUI = imageWidthSpinBoxUI
-        self.imageHeightSpinBoxUI = imageHeightSpinBoxUI
-
-        self.imageWidth = self.imageWidthSliderUI.value()
-        self.imageHeight = self.imageHeightSliderUI.value()
-
-        self.imageWidthSliderUI.sliderReleased.connect(self.sliderSetImageWidth)
-        self.imageHeightSliderUI.sliderReleased.connect(self.sliderSetImageHeight)
-
-        self.imageWidthSpinBoxUI.valueChanged.connect(self.spinBoxSetImageWidth)
-        self.imageHeightSpinBoxUI.valueChanged.connect(self.spinBoxSetImageHeight)
-
-    def sliderSetImageWidth(self):
-        width = int(self.imageWidthSliderUI.value())
-        self.imageWidth = width
-        self.imageWidthSpinBoxUI.setValue(width)
-
-    def sliderSetImageHeight(self):
-        height = int(self.imageHeightSliderUI.value())
-
-        self.imageHeight = height
-        self.imageHeightSpinBoxUI.setValue(height)
-
-    def spinBoxSetImageWidth(self, event):
-        width = int(self.imageWidthSpinBoxUI.value())
-        self.imageWidth = width
-        self.imageWidthSliderUI.setValue(width)
-
-    def spinBoxSetImageHeight(self, event):
-        print(event)
-        height = int(self.imageHeightSpinBoxUI.value())
-
-        self.imageHeight = height
-        self.imageHeightSliderUI.setValue(height)
+        self.imageWidth = imageWidth
+        self.imageHeight = imageHeight
 
     def connectedToService(self):
         image = QImage()
         while True:
+            print("connectedToService")
             try:
                 jsonBody = {'width': self.imageWidth, 'height': self.imageHeight}
 
@@ -89,9 +56,6 @@ class Thread(QThread):
 
     def tryingToConnect(self):
         while True:
-            print("tryingToConnect")
-            print(self.imageWidth)
-
             self.exceptionCounter += 1
             self.displayFramerateUI.setText(str(self.exceptionCounter))
             time.sleep(1)
@@ -108,14 +72,20 @@ class Thread(QThread):
 
     def run(self):
         try:
-            requests.get(self.url, timeout=2.50)
+            requests.post(self.url, timeout=2.50)
             self.counterLabelUI.setText('Framerate: ')
             self.connectedToService()
         except:
             self.tryingToConnect()
 
+    def setFrameWidth(self, width):
+        self.imageWidth = width
 
-class Thread1(QThread):
+    def setFrameHeight(self, height):
+        self.imageHeight = height
+
+
+class AlertThread(QThread):
     def run(self):
         msg = QMessageBox()
         msg.setWindowTitle("Alert")
@@ -125,7 +95,6 @@ class Thread1(QThread):
 
 
 class CameraPanelWidget(BaseWidget):
-
     def __init__(self, stack=None, node=None):
         super(CameraPanelWidget, self).__init__(stack, PackageNameEnum.CameraPanel)
         print("CameraPanelWidget")
@@ -144,27 +113,56 @@ class CameraPanelWidget(BaseWidget):
         self.screenshotButtonUI.clicked.connect(self.captureScreenshot)
 
         self.th = Thread(host=self.host, displayFramerateUI=self.displayFramerateUI, counterLabelUI=self.counterLabelUI,
-                         imageWidthSliderUI=self.imageWidthSliderUI, imageHeightSliderUI=self.imageHeightSliderUI,
-                         imageWidthSpinBoxUI=self.imageWidthSpinBoxUI, imageHeightSpinBoxUI=self.imageHeightSpinBoxUI)
+                         imageWidth=int(self.imageWidthSliderUI.value()),
+                         imageHeight=int(self.imageHeightSliderUI.value()))
         self.th.changePixmap.connect(self.displayImage)
         self.th.start()
 
+        self.imageWidthSliderUI.sliderReleased.connect(self.sliderSetImageWidth)
+        self.imageHeightSliderUI.sliderReleased.connect(self.sliderSetImageHeight)
+
+        self.imageWidthSpinBoxUI.valueChanged.connect(self.spinBoxSetImageWidth)
+        self.imageHeightSpinBoxUI.valueChanged.connect(self.spinBoxSetImageHeight)
+
+    def sliderSetImageWidth(self):
+        width = int(self.imageWidthSliderUI.value())
+        self.imageWidthSpinBoxUI.setValue(width)
+        self.th.setFrameWidth(width)
+
+    def sliderSetImageHeight(self):
+        height = int(self.imageHeightSliderUI.value())
+        self.imageHeightSpinBoxUI.setValue(height)
+        self.th.setFrameHeight(height)
+
+    def spinBoxSetImageWidth(self, event):
+        width = int(self.imageWidthSpinBoxUI.value())
+        self.imageWidthSliderUI.setValue(width)
+        self.th.setFrameWidth(width)
+
+    def spinBoxSetImageHeight(self, event):
+        height = int(self.imageHeightSpinBoxUI.value())
+        self.imageHeightSliderUI.setValue(height)
+        self.th.setFrameHeight(height)
+
     def showAlertThatHostIsNotDefined(self):
-        self.th1 = Thread1()
+        self.th1 = AlertThread()
         self.th1.start()
 
     def captureScreenshot(self):
         try:
             url = 'http://' + self.host + ':8000/stream.mjpg'
-            jsonBody = {'width': 100, 'height': 200}
-            print("requests.post")
+            jsonBody = {'width': self.imageWidthSliderUI.value(), 'height': self.imageHeightSliderUI.value()}
             contents = requests.post(url, json=jsonBody, timeout=2.50)
             image = QImage()
 
             image.loadFromData(contents.content)
             options = QFileDialog.Options()
             options |= QFileDialog.ReadOnly
-            fileName, _ = QFileDialog.getSaveFileName(self, "QFileDialog.getSaveFileName()", "",
+            now = datetime.now()
+
+            fileName = now.strftime("%Y-%m-%d-%H-%M-%S") + '-minirys-camera.png'
+
+            fileName, _ = QFileDialog.getSaveFileName(self, "QFileDialog.getSaveFileName()", fileName,
                                                       "PNG Files (*.png);;JPG Files (*.jpg);;All Files (*)",
                                                       options=options)
             if fileName:
