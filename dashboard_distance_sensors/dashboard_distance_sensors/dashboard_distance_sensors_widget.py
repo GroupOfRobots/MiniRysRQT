@@ -25,6 +25,7 @@ from python_qt_binding.QtGui import QImage, QPixmap, QTransform
 
 from shared.enums import ControlKeyEnum, PackageNameEnum
 
+
 # from python_qt_binding.Qt import AspectRatioMode
 
 
@@ -50,12 +51,6 @@ class DashboardDistanceSensorsWidget(BaseWidget):
         self.pic.setOpacity(0.5)
         self.scene.addItem(self.pic)
 
-        # self.text = self.scene.addText('')
-        # self.text.setPos(100, 200)
-        # self.text.setHtml('<div>FRONT </div><div>b</div><div>c</div>')
-        #
-        # self.scene.addLine(0, 0, 100, 100)
-
         for index, subscriberParam in enumerate(self.subscriberParams):
             line = self.scene.addLine(subscriberParam.QLineF)
             text = self.scene.addText(subscriberParam.textPlaceholder)
@@ -68,47 +63,45 @@ class DashboardDistanceSensorsWidget(BaseWidget):
         self.graphicsView.setScene(self.scene)
         self.graphicsView.show()
 
-        # self.signal = pyqtSignal(object, name="updateFanValue111")
         self.signal.connect(self.test)
 
         self.setRobotOnScreen()
 
-
     def predefineSubscribers(self):
-        self.topSensorSubsciberParam = SubscriberParam(None, Range, '/internal/distance_0',
-                                                       self.topDistanceSensorCallback, QPoint(250, 0), None, 'TOP',
-                                                       QLineF(260, 30, 260, 140), None)
+        topSensorSubsciberParam = SubscriberParam(None, Range, '/internal/distance_0',
+                                                  self.topDistanceSensorCallback, QPoint(250, 0), None, 'TOP',
+                                                  QLineF(260, 30, 260, 140), None)
 
-        self.bottomSensorSubsciberParam = SubscriberParam(None, Range, '/internal/distance_1',
-                                                          self.bottomDistanceSensorCallback, QPoint(220, 460),
-                                                          None, 'BOTTOM', QLineF(250, 410, 250, 460), None)
+        bottomSensorSubsciberParam = SubscriberParam(None, Range, '/internal/distance_1',
+                                                     self.bottomDistanceSensorCallback, QPoint(220, 460),
+                                                     None, 'BOTTOM', QLineF(250, 410, 250, 460), None)
 
-        self.rightSensorSubsciberParam = SubscriberParam(None, Range, '/internal/distance_2',
-                                                         self.rightDistanceSensorCallback, QPoint(450, 190),
-                                                         None, 'RIGHT', QLineF(380, 200, 450, 200), None)
+        rightSensorSubsciberParam = SubscriberParam(None, Range, '/internal/distance_2',
+                                                    self.rightDistanceSensorCallback, QPoint(450, 190),
+                                                    None, 'RIGHT', QLineF(380, 200, 450, 200), None)
 
-        self.backSensorSubsciberParam = SubscriberParam(None, Range, '/internal/distance_3',
-                                                        self.backDistanceSensorCallback,
-                                                        QPoint(450, 50),
-                                                        None, 'BACK', QLineF(450, 60, 340, 140), None)
+        backSensorSubsciberParam = SubscriberParam(None, Range, '/internal/distance_3',
+                                                   self.backDistanceSensorCallback,
+                                                   QPoint(450, 50),
+                                                   None, 'BACK', QLineF(450, 60, 340, 140), None)
 
-        self.frontSensorSubsciberParam = SubscriberParam(None, Range, '/internal/distance_4',
-                                                         self.frontDistanceSensorCallback,
-                                                         QPoint(50, 50),
-                                                         None, 'FRONT', QLineF(90, 60, 200, 200), None)
+        frontSensorSubsciberParam = SubscriberParam(None, Range, '/internal/distance_4',
+                                                    self.frontDistanceSensorCallback,
+                                                    QPoint(50, 50),
+                                                    None, 'FRONT', QLineF(90, 60, 200, 200), None)
 
-        self.leftSensorSubsciberParam = SubscriberParam(None, Range, '/internal/distance_5',
-                                                        self.leftDistanceSensorCallback,
-                                                        QPoint(20, 190), None, 'LEFT',
-                                                        QLineF(70, 200, 100, 200), None)
+        leftSensorSubsciberParam = SubscriberParam(None, Range, '/internal/distance_5',
+                                                   self.leftDistanceSensorCallback,
+                                                   QPoint(20, 190), None, 'LEFT',
+                                                   QLineF(70, 200, 100, 200), None)
 
         self.subscriberParams = [
-            self.topSensorSubsciberParam,
-            self.bottomSensorSubsciberParam,
-            self.rightSensorSubsciberParam,
-            self.backSensorSubsciberParam,
-            self.frontSensorSubsciberParam,
-            self.leftSensorSubsciberParam]
+            topSensorSubsciberParam,
+            bottomSensorSubsciberParam,
+            rightSensorSubsciberParam,
+            backSensorSubsciberParam,
+            frontSensorSubsciberParam,
+            leftSensorSubsciberParam]
 
     def resetSubscribers(self):
         for subscriberParam in self.subscriberParams:
@@ -118,116 +111,55 @@ class DashboardDistanceSensorsWidget(BaseWidget):
 
     def initializeSubscribers(self):
         self.resetSubscribers()
-        print(self.namespace)
         for index, subscriberParam in enumerate(self.subscriberParams):
             subscriberInstance = self.node.create_subscription(subscriberParam.messageType,
                                                                self.namespace + subscriberParam.topic,
                                                                subscriberParam.callback
                                                                , 10)
-            #
-            # subscriberInstance = self.node.create_subscription(subscriberParam.messageType,
-            #                                                    self.namespace + subscriberParam.topic,
-            #                                                    lambda event: subscriberParam.callback(event,
-            #                                                                                           subscriberParam.text)
-            #                                                    , 10)
+
             subscriberParam = subscriberParam._replace(subscriber=subscriberInstance)
             self.subscriberParams[index] = subscriberParam
-        # print(self.subscriberParams[0].subscriber)
 
     def initializeRobotSettings(self):
         self.initializeSubscribers()
 
-    def topDistanceSensorCallback(self, event):
-        # print(event)
-        # print("text")
-        # # print("text")
-        # print(self.subscriberParams[0].text)
-        # # self.subscriberParams[0].text.setHtml('<div>FRONT </div><div>b</div><div>' + event.range + '</div>')
-        # # self.subscriberParams[0].text.setHtml('<div>FRONT </div><div>b</div><div>' + 'aa' + '</div>')
-        # self.lcdNumber.display(event.range)
-        # self.topSensorSubsciberParam.setHtml('<div>FRONT </div><div>b</div><div>c</div>')
-        # self.topDistanceLcdUI.display(event.range)
-        # fanData = {
-        #     "panelName": self.fanPanel.name,
-        #     "value": self.value
-        # }
-        self.signal.emit(event)
-        # self.test(event)
+    def emitLabel(self, subscriberParam, event):
+        self.signal.emit(
+            {"text": subscriberParam.text, "range": event.range,
+             "textPlaceholder": subscriberParam.textPlaceholder})
 
     def test(self, event):
+        range = str(round(event["range"], 2))
+        textPlaceholder = event.get("textPlaceholder", "")
+        event["text"].setHtml('<div>' + textPlaceholder + '</div><div>' + range + '</div>')
+
         pass
-        # self.subscriberParams[0].text.setHtml('<div>FRONT </div><div>' + str(round(event.range, 2)) + '</div>')
-        # self.text.setPlainText('aaaaa')
-        # self.scene.addLine(0, 100, 100, 100)
+
+    def topDistanceSensorCallback(self, event):
+        subscriberParam = self.subscriberParams[0]
+        self.emitLabel(subscriberParam, event)
 
     def bottomDistanceSensorCallback(self, event):
-        # self.bottomDistanceLcdUI.display(event.range)
-        pass
-        # print(event)
+        subscriberParam = self.subscriberParams[1]
+        self.emitLabel(subscriberParam, event)
 
     def rightDistanceSensorCallback(self, event):
-        # self.rightDistanceLcdUI.display(event.range)
-        # print(event)
-        pass
+        subscriberParam = self.subscriberParams[2]
+        self.emitLabel(subscriberParam, event)
 
     def backDistanceSensorCallback(self, event):
-        # self.backDistanceLcdUI.display(event.range)
-        # print(event)
-        pass
+        subscriberParam = self.subscriberParams[3]
+        self.emitLabel(subscriberParam, event)
 
     def frontDistanceSensorCallback(self, event):
-        # self.frontDistanceLcdUI.display(event.range)
-        # print(event)
-        pass
+        subscriberParam = self.subscriberParams[4]
+        self.emitLabel(subscriberParam, event)
 
     def leftDistanceSensorCallback(self, event):
-        # self.leftDistanceLcdUI.display(event.range)
-        pass
-        # print(event)
-
-    # def topDistanceSensorCallback(self, event, text):
-    #        # print(event)
-    #        print("text")
-    #        print("text")
-    #        print(text)
-    #        # text.setHtml('<div>FRONT </div><div>b</div><div>' + event.range + '</div>')
-    #        # self.topSensorSubsciberParam.setHtml('<div>FRONT </div><div>b</div><div>c</div>')
-    #        # self.topDistanceLcdUI.display(event.range)
-    #
-    #    def bottomDistanceSensorCallback(self, event, text):
-    #        # self.bottomDistanceLcdUI.display(event.range)
-    #        pass
-    #        # print(event)
-    #
-    #    def rightDistanceSensorCallback(self, event, text):
-    #        # self.rightDistanceLcdUI.display(event.range)
-    #        # print(event)
-    #        pass
-    #
-    #    def backDistanceSensorCallback(self, event, text):
-    #        # self.backDistanceLcdUI.display(event.range)
-    #        # print(event)
-    #        pass
-    #
-    #    def frontDistanceSensorCallback(self, event, text):
-    #        # self.frontDistanceLcdUI.display(event.range)
-    #        print(event)
-    #        # pass
-    #
-    #    def leftDistanceSensorCallback(self, event, text):
-    #        # self.leftDistanceLcdUI.display(event.range)
-    #        pass
-    #        # print(event)
-
-    # def backSensorCallback(self, event,text):
-    #     # self.backDistanceLcdUI.display(event.range)
-    #     print(event)
+        subscriberParam = self.subscriberParams[5]
+        self.emitLabel(subscriberParam, event)
 
     def resizeEvent(self, event):
-        # self.topSensorSubsciberParam.text.setHtml('<div>FRONT </div><div>b</div><div>c</div>')
-
-        # print(self.topSensorSubsciberParam)
-        # print(self.subscriberParams[0])
         graphicsViewSize = self.graphicsView.size()
 
         self.scene.setSceneRect(0, 0, graphicsViewSize.width(), graphicsViewSize.height())
@@ -241,7 +173,6 @@ class DashboardDistanceSensorsWidget(BaseWidget):
         self.pic.setTransform(transform)
 
         for subscriberParam in self.subscriberParams:
-            # line = subscriberParam.QLineF
             textPoint = subscriberParam.QPoint
             newX = int(textPoint.x() * xScaleFactor)
             newY = int(textPoint.y() * yScaleFactor)
@@ -250,11 +181,6 @@ class DashboardDistanceSensorsWidget(BaseWidget):
 
             subscriberParam.text.setPos(textNewPoint)
 
-            # point1 = QPoint(int(subscriberParam.QLineF.x1() * xScaleFactor),
-            #                 int(subscriberParam.QLineF.y1() * yScaleFactor))
-            # point2 = QPoint(int(subscriberParam.QLineF.x2() * xScaleFactor),
-            #                 int(subscriberParam.QLineF.y2() * yScaleFactor))
-            # subscriberParam.line.setPoints(point1, point2)
             subscriberParam.line.setTransform(transform)
 
 
