@@ -116,7 +116,6 @@ class SetupWidget(QWidget):
         return id
 
     def updateRobotData(self):
-        print("updateRobotData")
         id = self.data.get('id', None)
 
         itemData = {

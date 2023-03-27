@@ -48,7 +48,7 @@ class PidWidget(QWidget):
         self.widget.data['pid']["pidAngle"]["Ki"] = self.widget.pidAngleKiUI.value()
         self.widget.data['pid']["pidAngle"]["Kd"] = self.widget.pidAngleKdUI.value()
 
-    def test(self, event):
-        print("event12325")
-        print("event")
-        print(event)
+    # def test(self, event):
+    #     print("event12325")
+    #     print("event")
+    #     print(event)

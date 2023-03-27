@@ -5,10 +5,6 @@ import os
 from python_qt_binding.QtWidgets import QAbstractSpinBox, QFileDialog, QMessageBox
 from shared.base_widget.base_widget import BaseWidget
 
-from std_msgs.msg import Float32
-from ament_index_python import get_resource
-from python_qt_binding import loadUi
-
 from shared.enums import PackageNameEnum
 
 from python_qt_binding.QtCore import pyqtSignal, QObject, QThread, pyqtSlot, Qt
@@ -37,7 +33,6 @@ class Thread(QThread):
     def connectedToService(self):
         image = QImage()
         while True:
-            print("connectedToService")
             try:
                 jsonBody = {'width': self.imageWidth, 'height': self.imageHeight}
 
@@ -66,7 +61,6 @@ class Thread(QThread):
                 self.connectedToService()
                 return
             except Exception as e:
-                print("aaaaaaaaaaaa")
                 print(e)
                 pass
 
@@ -124,25 +118,81 @@ class CameraPanelWidget(BaseWidget):
         self.imageWidthSpinBoxUI.valueChanged.connect(self.spinBoxSetImageWidth)
         self.imageHeightSpinBoxUI.valueChanged.connect(self.spinBoxSetImageHeight)
 
+        self.aspectRatioCheckBoxUI.stateChanged.connect(self.aspectRatioChanged)
+
+    def aspectRatioChanged(self, event):
+        print(event)
+        print(self.aspectRatioCheckBoxUI.isChecked())
+
+    def getHeightRange(self):
+        heightMaximum = self.imageHeightSpinBoxUI.maximum()
+        heightMinimum = self.imageHeightSpinBoxUI.minimum()
+
+        return heightMaximum, heightMinimum, (heightMaximum - heightMinimum)
+
+    def getWidthRange(self):
+        widthMaximum = self.imageWidthSpinBoxUI.maximum()
+        widthMinimum = self.imageWidthSpinBoxUI.minimum()
+
+        return widthMaximum, widthMinimum, (widthMaximum - widthMinimum)
+
+    def widthAspectRatio(self, height):
+        if self.aspectRatioCheckBoxUI.isChecked():
+            heightMaximum, heightMinimum, heightRange = self.getHeightRange()
+
+            aspectRatio = (height - heightMinimum) / heightRange
+
+            widthMaximum, widthMinimum, widthRange = self.getWidthRange()
+
+            width = int(aspectRatio * widthRange + widthMinimum)
+            self.imageWidthSpinBoxUI.setValue(width)
+            self.imageWidthSliderUI.setValue(width)
+
+    def heightAspectRatio(self, width):
+        if self.aspectRatioCheckBoxUI.isChecked():
+            widthMaximum, widthMinimum, widthRange = self.getWidthRange()
+
+            aspectRatio = (width - widthMinimum) / widthRange
+
+            heightMaximum, heightMinimum, heightRange = self.getHeightRange()
+
+            height = int(aspectRatio * heightRange + heightMinimum)
+            self.imageHeightSpinBoxUI.setValue(height)
+            self.imageHeightSliderUI.setValue(height)
+
     def sliderSetImageWidth(self):
         width = int(self.imageWidthSliderUI.value())
         self.imageWidthSpinBoxUI.setValue(width)
         self.th.setFrameWidth(width)
+
+        self.heightAspectRatio(width)
 
     def sliderSetImageHeight(self):
         height = int(self.imageHeightSliderUI.value())
         self.imageHeightSpinBoxUI.setValue(height)
         self.th.setFrameHeight(height)
 
-    def spinBoxSetImageWidth(self, event):
+        self.widthAspectRatio(height)
+
+    def spinBoxSetImageWidth(self):
+        if not self.imageWidthSpinBoxUI.hasFocus() :
+            return
         width = int(self.imageWidthSpinBoxUI.value())
         self.imageWidthSliderUI.setValue(width)
         self.th.setFrameWidth(width)
 
-    def spinBoxSetImageHeight(self, event):
+        self.heightAspectRatio(width)
+
+    def spinBoxSetImageHeight(self):
+        print("spinBoxSetImageHeight")
+        if not self.imageHeightSpinBoxUI.hasFocus():
+            return
         height = int(self.imageHeightSpinBoxUI.value())
+        print(height)
         self.imageHeightSliderUI.setValue(height)
         self.th.setFrameHeight(height)
+
+        self.widthAspectRatio(height)
 
     def showAlertThatHostIsNotDefined(self):
         self.th1 = AlertThread()

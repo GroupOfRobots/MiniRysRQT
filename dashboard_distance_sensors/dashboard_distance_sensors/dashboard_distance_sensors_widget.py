@@ -1,23 +1,13 @@
 # This Python file uses the following encoding: utf-8
-import math
 import os
 
-# from PyQt5.QtWidgets import QGraphicsPixmapItem
-# from PyQt5.QtGui import QImage
-# from PyQt5.QtWidgets import QGraphicsScene
 from python_qt_binding.QtCore import Qt, QPoint, QLineF, pyqtSignal
-from python_qt_binding.QtGui import QPainter, QPen
 from ament_index_python import get_resource
-from python_qt_binding import loadUi
 from shared.base_widget.base_widget import BaseWidget
 
 from rclpy.node import Node
-from minirys_msgs.msg import BatteryStatus, AngularPose
 from sensor_msgs.msg import Range
 
-from std_msgs.msg import Float32, String
-
-import time
 from collections import namedtuple
 
 from python_qt_binding.QtWidgets import QGraphicsScene, QGraphicsPixmapItem, QFileDialog
@@ -26,11 +16,9 @@ from python_qt_binding.QtGui import QImage, QPixmap, QTransform
 from shared.enums import ControlKeyEnum, PackageNameEnum
 
 
-# from python_qt_binding.Qt import AspectRatioMode
-
-
 class DashboardDistanceSensorsWidget(BaseWidget):
-    signal = pyqtSignal(object, name="updateFanValue111")
+    # displayDistanceSensorSignal = pyqtSignal(object, name="displayDistanceSensorSignal")
+    displayDistanceSensorSignal = pyqtSignal(object)
 
     def __init__(self, stack=None, node=Node):
         super(DashboardDistanceSensorsWidget, self).__init__(stack, PackageNameEnum.DashboardDistanceSensors)
@@ -39,8 +27,21 @@ class DashboardDistanceSensorsWidget(BaseWidget):
         self.node = node
         self.predefineSubscribers()
 
-        self.scene = QGraphicsScene()
+        self.createCanvas()
+        self.setBackgroundImage()
 
+        self.initSubscriberParams()
+
+        self.displayDistanceSensorSignal.connect(self.displayDistanceSensorCallback)
+
+        self.setRobotOnScreen()
+
+    def createCanvas(self):
+        self.scene = QGraphicsScene()
+        self.graphicsView.setScene(self.scene)
+        self.graphicsView.show()
+
+    def setBackgroundImage(self):
         _, packagePath = get_resource('packages', 'dashboard_distance_sensors')
         file_name = os.path.join(packagePath, 'share', 'dashboard_distance_sensors', 'resource', 'imgs', 'rys.png')
 
@@ -49,8 +50,10 @@ class DashboardDistanceSensorsWidget(BaseWidget):
         self.pic = QGraphicsPixmapItem()
         self.pic.setPixmap(QPixmap.fromImage(self.image_qt))
         self.pic.setOpacity(0.5)
+
         self.scene.addItem(self.pic)
 
+    def initSubscriberParams(self):
         for index, subscriberParam in enumerate(self.subscriberParams):
             line = self.scene.addLine(subscriberParam.QLineF)
             text = self.scene.addText(subscriberParam.textPlaceholder)
@@ -59,13 +62,6 @@ class DashboardDistanceSensorsWidget(BaseWidget):
 
             subscriberParam.text.setPos(subscriberParam.QPoint)
             self.subscriberParams[index] = subscriberParam
-
-        self.graphicsView.setScene(self.scene)
-        self.graphicsView.show()
-
-        self.signal.connect(self.test)
-
-        self.setRobotOnScreen()
 
     def predefineSubscribers(self):
         topSensorSubsciberParam = SubscriberParam(None, Range, '/internal/distance_0',
@@ -124,16 +120,14 @@ class DashboardDistanceSensorsWidget(BaseWidget):
         self.initializeSubscribers()
 
     def emitLabel(self, subscriberParam, event):
-        self.signal.emit(
+        self.displayDistanceSensorSignal.emit(
             {"text": subscriberParam.text, "range": event.range,
              "textPlaceholder": subscriberParam.textPlaceholder})
 
-    def test(self, event):
+    def displayDistanceSensorCallback(self, event):
         range = str(round(event["range"], 2))
         textPlaceholder = event.get("textPlaceholder", "")
         event["text"].setHtml('<div>' + textPlaceholder + '</div><div>' + range + '</div>')
-
-        pass
 
     def topDistanceSensorCallback(self, event):
         subscriberParam = self.subscriberParams[0]

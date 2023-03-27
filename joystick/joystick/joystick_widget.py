@@ -160,7 +160,7 @@ class JoystickWidget(BaseWidget):
                 elif angle > math.pi * 0.5:
                     angleFactor = (angle - (math.pi * 0.5)) / (math.pi * 0.5)
                     leftEngine = self.getValue(joystickForwardData, "leftEngine") * (1 - angleFactor) \
-                                 + self.getValue(sa, "leftEngine") * angleFactor
+                                 + self.getValue(joystickLeftData, "leftEngine") * angleFactor
 
                     rightEngine = self.getValue(joystickForwardData, "rightEngine") * (1 - angleFactor) \
                                   + self.getValue(joystickLeftData, "rightEngine") * angleFactor

@@ -218,7 +218,7 @@ background-color:none;</string>
                 <number>100</number>
                </property>
                <property name="maximum">
-                <number>3280</number>
+                <number>2464</number>
                </property>
               </widget>
              </item>
@@ -226,11 +226,45 @@ background-color:none;</string>
            </item>
           </layout>
          </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_5">
+           <item alignment="Qt::AlignTop">
+            <widget class="QLabel" name="label_3">
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>20</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;ASPECT RATIO&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QVBoxLayout" name="verticalLayout_6">
+             <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+              <widget class="QCheckBox" name="aspectRatioCheckBoxUI">
+               <property name="text">
+                <string/>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_3"/>
+         </item>
         </layout>
        </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
-         <item alignment="Qt::AlignRight">
+         <item alignment="Qt::AlignHCenter">
           <widget class="QLabel" name="counterLabelUI">
            <property name="maximumSize">
             <size>
@@ -252,7 +286,7 @@ background-color:none;</string>
             </size>
            </property>
            <property name="text">
-            <string/>
+            <string>Frame rate</string>
            </property>
           </widget>
          </item>
@@ -260,17 +294,13 @@ background-color:none;</string>
        </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_7">
-         <item alignment="Qt::AlignRight">
-          <widget class="QLabel" name="label_3">
+         <item alignment="Qt::AlignHCenter">
+          <widget class="QPushButton" name="screenshotButtonUI">
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
            <property name="text">
             <string>Capture screenshot</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="screenshotButtonUI">
-           <property name="text">
-            <string>222312</string>
            </property>
           </widget>
          </item>

@@ -11,10 +11,13 @@ from ament_index_python import get_resource
 from python_qt_binding import loadUi
 
 import threading
+import time
 
 import json
 import os
 import subprocess
+import select
+
 
 
 class RunStatusIcon(str, Enum):
@@ -57,22 +60,9 @@ class CommandExecuteElementWidget(QWidget):
 
     def stopCommand(self):
         if self.command.get('executeViaSsh'):
-            print('awwwwww')
-            # stdin, stdout, stderr = self.ssh.exec_command(chr(3))
-            stdin, stdout, stderr = self.ssh.exec_command('\x003' )
-            # stdin.close()
-            # stdin, stdout, stderr = paramiko.send(chr(3))
-            output = stdout.readlines()
-            errors = stderr.readlines()
-            outputString = ''.join(output)
-            errorsString = ''.join(errors)
-            print('outputString')
-            print(outputString)
-            # print(errorsString)
-            transport = self.ssh.get_transport()
-            # transport.send(chr(3))
-            # transport.set_keepalive(1)
-            print('awwwwwwwwwdddddd')
+            print("wwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+            self.stdout.channel.close()
+            print("qqqqqqqqqqqqqqqqqqqqqqqqqqq")
             self.ssh.close()
         else:
             print(self.process)
@@ -116,6 +106,8 @@ class CommandExecuteElementWidget(QWidget):
         password = sshData.get('password')
 
         command = self.command.get('command')
+        print("command")
+        print(command)
 
         self.ssh = paramiko.SSHClient()
         self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -125,17 +117,12 @@ class CommandExecuteElementWidget(QWidget):
 
             transport = self.ssh.get_transport()
             channel = transport.open_session()
-            # channel.exec_command("tail -f /var/log/everything/current")
-            # stdin, stdout, stderr = channel.exec_command(command)
-            # ODKOMENTOWAC
-            stdin, stdout, stderr = self.ssh.exec_command(command)
-            output = stdout.readlines()
-            errors = stderr.readlines()
-            outputString = ''.join(output)
-            errorsString = ''.join(errors)
-            # print(self.ssh.exit_status_ready())
-            self.ssh.close()
-
-            self.commandOutputSignal.emit([command, outputString, errorsString])
+            channel.exec_command(command)
+            # while True:
+            rl, wl, xl = select.select([channel], [], [], 0.0)
+            #     if len(rl) > 0:
+            #         # Must be stdout
+            print ("wl")
+            print (wl,rl, xl)
         except BaseException as exception:
             self.commandOutputSignal.emit([command, "SSH ERROR", str(exception)])

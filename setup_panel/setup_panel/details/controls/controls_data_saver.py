@@ -59,7 +59,6 @@ class ControlsDataSaver:
 
     def saveJoystickDynamic(self):
         data = self.widget.data
-        print(data)
 
         data["joystick"]["forward"]["leftEngine"] = self.widget.joystickForward.item(0, 0).text()
         data["joystick"]["forward"]["rightEngine"] = self.widget.joystickForward.item(0, 1).text()
