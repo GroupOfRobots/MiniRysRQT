@@ -1,0 +1,21 @@
+<library path="lib">
+  <class name="ProcessPanel" type="process_panel.process_panel.ProcessPanel" base_class_type="rqt_gui_py::Plugin">
+    <description>
+      Process panel gui
+    </description>
+    <qtgui>
+<!--      &lt;!&ndash; optional grouping...-->
+<!--      <group>-->
+<!--        <label>Group</label>-->
+<!--      </group>-->
+<!--      <group>-->
+<!--        <label>Subgroup</label>-->
+<!--      </group>-->
+<!--      &ndash;&gt;-->
+      <label>Process</label>
+      <icon type="theme">face-angel
+      </icon>
+      <statustip>Process panel interface</statustip>
+    </qtgui>
+  </class>
+</library>

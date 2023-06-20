@@ -1,7 +1,4 @@
 # This Python file uses the following encoding: utf-8
-import json
-import os
-
 from python_qt_binding.QtWidgets import QAbstractSpinBox, QFileDialog, QMessageBox
 from shared.base_widget.base_widget import BaseWidget
 
@@ -15,6 +12,10 @@ import time
 from datetime import datetime
 
 
+def setRequestUrl(host):
+    return 'http://' + host + ':8000/stream.mjpg'
+
+
 class Thread(QThread):
     changePixmap = pyqtSignal(QImage)
     counter = 0
@@ -23,19 +24,18 @@ class Thread(QThread):
 
     def __init__(self, host, displayFramerateUI, counterLabelUI, imageWidth, imageHeight):
         super(QThread, self).__init__()
-        self.url = 'http://' + host + ':8000/stream.mjpg'
         self.displayFramerateUI = displayFramerateUI
         self.counterLabelUI = counterLabelUI
-
         self.imageWidth = imageWidth
         self.imageHeight = imageHeight
+        self.host = host
+        self.url = setRequestUrl(host)
 
     def connectedToService(self):
         image = QImage()
         while True:
             try:
                 jsonBody = {'width': self.imageWidth, 'height': self.imageHeight}
-
                 contents = requests.post(self.url, json=jsonBody, timeout=2.50)
                 image.loadFromData(contents.content)
                 self.changePixmap.emit(image)
@@ -44,7 +44,8 @@ class Thread(QThread):
                     self.displayFramerateUI.setText(str(self.counter))
                     self.counter = 0
                     self.timestamp = time.time()
-            except:
+            except Exception as exception:
+                print(exception)
                 self.counter = 0
                 self.counterLabelUI.setText('Trying to reconnect: ')
                 self.tryingToConnect()
@@ -60,8 +61,8 @@ class Thread(QThread):
                 self.exceptionCounter = 0
                 self.connectedToService()
                 return
-            except Exception as e:
-                print(e)
+            except Exception as exception:
+                print(exception)
                 pass
 
     def run(self):
@@ -97,20 +98,16 @@ class CameraPanelWidget(BaseWidget):
         self.setRobotOnScreen()
         self.settingsButtonUI.clicked.connect(self.settingsClicked)
 
-        sshData = self.data.get('ssh', {})
-
-        self.host = sshData.get('host')
-
-        if self.host is None or self.host == '':
-            self.showAlertThatHostIsNotDefined()
-
-        self.screenshotButtonUI.clicked.connect(self.captureScreenshot)
-
         self.th = Thread(host=self.host, displayFramerateUI=self.displayFramerateUI, counterLabelUI=self.counterLabelUI,
                          imageWidth=int(self.imageWidthSliderUI.value()),
                          imageHeight=int(self.imageHeightSliderUI.value()))
         self.th.changePixmap.connect(self.displayImage)
         self.th.start()
+
+        if self.host is None or self.host == '':
+            self.showAlertThatHostIsNotDefined()
+
+        self.screenshotButtonUI.clicked.connect(self.captureScreenshot)
 
         self.imageWidthSliderUI.sliderReleased.connect(self.sliderSetImageWidth)
         self.imageHeightSliderUI.sliderReleased.connect(self.sliderSetImageHeight)
@@ -118,11 +115,17 @@ class CameraPanelWidget(BaseWidget):
         self.imageWidthSpinBoxUI.valueChanged.connect(self.spinBoxSetImageWidth)
         self.imageHeightSpinBoxUI.valueChanged.connect(self.spinBoxSetImageHeight)
 
-        self.aspectRatioCheckBoxUI.stateChanged.connect(self.aspectRatioChanged)
+    def initializeRobotSettings(self):
+        sshData = self.data.get('ssh', {})
 
-    def aspectRatioChanged(self, event):
-        print(event)
-        print(self.aspectRatioCheckBoxUI.isChecked())
+        self.host = sshData.get('host')
+        try:
+            if self.th is not None:
+                self.th.url = setRequestUrl(self.host)
+                self.th.host = self.host
+                # self.th.setHost(self.host)
+        except AttributeError:
+            pass
 
     def getHeightRange(self):
         heightMaximum = self.imageHeightSpinBoxUI.maximum()
@@ -175,7 +178,7 @@ class CameraPanelWidget(BaseWidget):
         self.widthAspectRatio(height)
 
     def spinBoxSetImageWidth(self):
-        if not self.imageWidthSpinBoxUI.hasFocus() :
+        if not self.imageWidthSpinBoxUI.hasFocus():
             return
         width = int(self.imageWidthSpinBoxUI.value())
         self.imageWidthSliderUI.setValue(width)
@@ -184,11 +187,9 @@ class CameraPanelWidget(BaseWidget):
         self.heightAspectRatio(width)
 
     def spinBoxSetImageHeight(self):
-        print("spinBoxSetImageHeight")
         if not self.imageHeightSpinBoxUI.hasFocus():
             return
         height = int(self.imageHeightSpinBoxUI.value())
-        print(height)
         self.imageHeightSliderUI.setValue(height)
         self.th.setFrameHeight(height)
 
@@ -217,7 +218,8 @@ class CameraPanelWidget(BaseWidget):
                                                       options=options)
             if fileName:
                 image.save(fileName)
-        except:
+        except Exception as exception:
+            print(exception)
             pass
 
     def onShtudownPlugin(self):

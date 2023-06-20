@@ -116,13 +116,7 @@ QGroupBox:title {
          <number>30</number>
         </property>
         <item>
-         <layout class="QHBoxLayout" name="frontSensor" stretch="1,0">
-          <property name="topMargin">
-           <number>10</number>
-          </property>
-          <property name="bottomMargin">
-           <number>10</number>
-          </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
           <item>
            <widget class="QLabel" name="frontSensorLabel">
             <property name="text">
@@ -130,7 +124,7 @@ QGroupBox:title {
             </property>
            </widget>
           </item>
-          <item>
+          <item alignment="Qt::AlignRight">
            <widget class="QLCDNumber" name="frontDistanceLcdUI">
             <property name="digitCount">
              <number>4</number>
@@ -319,7 +313,7 @@ QGroupBox:title {
               </property>
              </widget>
             </item>
-            <item>
+            <item alignment="Qt::AlignRight">
              <widget class="QLCDNumber" name="voltageCell1Lcd">
               <property name="autoFillBackground">
                <bool>false</bool>
@@ -353,7 +347,7 @@ QGroupBox:title {
               </property>
              </widget>
             </item>
-            <item>
+            <item alignment="Qt::AlignRight">
              <widget class="QLCDNumber" name="voltageCell2Lcd"/>
             </item>
            </layout>
@@ -383,7 +377,7 @@ QGroupBox:title {
               </property>
              </widget>
             </item>
-            <item>
+            <item alignment="Qt::AlignRight">
              <widget class="QLCDNumber" name="voltageCell3Lcd">
               <property name="styleSheet">
                <string notr="true"/>
@@ -439,7 +433,7 @@ QGroupBox:title {
           </item>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_6">
-            <item alignment="Qt::AlignRight">
+            <item>
              <widget class="QLCDNumber" name="temperatureMainLcd">
               <property name="minimumSize">
                <size>

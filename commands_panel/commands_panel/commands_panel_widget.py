@@ -26,7 +26,7 @@ class CommandsPanelWidget(BaseWidget):
 
         self.commandOutputSignal.connect(self.onCommandOutputSignal)
 
-        self.comboBox.currentIndexChanged.connect(self.setRobotOnScreen)
+        # self.comboBox.currentIndexChanged.connect(self.setRobotOnScreen)
         self.setRobotOnScreen()
 
         self.logFormat = self.logsPlainTextEditUI.currentCharFormat()
