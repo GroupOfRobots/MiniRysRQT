@@ -10,7 +10,3 @@ class CameraPanelStack(StackWidget):
 
         self.mainChildWidget = CameraPanelWidget(stack=self, node=node)
         self.stack.addWidget(self.mainChildWidget)
-        self.mainChildWidget.destroyed.connect(self.on_widget_closed)
-
-    def on_widget_closed(self):
-        print("The widget was closed")

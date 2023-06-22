@@ -1,21 +1,15 @@
 # This Python file uses the following encoding: utf-8
 import math
-import os
+from collections import namedtuple
+
+from minirys_msgs.msg import BatteryStatus, AngularPose
 from python_qt_binding.QtCore import Qt
 from python_qt_binding.QtGui import QPainter, QPen
-from ament_index_python import get_resource
-from python_qt_binding import loadUi
-from shared.base_widget.base_widget import BaseWidget
-
 from rclpy.node import Node
-from minirys_msgs.msg import BatteryStatus, AngularPose
 from sensor_msgs.msg import Range
-
-from std_msgs.msg import Float32, String
-from shared.enums import ControlKeyEnum, PackageNameEnum
-
-import time
-from collections import namedtuple
+from shared.base_widget.base_widget import BaseWidget
+from shared.enums import PackageNameEnum
+from std_msgs.msg import Float32
 
 
 class DashboardWidget(BaseWidget):
@@ -33,8 +27,6 @@ class DashboardWidget(BaseWidget):
 
         self.angleWidget.paintEvent = self.paintRobotAngle
 
-        self.destroyed.connect(DashboardWidget.onDestroyed)
-
     def predefineSubscribers(self):
         self.subscriberParams = [
             SubscriberParam(None, Range, '/internal/distance_0', self.topDistanceSensorCallback),
@@ -50,13 +42,11 @@ class DashboardWidget(BaseWidget):
 
     def resetSubscribers(self):
         for subscriberParam in self.subscriberParams:
-
             subscriber = subscriberParam.subscriber
             if subscriber is not None:
                 self.node.destroy_subscription(subscriber)
 
     def initializeRobotSettings(self):
-        print('initializeSettings')
         self.initializeSubscribers()
 
     def initializeSubscribers(self):
@@ -139,11 +129,8 @@ class DashboardWidget(BaseWidget):
     def paintRobotAngle(self, event):
         painter = QPainter()
         painter.begin(self.angleWidget)
-        pos = self.angleWidget.pos()
         painter.setPen(QPen(Qt.black, 5, Qt.SolidLine))
-        # painter.setBrush(QBrush(Qt.red, Qt.SolidPattern))
 
-        pos1 = self.angleWidget.mapToGlobal(pos)
         width = self.angleWidget.width()
         height = self.angleWidget.height()
         x1 = self.angleWidget.x() + round(width * 0.5)
@@ -160,30 +147,9 @@ class DashboardWidget(BaseWidget):
         x2Bottom = self.angleWidget.x() + round(width * 0.8)
         painter.drawLine(x1Bottom, y1, x2Bottom, y1)
 
-        # painter.end()
-
     def angularPoseCallback(self, event):
-        # print(event)
         self.angularPosition = event.angular_position
         self.angleWidget.update()
-        # self.angleW
-
-    @staticmethod
-    def onDestroyed():
-        # Do stuff here
-        print("CCCCCCCCCCCCLOOOOOOOOOOOSEEEEEEEEEEEEEE333333333")
-        # self.publisher= None
-
-        pass
-
-    def closeEvent(self, event):
-        print("CCCCCCCCCCCCLOOOOOOOOOOOSEEEEEEEEEEEEEE")
-
-    def __del__(self):
-        print('Destructor called, vehicle deleted.')
-
-    def shutdown_plugin(self):
-        print("shutdown_plugin")
 
 
 SubscriberParam = namedtuple('SubscriberParam', ["subscriber", "messageType", "topic", "callback"])

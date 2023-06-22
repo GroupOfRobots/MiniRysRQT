@@ -18,14 +18,4 @@ class Dashboard(Plugin):
 
     def shutdown_plugin(self):
         print("shutdown_plugin")
-        print(self.parent())
-        print(self.children())
-        # self.context.close_plugin()
-        # self.context.remove_widget(self._stack)
-        # print(self.parent().serialNumber())
-        DashboardWidget.onDestroyed()
-        print(self.parent().parent())
-        print(self.parent().children())
-        print(self.parent().parent().children())
-        # a=self.parent().parent()
-        # a.closePlugin()
+

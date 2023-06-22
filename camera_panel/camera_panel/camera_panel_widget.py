@@ -16,7 +16,6 @@ class CameraPanelWidget(BaseWidget):
     def __init__(self, stack=None, node=None):
         super(CameraPanelWidget, self).__init__(stack, PackageNameEnum.CameraPanel)
 
-        self.comboBox.currentIndexChanged.connect(self.setRobotOnScreen)
         self.setRobotOnScreen()
         self.settingsButtonUI.clicked.connect(self.settingsClicked)
 

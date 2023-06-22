@@ -24,8 +24,6 @@ class FanPanelWidget(BaseWidget):
         self.id = None
         self.setRobotOnScreen()
 
-        # self.initializeRobotsOptions()
-
         self.publisher = node.create_publisher(Float32, '/internal/fan_output', 10)
         self.msg = Float32()
         self.value = 0

@@ -1,23 +1,18 @@
 # This Python file uses the following encoding: utf-8
 import os
-
-from python_qt_binding.QtCore import Qt, QPoint, QLineF, pyqtSignal
-from ament_index_python import get_resource
-from shared.base_widget.base_widget import BaseWidget
-
-from rclpy.node import Node
-from sensor_msgs.msg import Range
-
 from collections import namedtuple
 
-from python_qt_binding.QtWidgets import QGraphicsScene, QGraphicsPixmapItem, QFileDialog
+from ament_index_python import get_resource
+from python_qt_binding.QtCore import Qt, QPoint, QLineF, pyqtSignal
 from python_qt_binding.QtGui import QImage, QPixmap, QTransform
-
-from shared.enums import ControlKeyEnum, PackageNameEnum
+from python_qt_binding.QtWidgets import QGraphicsScene, QGraphicsPixmapItem
+from rclpy.node import Node
+from sensor_msgs.msg import Range
+from shared.base_widget.base_widget import BaseWidget
+from shared.enums import PackageNameEnum
 
 
 class DashboardDistanceSensorsWidget(BaseWidget):
-    # displayDistanceSensorSignal = pyqtSignal(object, name="displayDistanceSensorSignal")
     displayDistanceSensorSignal = pyqtSignal(object)
 
     def __init__(self, stack=None, node=Node):
@@ -172,9 +167,7 @@ class DashboardDistanceSensorsWidget(BaseWidget):
             newY = int(textPoint.y() * yScaleFactor)
 
             textNewPoint = QPoint(newX, newY)
-
             subscriberParam.text.setPos(textNewPoint)
-
             subscriberParam.line.setTransform(transform)
 
 
