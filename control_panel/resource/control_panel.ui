@@ -179,7 +179,8 @@ background-color:none;</string>
          </property>
          <property name="styleSheet">
           <string notr="true">background-color: rgb(200, 200, 200);
-border: none;</string>
+border: none; 
+border-radius:5px;</string>
          </property>
          <property name="text">
           <string/>
@@ -253,7 +254,8 @@ border: none;</string>
          </property>
          <property name="styleSheet">
           <string notr="true">background-color: rgb(200, 200, 200);
-border: none;</string>
+border: none;
+border-radius:5px;</string>
          </property>
          <property name="text">
           <string/>
@@ -289,7 +291,8 @@ border: none;</string>
          </property>
          <property name="styleSheet">
           <string notr="true">background-color: rgb(200, 200, 200);
-border: none;</string>
+border: none;
+border-radius:5px;</string>
          </property>
          <property name="text">
           <string/>
@@ -326,7 +329,8 @@ border: none;</string>
          <property name="styleSheet">
           <string notr="true">background-color: rgb(200, 200, 200);
 border: none;
-transform: rotate(45deg);</string>
+transform: rotate(45deg);
+border-radius:5px;</string>
          </property>
          <property name="text">
           <string/>

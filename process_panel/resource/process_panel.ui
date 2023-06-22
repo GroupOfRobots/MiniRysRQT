@@ -114,17 +114,52 @@ background-color:none;</string>
         <number>0</number>
        </property>
        <item>
-        <widget class="QLabel" name="label_2">
+        <widget class="QLabel" name="label">
          <property name="text">
-          <string>COMMAND PS AUX | GREP</string>
+          <string>COMMAND</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit"/>
+        <widget class="QLabel" name="label_2">
+         <property name="styleSheet">
+          <string notr="true">background: rgb(200,200,200); padding-left:5px;</string>
+         </property>
+         <property name="text">
+          <string>PS AUX | GREP</string>
+         </property>
+        </widget>
+       </item>
+       <item alignment="Qt::AlignVCenter">
+        <widget class="QLineEdit" name="lineEdit">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background: rgb(220,220,220); margin-right:5px</string>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QPushButton" name="searchButtonUI">
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border: 1px solid black;
+border-radius: 5px;
+padding: 5px;
+background: gray;</string>
+         </property>
          <property name="text">
           <string>SEARCH</string>
          </property>
