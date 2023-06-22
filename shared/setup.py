@@ -7,8 +7,14 @@ package_name = 'shared'
 setup(
     name=package_name,
     version='0.0.0',
-    packages=[package_name, package_name + '/deleted_robot_screen', package_name + '/utils',  package_name + '/stack_widget', package_name + '/base_widget'],
+    packages=[package_name,
+              package_name + '/deleted_robot_screen',
+              package_name + '/utils',
+              package_name + '/stack_widget',
+              package_name + '/base_widget'],
     data_files=[
+        ('share/ament_index/resource_index/packages',
+         ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
         ('share/' + package_name + '/data', glob('*/*.json')),
         ('share/' + package_name + '/data/robots', glob('data/robots/*.json')),
