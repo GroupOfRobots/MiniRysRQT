@@ -1,111 +1,33 @@
 # This Python file uses the following encoding: utf-8
-from python_qt_binding.QtWidgets import QAbstractSpinBox, QFileDialog, QMessageBox
-from shared.base_widget.base_widget import BaseWidget
-
-from shared.enums import PackageNameEnum
-
-from python_qt_binding.QtCore import pyqtSignal, QObject, QThread, pyqtSlot, Qt
-from python_qt_binding.QtGui import QColor, QFont, QPixmap, QImage
-
-import requests
-import time
 from datetime import datetime
 
+import requests
+from python_qt_binding.QtCore import pyqtSlot, Qt
+from python_qt_binding.QtGui import QPixmap, QImage
+from python_qt_binding.QtWidgets import QFileDialog
+from shared.base_widget.base_widget import BaseWidget
+from shared.enums import PackageNameEnum
 
-def setRequestUrl(host):
-    return 'http://' + host + ':8000/stream.mjpg'
-
-
-class Thread(QThread):
-    changePixmap = pyqtSignal(QImage)
-    counter = 0
-    exceptionCounter = 0
-    timestamp = 0
-
-    def __init__(self, host, displayFramerateUI, counterLabelUI, imageWidth, imageHeight):
-        super(QThread, self).__init__()
-        self.displayFramerateUI = displayFramerateUI
-        self.counterLabelUI = counterLabelUI
-        self.imageWidth = imageWidth
-        self.imageHeight = imageHeight
-        self.host = host
-        self.url = setRequestUrl(host)
-
-    def connectedToService(self):
-        image = QImage()
-        while True:
-            try:
-                jsonBody = {'width': self.imageWidth, 'height': self.imageHeight}
-                contents = requests.post(self.url, json=jsonBody, timeout=2.50)
-                image.loadFromData(contents.content)
-                self.changePixmap.emit(image)
-                self.counter += 1
-                if self.timestamp < time.time() - 1:
-                    self.displayFramerateUI.setText(str(self.counter))
-                    self.counter = 0
-                    self.timestamp = time.time()
-            except Exception as exception:
-                print(exception)
-                self.counter = 0
-                self.counterLabelUI.setText('Trying to reconnect: ')
-                self.tryingToConnect()
-
-    def tryingToConnect(self):
-        while True:
-            self.exceptionCounter += 1
-            self.displayFramerateUI.setText(str(self.exceptionCounter))
-            time.sleep(1)
-            try:
-                requests.get(self.url, timeout=2.50)
-                self.counterLabelUI.setText('Framerate: ')
-                self.exceptionCounter = 0
-                self.connectedToService()
-                return
-            except Exception as exception:
-                print(exception)
-                pass
-
-    def run(self):
-        try:
-            requests.post(self.url, timeout=2.50)
-            self.counterLabelUI.setText('Framerate: ')
-            self.connectedToService()
-        except:
-            self.tryingToConnect()
-
-    def setFrameWidth(self, width):
-        self.imageWidth = width
-
-    def setFrameHeight(self, height):
-        self.imageHeight = height
-
-
-class AlertThread(QThread):
-    def run(self):
-        msg = QMessageBox()
-        msg.setWindowTitle("Alert")
-        msg.setText("This is an alert message")
-        msg.setIcon(QMessageBox.Warning)
-        msg.exec_()
+from .threads.camera_connection_thread import CameraConnectionThread
+from .threads.host_not_defined_alert_thread import HostNotDefinedAlertThread
 
 
 class CameraPanelWidget(BaseWidget):
     def __init__(self, stack=None, node=None):
         super(CameraPanelWidget, self).__init__(stack, PackageNameEnum.CameraPanel)
-        print("CameraPanelWidget")
 
         self.comboBox.currentIndexChanged.connect(self.setRobotOnScreen)
         self.setRobotOnScreen()
         self.settingsButtonUI.clicked.connect(self.settingsClicked)
 
-        self.th = Thread(host=self.host, displayFramerateUI=self.displayFramerateUI, counterLabelUI=self.counterLabelUI,
-                         imageWidth=int(self.imageWidthSliderUI.value()),
-                         imageHeight=int(self.imageHeightSliderUI.value()))
-        self.th.changePixmap.connect(self.displayImage)
-        self.th.start()
+        self.cameraConnectionThread = CameraConnectionThread(url=self.getRequestUrl(),
+                                                             displayFramerateUI=self.displayFramerateUI,
+                                                             counterLabelUI=self.counterLabelUI,
+                                                             imageWidth=int(self.imageWidthSliderUI.value()),
+                                                             imageHeight=int(self.imageHeightSliderUI.value()))
 
-        if self.host is None or self.host == '':
-            self.showAlertThatHostIsNotDefined()
+        self.cameraConnectionThread.changePixmap.connect(self.displayImage)
+        self.cameraConnectionThread.start()
 
         self.screenshotButtonUI.clicked.connect(self.captureScreenshot)
 
@@ -117,15 +39,20 @@ class CameraPanelWidget(BaseWidget):
 
     def initializeRobotSettings(self):
         sshData = self.data.get('ssh', {})
-
         self.host = sshData.get('host')
+
+        if self.host is None or self.host == '':
+            self.showAlertThatHostIsNotDefined()
+
         try:
-            if self.th is not None:
-                self.th.url = setRequestUrl(self.host)
-                self.th.host = self.host
-                # self.th.setHost(self.host)
+            if self.cameraConnectionThread is not None:
+                self.cameraConnectionThread.url = self.getRequestUrl()
+                self.cameraConnectionThread.host = self.host
         except AttributeError:
             pass
+
+    def getRequestUrl(self):
+        return 'http://' + self.host + ':8000/stream.mjpg'
 
     def getHeightRange(self):
         heightMaximum = self.imageHeightSpinBoxUI.maximum()
@@ -166,14 +93,14 @@ class CameraPanelWidget(BaseWidget):
     def sliderSetImageWidth(self):
         width = int(self.imageWidthSliderUI.value())
         self.imageWidthSpinBoxUI.setValue(width)
-        self.th.setFrameWidth(width)
+        self.cameraConnectionThread.setFrameWidth(width)
 
         self.heightAspectRatio(width)
 
     def sliderSetImageHeight(self):
         height = int(self.imageHeightSliderUI.value())
         self.imageHeightSpinBoxUI.setValue(height)
-        self.th.setFrameHeight(height)
+        self.cameraConnectionThread.setFrameHeight(height)
 
         self.widthAspectRatio(height)
 
@@ -182,7 +109,7 @@ class CameraPanelWidget(BaseWidget):
             return
         width = int(self.imageWidthSpinBoxUI.value())
         self.imageWidthSliderUI.setValue(width)
-        self.th.setFrameWidth(width)
+        self.cameraConnectionThread.setFrameWidth(width)
 
         self.heightAspectRatio(width)
 
@@ -191,13 +118,13 @@ class CameraPanelWidget(BaseWidget):
             return
         height = int(self.imageHeightSpinBoxUI.value())
         self.imageHeightSliderUI.setValue(height)
-        self.th.setFrameHeight(height)
+        self.cameraConnectionThread.setFrameHeight(height)
 
         self.widthAspectRatio(height)
 
     def showAlertThatHostIsNotDefined(self):
-        self.th1 = AlertThread()
-        self.th1.start()
+        self.hostNotDefinedAlertThread = HostNotDefinedAlertThread()
+        self.hostNotDefinedAlertThread.start()
 
     def captureScreenshot(self):
         try:
@@ -223,7 +150,7 @@ class CameraPanelWidget(BaseWidget):
             pass
 
     def onShtudownPlugin(self):
-        self.th.terminate()
+        self.cameraConnectionThread.terminate()
 
     def settingsClicked(self):
         self.stack.goToSettings(self.dataFilePath)

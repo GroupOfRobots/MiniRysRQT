@@ -263,6 +263,22 @@ background-color:none;</string>
         </layout>
        </item>
        <item>
+        <widget class="Line" name="line">
+         <property name="styleSheet">
+          <string notr="true">border: 1px solid black;</string>
+         </property>
+         <property name="lineWidth">
+          <number>0</number>
+         </property>
+         <property name="midLineWidth">
+          <number>0</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item alignment="Qt::AlignHCenter">
           <widget class="QLabel" name="counterLabelUI">
@@ -293,11 +309,27 @@ background-color:none;</string>
         </layout>
        </item>
        <item>
+        <widget class="Line" name="line_2">
+         <property name="styleSheet">
+          <string notr="true">border: 1px solid black;</string>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
         <layout class="QHBoxLayout" name="horizontalLayout_7">
          <item alignment="Qt::AlignHCenter">
           <widget class="QPushButton" name="screenshotButtonUI">
            <property name="cursor">
             <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">border: 1px solid black;
+border-radius: 5px;
+padding: 5px;
+background: gray;</string>
            </property>
            <property name="text">
             <string>Capture screenshot</string>
@@ -305,6 +337,16 @@ background-color:none;</string>
           </widget>
          </item>
         </layout>
+       </item>
+       <item>
+        <widget class="Line" name="line_3">
+         <property name="styleSheet">
+          <string notr="true">border: 1px solid black;</string>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QGroupBox" name="groupBox_2">

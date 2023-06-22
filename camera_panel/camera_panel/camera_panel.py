@@ -14,9 +14,6 @@ class CameraPanel(Plugin):
 
         context.add_widget(self._stack)
 
-    def closeEvent(self, event):
-        print('zczczszc')
-
     def shutdown_plugin(self):
         self._stack.mainChildWidget.onShtudownPlugin()
 
