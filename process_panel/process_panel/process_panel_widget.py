@@ -1,17 +1,18 @@
 # This Python file uses the following encoding: utf-8
-import threading
 
+import os
+import re
+
+import paramiko
+from ament_index_python import get_resource
 from python_qt_binding.QtCore import Qt, QTimer
 from python_qt_binding.QtGui import QIcon, QPixmap, QCursor
 from python_qt_binding.QtWidgets import QTableWidgetItem, QHeaderView, QPushButton, QAbstractItemView, QHBoxLayout, \
     QWidget
 from shared.base_widget.base_widget import BaseWidget
-from ament_index_python import get_resource
-
 from shared.enums import PackageNameEnum
-import os
 
-import paramiko
+PID_PROCESS_PATTERN = r"\b(\d+)\b"
 
 
 class ProcessPanelWidget(BaseWidget):
@@ -29,6 +30,7 @@ class ProcessPanelWidget(BaseWidget):
         if self.ssh:
             self.executeSshCommand()
             self.searchButtonUI.clicked.connect(self.executeSshCommand)
+            self.commandSearchQueryLineEditUI.editingFinished.connect(self.executeSshCommand)
             self.cyclicallExecuteSshCommand()
 
         self.processPanel.closePanelSignal.connect(self.onDestroy)
@@ -37,9 +39,6 @@ class ProcessPanelWidget(BaseWidget):
         self.timer = QTimer()
         self.timer.timeout.connect(self.executeSshCommand)
         self.timer.start(10000)
-        # self.timer = threading.Timer(5.0, self.cyclicallExecuteSshCommand)
-        # self.timer.start()
-        # self.executeSshCommand()
 
     def createSSHChannel(self):
         sshData = self.data.get('ssh', {})
@@ -52,63 +51,82 @@ class ProcessPanelWidget(BaseWidget):
         self.ssh = paramiko.SSHClient()
         self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
-        command = "ps -aux"
-
         try:
             pass
-            # self.ssh.connect(host, port, username, password, timeout=5)
+            self.ssh.connect(host, port, username, password, timeout=5)
 
         except BaseException as exception:
+            print("BaseException createSSHChannel")
             print(exception)
-            # self.commandOutputSignal.emit([command, "SSH ERROR", str(exception)])
         self.processTableWidgetUI.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
     def executeSshCommand(self):
         try:
-            # stdin, stdout, stderr = self.ssh.exec_command(command)
-            # output = stdout.readlines()
-            output = ["TEST"]
+            command = "ps -aux"
+            searchQuery = self.commandSearchQueryLineEditUI.text()
+            if searchQuery:
+                command = command + " | grep " + searchQuery
+            stdin, stdout, stderr = self.ssh.exec_command(command)
+            output = stdout.readlines()
+            stdin.flush()
+
             self.processTableWidgetUI.setRowCount(len(output))
 
-            index = 0
+            index = -1
             for line in output:
-                item = QTableWidgetItem(line)
-                cellButton = self.createCellButton()
-
-                self.processTableWidgetUI.setItem(index, 0, item)
-                self.processTableWidgetUI.setCellWidget(index, 1, cellButton)
                 index += 1
+                item = QTableWidgetItem(line)
+                self.processTableWidgetUI.setItem(index, 0, item)
+
+                pid = self.getProcessPid(line)
+                if pid is None:
+                    continue
+                cellButton = self.createCellButton(pid)
+
+                self.processTableWidgetUI.setCellWidget(index, 1, cellButton)
         except BaseException as exception:
+            print("BaseException executeSshCommand")
             print(exception)
 
-    def createCellButton(self):
+    def getProcessPid(self, line):
+        pids = re.findall(PID_PROCESS_PATTERN, line)
+        if len(pids):
+            return int(pids[0])
+        return None
+
+    def createCellButton(self, pid):
         cellWidget = QWidget()
         layout = QHBoxLayout(cellWidget)
         layout.setContentsMargins(0, 0, 0, 0)
 
-        # Create a QPushButton and add it to the layout
         button = QPushButton()
         button.setCursor(QCursor(Qt.PointingHandCursor))
 
-        # Set the icon for the button
         iconPath = os.path.join(self.packagePath, 'share', 'commands_panel', 'resource', 'imgs', "stopIcon.png")
         icon = QPixmap(iconPath)
         button.setIcon(QIcon(icon))
         layout.addWidget(button)
         layout.setAlignment(button, Qt.AlignCenter)
 
-        button.clicked.connect(self.test)
+        button.clicked.connect(lambda: self.killProcess(pid))
 
         return cellWidget
 
-    def test(self):
-        print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+    def killProcess(self, pid):
+        try:
+            killCommand = f"sudo kill -9 {pid}"
 
-    def initializeRobotSettings(self):
-        print("initializeRobotSettings")
-        pass
+            stdin, stdout, stderr = self.ssh.exec_command(killCommand)
+            stdin.write('minirys\n')
+            stdin.flush()
+            self.executeSshCommand()
+
+        except Exception as exception:
+            print("Exception killProcess")
+            print(exception)
 
     def onDestroy(self):
         if self.timer:
-            # self.timer.cancel()
             self.timer.stop()
+        if self.ssh:
+            self.ssh.close()

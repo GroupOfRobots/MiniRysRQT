@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>709</width>
-    <height>587</height>
+    <height>569</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -131,7 +131,7 @@ background-color:none;</string>
         </widget>
        </item>
        <item alignment="Qt::AlignVCenter">
-        <widget class="QLineEdit" name="lineEdit">
+        <widget class="QLineEdit" name="commandSearchQueryLineEditUI">
          <property name="minimumSize">
           <size>
            <width>0</width>
