@@ -33,6 +33,7 @@ class CommandExecuteElementWidget(QWidget):
         self.data = data
         self.commandOutputSignal = commandOutputSignal
 
+        self.pids = []
         self.process = None
 
         self.loadUi()
@@ -60,35 +61,42 @@ class CommandExecuteElementWidget(QWidget):
 
     def stopCommand(self):
         if self.command.get('executeViaSsh'):
-            a = paramiko.SSHClient()
-            a.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-            sshData = self.data.get('ssh', {})
-
-            host = sshData.get('host')
-            port = sshData.get('port')
-            username = sshData.get('username')
-            password = sshData.get('password')
-            a.connect(host, port, username, password, timeout=5)
             running_command = self.command.get('command')
+            print("self.pids")
             print(self.pids)
-            for pid in self.pids:
-                command = f'sudo kill -9 {pid}'
-                print("lillllllll")
-                print(command)
+            if self.pids and len(self.pids) and None:
+                self.killProcessesWithPid()
+                # break
+            else:
+                commands = re.split(r"\s*&&\s*", running_command)
+                print(commands)
                 try:
-                    stdin, stdout, stderr = self.ssh.exec_command(command)
-                    stdin.write('minirys\n')
-                    stdin.flush()
-                    print(stdin)
-                    print(stdout)
-                    output = stdout.readlines()
-                    errors = stderr.readlines()
-                    print(output)
-                    print(errors)
+                    for command in commands:
+                        executeCommand = f'pgrep -af "{command}"'
+                        print(executeCommand)
+                        stdin, stdout, stderr = self.ssh.exec_command(executeCommand)
+                    # stdin.write('minirys\n')
+                        stdin.flush()
+
+                        line =stdout.readline()
+                        print("line")
+                        line=line.rstrip()
+                        print(line.rstrip())
+                        print(command)
+                        print(line.endswith(str(command)))
+                        if not line.endswith(command):
+                            continue
+                        match = re.match(r"^(\d+)", line)
+                        if match:
+                            pid = match.group(1)
+                            print("PID:", pid)
+                            pid = self.safeCast(match.group(1), int)
+                            print(pid)
+                            if pid is not None:
+                                print("heeeeeeereeeeeee")
+                                self.killProcessWithPid(pid)
                 except Exception as exception:
                     print("aaaaaawwwwwwwwwww")
-                # break
-
 
         else:
             print(self.process)
@@ -97,6 +105,34 @@ class CommandExecuteElementWidget(QWidget):
         self.commandThread.join()
         self.isCommandRunning = False
         self.setRunningStatusIcon(RunStatusIcon.RUN)
+
+    def safeCast(self,val, to_type, default=None):
+        try:
+            return to_type(val)
+        except (ValueError, TypeError):
+            print("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq")
+            return default
+
+    def killProcessesWithPid(self):
+        for pid in self.pids:
+            self.killProcessWithPid(pid)
+
+    def killProcessWithPid(self, pid):
+        command = f'sudo kill -9 {pid}'
+        print("lillllllll")
+        print(command)
+        try:
+            stdin, stdout, stderr = self.ssh.exec_command(command)
+            stdin.write('minirys\n')
+            stdin.flush()
+            print(stdin)
+            print(stdout)
+            output = stdout.readlines()
+            errors = stderr.readlines()
+            print(output)
+            print(errors)
+        except Exception as exception:
+            print("aaaaaawwwwwwwwwww")
 
     def runCommand(self):
         self.isCommandRunning = True
@@ -144,45 +180,30 @@ class CommandExecuteElementWidget(QWidget):
             transport = self.ssh.get_transport()
             self.channel = transport.open_session()
 
-            # renamed_command="bash -c \"exec -a name1234" + command+"\""
-            # print(renamed_command)
 
-            renamed_command = command + " & echo $!"
-            # renamed_command = command
-            # print(renamed_command)
 
-            stdin, stdout, stderr = self.ssh.exec_command(renamed_command)
+            stdin, stdout, stderr = self.ssh.exec_command(command)
             stdout.channel.set_combine_stderr(True)
 
             self.pids = []
             line = stdout.readline()
-            # print(line)
-
-            self.pid = int(line)
-            self.pids.append(self.pid)
 
             self.commandOutputSignal.emit([command, line, ''])
 
             while self.isCommandRunning:
                 line = stdout.readline()
-                # error = stderr.readline()
                 self.commandOutputSignal.emit([command, line, ''])
-                # print(line)
                 pattern = "process started with pid \[(\d+)\]"
                 pattern2 = "\[(\d+)\]"
                 match = re.search(pattern, line)
                 match2 = re.search(pattern2, line)
-                # print("match123456789", match, match2),
                 if match:
                     pid = match.group(1)
-                    # print("match", pid)
                     self.pids.append(int(pid))
                 elif match2:
                     pid = match2.group(1)
-                    # print("match", pid)
                     self.pids.append(int(pid))
 
-                # print(line, '')
                 if not line:
                     self.isCommandRunning = False
                     break
