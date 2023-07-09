@@ -1,21 +1,14 @@
 # This Python file uses the following encoding: utf-8
-import json
-import os
 
-# from PyQt5.QtWidgets import QAbstractSpinBox
-# from python_qt_binding.QtWidgets 
-from python_qt_binding.QtWidgets import QAbstractSpinBox
+from python_qt_binding.QtCore import Qt,pyqtSignal
+from python_qt_binding.QtGui import QColor, QFont,QCursor,QCursor,QTextCharFormat
+
+from python_qt_binding.QtWidgets import QPlainTextEdit, QVBoxLayout, QWidget,QPushButton
+
 from shared.base_widget.base_widget import BaseWidget
-
-from std_msgs.msg import Float32
-from ament_index_python import get_resource
-from python_qt_binding import loadUi
-
 from shared.enums import PackageNameEnum
-from .command_execute_element import CommandExecuteElementWidget
 
-from python_qt_binding.QtCore import pyqtSignal, QObject
-from python_qt_binding.QtGui import QColor, QFont
+from .command_execute_element import CommandExecuteElementWidget
 
 
 class CommandsPanelWidget(BaseWidget):
@@ -26,12 +19,50 @@ class CommandsPanelWidget(BaseWidget):
 
         self.commandOutputSignal.connect(self.onCommandOutputSignal)
 
-        # self.comboBox.currentIndexChanged.connect(self.setRobotOnScreen)
         self.setRobotOnScreen()
 
-        self.logFormat = self.logsPlainTextEditUI.currentCharFormat()
-        self.clearConsoleButtonUI.clicked.connect(self.clearConsole)
+        self.logFormat = QTextCharFormat()
+        self.clearAllConsoleButtonUI.clicked.connect(self.clearAllTabs)
+        self.closeAllConsoleButtonUI.clicked.connect(self.closeAllTabs)
         self.settingsButtonUI.clicked.connect(self.settingsClicked)
+
+        self.logsTabWidgetUI.setTabsClosable(True)
+        self.logsTabWidgetUI.tabCloseRequested.connect(self.tabCloseRequested)
+
+        self.tabDictionary = {}
+
+    def clearAllTabs(self):
+        for plainTextEdit in self.tabDictionary.values():
+            plainTextEdit.clear()
+
+    def closeAllTabs(self):
+        self.tabDictionary.clear()
+        self.logsTabWidgetUI.clear()
+
+    def addTab(self, tabName):
+        plainTextEdit = QPlainTextEdit()
+        plainTextEdit.setReadOnly(True)
+        button = QPushButton("CLEAR")
+        button.setCursor(QCursor(Qt.PointingHandCursor))
+        button.clicked.connect(lambda: plainTextEdit.clear())
+        button.setStyleSheet("border: 1px solid black;\nborder-radius: 5px;\npadding: 5px;\nbackground: gray;")
+        button.setMinimumWidth(150)
+        button.setMaximumWidth(150)
+
+        # Create a widget to hold the plain text edit (optional)
+        widget = QWidget()
+        layout = QVBoxLayout(widget)
+        layout.addWidget(button)
+        layout.addWidget(plainTextEdit)
+        self.tabDictionary[tabName] = plainTextEdit
+
+        self.logsTabWidgetUI.insertTab(0, widget, tabName)
+        self.logsTabWidgetUI.setCurrentIndex(0)
+
+    def tabCloseRequested(self, index):
+        self.tabDictionary.pop(self.logsTabWidgetUI.tabText(index))
+
+        self.logsTabWidgetUI.removeTab(index)
 
     def initializeRobotSettings(self):
         for index in range(self.commandsBoxLayoutUI.count()):
@@ -43,32 +74,32 @@ class CommandsPanelWidget(BaseWidget):
             element = CommandExecuteElementWidget(command, self.data, self.commandOutputSignal)
             self.commandsBoxLayoutUI.addWidget(element)
 
-    def clearConsole(self):
-        self.logsPlainTextEditUI.clear()
-
     def onCommandOutputSignal(self, commandOutput):
         [command, output, errors] = commandOutput
 
-        self.logFormat.setFontWeight(QFont.Bold)
-        self.insertLog("black", "COMMAND:")
-        self.logFormat.setFontWeight(QFont.Normal)
+        if self.tabDictionary.get(command) is None:
+            self.addTab(command)
 
         if (len(command)):
-            self.insertLog("blue", command + "\n")
+            self.logFormat.setFontWeight(QFont.Bold)
+            self.insertLog("black", "COMMAND:", command)
+            self.logFormat.setFontWeight(QFont.Normal)
+
+            self.insertLog("blue", command + "\n", command)
 
         if len(output):
-            self.insertLog("black", output)
+            self.insertLog("black", output, command)
 
         if len(errors):
-            self.insertLog("red", errors)
+            self.insertLog("red", errors, command)
 
-        self.logsPlainTextEditUI.insertPlainText("\n")
+    def insertLog(self, colorName, log, command):
 
-    def insertLog(self, colorName, log):
         color = QColor(colorName)
         self.logFormat.setForeground(color)
-        self.logsPlainTextEditUI.setCurrentCharFormat(self.logFormat)
-        self.logsPlainTextEditUI.insertPlainText(log + "\n")
+        plainTextEdit = self.tabDictionary.get(command)
+        plainTextEdit.setCurrentCharFormat(self.logFormat)
+        plainTextEdit.insertPlainText(log + "\n")
 
     def settingsClicked(self):
         self.stack.goToSettings(self.dataFilePath)

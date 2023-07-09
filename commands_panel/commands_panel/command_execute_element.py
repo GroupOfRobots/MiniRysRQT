@@ -1,23 +1,15 @@
 # This Python file uses the following encoding: utf-8
-import logging
-from enum import Enum
+import os
 import re
+import subprocess
+import threading
+from enum import Enum
 
 import paramiko
-from python_qt_binding.QtCore import QSize
-from python_qt_binding.QtGui import QIcon, QPixmap
-from shared.inner_communication import innerCommunication
-from python_qt_binding.QtWidgets import QPushButton, QWidget, QLineEdit, QTableWidget, QTableWidgetItem, QMessageBox
 from ament_index_python import get_resource
 from python_qt_binding import loadUi
-
-import threading
-import time
-
-import json
-import os
-import subprocess
-import select
+from python_qt_binding.QtGui import QIcon, QPixmap
+from python_qt_binding.QtWidgets import QWidget
 
 
 class RunStatusIcon(str, Enum):
@@ -75,12 +67,12 @@ class CommandExecuteElementWidget(QWidget):
                         executeCommand = f'pgrep -af "{command}"'
                         print(executeCommand)
                         stdin, stdout, stderr = self.ssh.exec_command(executeCommand)
-                    # stdin.write('minirys\n')
+                        # stdin.write('minirys\n')
                         stdin.flush()
 
-                        line =stdout.readline()
+                        line = stdout.readline()
                         print("line")
-                        line=line.rstrip()
+                        line = line.rstrip()
                         print(line.rstrip())
                         print(command)
                         print(line.endswith(str(command)))
@@ -106,7 +98,7 @@ class CommandExecuteElementWidget(QWidget):
         self.isCommandRunning = False
         self.setRunningStatusIcon(RunStatusIcon.RUN)
 
-    def safeCast(self,val, to_type, default=None):
+    def safeCast(self, val, to_type, default=None):
         try:
             return to_type(val)
         except (ValueError, TypeError):
@@ -180,8 +172,6 @@ class CommandExecuteElementWidget(QWidget):
             transport = self.ssh.get_transport()
             self.channel = transport.open_session()
 
-
-
             stdin, stdout, stderr = self.ssh.exec_command(command)
             stdout.channel.set_combine_stderr(True)
 
@@ -207,13 +197,10 @@ class CommandExecuteElementWidget(QWidget):
                 if not line:
                     self.isCommandRunning = False
                     break
-                # print(line, end="")
-            print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
             output = stdout.readlines()
             errors = stderr.readlines()
             outputString = ''.join(output)
             errorsString = ''.join(errors)
-            # print(self.ssh.exit_status_ready())
             self.ssh.close()
 
             self.commandOutputSignal.emit([command, outputString, errorsString])
