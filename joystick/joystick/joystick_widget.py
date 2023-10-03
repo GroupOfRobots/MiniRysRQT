@@ -1,21 +1,17 @@
 # This Python file uses the following encoding: utf-8
-import json
 import math
-import os
 import threading
 import time
 
-from ament_index_python import get_resource
 from python_qt_binding import QtCore
-from python_qt_binding import loadUi
 from python_qt_binding.QtCore import Qt, QPoint
 from python_qt_binding.QtGui import QPainter, QBrush, QPen
 from shared.base_widget.base_widget import BaseWidget
 from shared.enums import ControlKeyEnum
-
-from python_qt_binding.QtWidgets import QWidget
-
 from shared.enums import PackageNameEnum
+
+from .services.key_press_service import KeyPressService
+from .services.engines_value_service import EnginesValueService
 
 
 class JoystickWidget(BaseWidget):
@@ -29,9 +25,6 @@ class JoystickWidget(BaseWidget):
     def __init__(self, stack=None):
         super(JoystickWidget, self).__init__(stack, PackageNameEnum.Joystick)
 
-        self.pressedKeys = []
-        self.xMove = 0
-        self.yMove = 0
         self.keyPressedThread = threading.Thread()
 
         self.setMouseTracking(False)
@@ -56,6 +49,8 @@ class JoystickWidget(BaseWidget):
 
     def initializeRobotSettings(self):
         self.controlKeys = self.data.get('controlKeys')
+        self.keyPressService = KeyPressService(self.controlKeys)
+        self.enginesValueService = EnginesValueService(self.data.get("joystick", {}))
 
         for key in self.controlKeys:
             controlValue = self.controlKeys[key].upper()
@@ -112,81 +107,44 @@ class JoystickWidget(BaseWidget):
         self.innerEllipseRx = self.widgetRx - self.joystickRx
         self.innerEllipseRy = self.widgetRy - self.joystickRy
 
-    def getValue(self, data, fieldName):
-        return int(data.get(fieldName, 0))
+
+    def calculateNewJoystickPosition(self):
+        x = self.joystickPosition.x() + self.keyPressService.xMove
+        y = self.joystickPosition.y() + self.keyPressService.yMove
+
+        return x, y
+
+    def updateJoystickPosition(self, x, y):
+        self.joystickPosition.setX(x)
+        self.joystickPosition.setY(y)
+        self.update()
+
+    def shouldUpdateJoystick(self, x, y):
+        return self.checkIfPointIsInEllipse(x, y) and not (
+                ControlKeyEnum.STABLE in self.keyPressService.pressedKeys and len(
+            self.keyPressService.pressedKeys) == 1)
 
     def calculateKeyPressed(self):
         while self.keyPressedFlag:
-            x = self.joystickPosition.x() + self.xMove
-            y = self.joystickPosition.y() + self.yMove
+            x, y = self.calculateNewJoystickPosition()
 
-            if self.checkIfPointIsInEllipse(x, y) and not (
-                    ControlKeyEnum.STABLE in self.pressedKeys and len(self.pressedKeys) == 1):
-                self.joystickPosition.setX(x)
-                self.joystickPosition.setY(y)
-
+            if self.shouldUpdateJoystick(x, y):
                 cartesianPositionX = x - self.joystickWidget.width() * 0.5
                 cartesianPositionY = self.joystickWidget.height() * 0.5 - y
 
                 angle = math.radians(math.atan2(cartesianPositionY, cartesianPositionX) / math.pi * 180)
-
-                print(angle)
 
                 ellipseR = self.innerEllipseRx * self.innerEllipseRy * 0.25 / (math.sqrt(
                     (self.innerEllipseRx * 0.5) ** 2 * math.sin(angle) ** 2 + (
                             self.innerEllipseRy * 0.5) ** 2 * math.cos(angle) ** 2))
                 joystickR = math.sqrt(cartesianPositionX ** 2 + cartesianPositionY ** 2)
 
-                print(angle, ellipseR, joystickR)
+                leftEngine, rightEngine = self.enginesValueService.calculateEnginesValue(angle, ellipseR, joystickR)
+                print(leftEngine, rightEngine,"aaa")
 
-                joystickData = self.data.get("joystick", {})
-                joystickForwardData = joystickData.get("forward", {})
-                joystickRightData = joystickData.get("right", {})
-                joystickBackwartdData = joystickData.get("backward", {})
-                joystickLeftData = joystickData.get("right", {})
+                # print(angle, ellipseR, joystickR)
 
-                joystickDeflection = joystickR / ellipseR
-
-                leftEngine = 0
-                rightEngine = 0
-
-                if angle > 0 and (angle <= math.pi * 0.5):
-                    angleFactor = angle / (math.pi * 0.5)
-                    leftEngine = self.getValue(joystickRightData, "leftEngine") * (1 - angleFactor) \
-                                 + self.getValue(joystickForwardData, "leftEngine") * angleFactor
-
-                    rightEngine = self.getValue(joystickRightData, "rightEngine") * (1 - angleFactor) \
-                                  + self.getValue(joystickForwardData, "rightEngine") * angleFactor
-                elif angle > math.pi * 0.5:
-                    angleFactor = (angle - (math.pi * 0.5)) / (math.pi * 0.5)
-                    leftEngine = self.getValue(joystickForwardData, "leftEngine") * (1 - angleFactor) \
-                                 + self.getValue(joystickLeftData, "leftEngine") * angleFactor
-
-                    rightEngine = self.getValue(joystickForwardData, "rightEngine") * (1 - angleFactor) \
-                                  + self.getValue(joystickLeftData, "rightEngine") * angleFactor
-
-
-                elif angle < 0 and (angle >= -math.pi * 0.5):
-                    angleFactor = abs(angle / (math.pi * 0.5))
-                    leftEngine = self.getValue(joystickRightData, "leftEngine") * (1 - angleFactor) \
-                                 + self.getValue(joystickBackwartdData, "leftEngine") * angleFactor
-
-                    rightEngine = self.getValue(joystickRightData, "rightEngine") * (1 - angleFactor) \
-                                  + self.getValue(joystickBackwartdData, "rightEngine") * angleFactor
-
-
-
-                elif angle < (-math.pi * 0.5):
-                    angleFactor = abs((angle + (math.pi * 0.5)) / (math.pi * 0.5))
-                    leftEngine = self.getValue(joystickBackwartdData, "leftEngine") * (1 - angleFactor) \
-                                 + self.getValue(joystickLeftData, "leftEngine") * angleFactor
-
-                    rightEngine = self.getValue(joystickBackwartdData, "rightEngine") * (1 - angleFactor) \
-                                  + self.getValue(joystickLeftData, "rightEngine") * angleFactor
-
-                print("engine", leftEngine, rightEngine)
-                print("engine", leftEngine*joystickDeflection, rightEngine*joystickDeflection)
-                self.update()
+                self.updateJoystickPosition(x, y)
                 time.sleep(0.001)
             else:
                 time.sleep(0.1)
@@ -204,25 +162,9 @@ class JoystickWidget(BaseWidget):
     def keyPressEvent(self, event):
         if event.isAutoRepeat():
             return
-        key = event.key()
-
-        if key == self.controlKeys[ControlKeyEnum.FORWARD]:
-            self.pressedKeys.append(ControlKeyEnum.FORWARD)
-            self.yMove = -1
-        elif key == self.controlKeys[ControlKeyEnum.RIGHT]:
-            self.pressedKeys.append(ControlKeyEnum.RIGHT)
-            self.xMove = 1
-        elif key == self.controlKeys[ControlKeyEnum.BACKWARD]:
-            self.pressedKeys.append(ControlKeyEnum.BACKWARD)
-            self.yMove = 1
-        elif key == self.controlKeys[ControlKeyEnum.LEFT]:
-            self.pressedKeys.append(ControlKeyEnum.LEFT)
-            self.xMove = -1
-        elif key == self.controlKeys[ControlKeyEnum.STABLE]:
-            self.pressedKeys.append(ControlKeyEnum.STABLE)
-        else:
-            event.accept()
+        if not self.keyPressService.onKeyPressed(event):
             return
+
         if not self.keyPressedThread.is_alive():
             self.keyPressedFlag = True
             self.keyPressedThread = threading.Thread(target=self.calculateKeyPressed, args=())
@@ -231,38 +173,11 @@ class JoystickWidget(BaseWidget):
     def keyReleaseEvent(self, event):
         if event.isAutoRepeat():
             return
-        key = event.key()
-        if key == self.controlKeys[ControlKeyEnum.FORWARD]:
-            self.pressedKeys.remove(ControlKeyEnum.FORWARD)
-            if ControlKeyEnum.BACKWARD in self.pressedKeys:
-                self.yMove = 1
-            else:
-                self.yMove = 0
-        elif key == self.controlKeys[ControlKeyEnum.RIGHT]:
-            self.pressedKeys.remove(ControlKeyEnum.RIGHT)
-            if ControlKeyEnum.LEFT in self.pressedKeys:
-                self.xMove = -1
-            else:
-                self.xMove = 0
-        elif key == self.controlKeys[ControlKeyEnum.BACKWARD]:
-            self.pressedKeys.remove(ControlKeyEnum.BACKWARD)
-            if ControlKeyEnum.FORWARD in self.pressedKeys:
-                self.yMove = -1
-            else:
-                self.yMove = 0
-        elif key == self.controlKeys[ControlKeyEnum.LEFT]:
-            self.pressedKeys.remove(ControlKeyEnum.LEFT)
-            if ControlKeyEnum.RIGHT in self.pressedKeys:
-                self.xMove = 1
-            else:
-                self.xMove = 0
-        elif key == QtCore.Qt.Key_Q:
-            self.pressedKeys.remove(ControlKeyEnum.STABLE)
-        else:
-            event.accept()
+
+        if not self.keyPressService.onKeyReleaseEvent(event):
             return
 
-        if len(self.pressedKeys) == 0:
+        if len(self.keyPressService.pressedKeys) == 0:
             self.keyPressedFlag = False
             self.keyPressedThread.join()
             self.returnToCenter()
