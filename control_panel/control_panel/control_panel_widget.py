@@ -1,13 +1,11 @@
 # This Python file uses the following encoding: utf-8
-import os
 
 from python_qt_binding.QtCore import Qt
-
-from shared.enums import ControlKeyEnum, PackageNameEnum
 from shared.base_widget.base_widget import BaseWidget
+from shared.enums import ControlKeyEnum, PackageNameEnum
 
-from .elements.button import Button
 from .elements.balance_publisher import BalancePublisher
+from .elements.button import Button
 from .elements.key_state import getKeyState
 from .elements.message_service import MessageService
 

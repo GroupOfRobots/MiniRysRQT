@@ -17,10 +17,10 @@ from shared.enums import PackageNameEnum
 class FanPanelWidget(BaseWidget):
     activeRobotsMap = {}
 
-    def __init__(self, stack=None, node=None, fanPanel=None):
+    def __init__(self, stack=None, node=None, mainPanel=None):
         super(FanPanelWidget, self).__init__(stack, PackageNameEnum.FanPanel)
 
-        self.fanPanel = fanPanel
+        self.fanPanel = mainPanel
         self.id = None
         self.setRobotOnScreen()
 

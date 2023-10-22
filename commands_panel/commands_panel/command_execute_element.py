@@ -1,8 +1,12 @@
 # This Python file uses the following encoding: utf-8
+import asyncio
 import os
 import re
+import shlex
+import signal
 import subprocess
 import threading
+import time
 from enum import Enum
 
 import paramiko
@@ -13,6 +17,7 @@ from python_qt_binding.QtWidgets import QWidget
 
 
 class RunStatusIcon(str, Enum):
+    RUNNING = 'runningArrow.png'
     RUN = 'runArrow.png'
     STOP = 'stopIcon.png'
 
@@ -42,7 +47,7 @@ class CommandExecuteElementWidget(QWidget):
             self.stopCommand()
 
         else:
-            self.setRunningStatusIcon(RunStatusIcon.STOP)
+            self.setRunningStatusIcon(RunStatusIcon.RUNNING)
             self.commandThread = threading.Thread(target=self.runCommand)
             self.commandThread.start()
 
@@ -52,6 +57,7 @@ class CommandExecuteElementWidget(QWidget):
         self.commandButtonUI.setIcon(QIcon(icon))
 
     def stopCommand(self):
+        print("stopCommand")
         if self.command.get('executeViaSsh'):
             running_command = self.command.get('command')
             print("self.pids")
@@ -91,7 +97,13 @@ class CommandExecuteElementWidget(QWidget):
                     print("aaaaaawwwwwwwwwww")
 
         else:
-            print(self.process)
+            print("self.process123456")
+            self.process.send_signal(signal.SIGINT)
+
+            # print(self.process)
+            # # os.kill(self.process.pid, signal.SIGTERM)
+            # # self.process.send_signal(signal.SIGTERM)
+            self.process.terminate()
             self.process.kill()
 
         self.commandThread.join()
@@ -128,18 +140,20 @@ class CommandExecuteElementWidget(QWidget):
 
     def runCommand(self):
         self.isCommandRunning = True
-
         if self.command.get('executeViaSsh'):
             self.executeCommandViaSsh()
         else:
             self.executeCommandLocaly()
         self.isCommandRunning = False
+        print("wwwwwwwwwwwwwwwwwwwwwwwwwwwww")
         self.setRunningStatusIcon(RunStatusIcon.RUN)
 
     def executeCommandLocaly(self):
         command = self.command.get('command', '')
 
-        self.process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        self.process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE,
+                                        stderr=subprocess.PIPE, stdin=subprocess.PIPE)
+
         out, err = self.process.communicate()
 
         outputString = out.decode("utf-8")
@@ -149,7 +163,6 @@ class CommandExecuteElementWidget(QWidget):
 
         self.commandOutputSignal.emit([command, outputString, errorsString])
 
-        # self.process.wait()
 
     def executeCommandViaSsh(self):
         sshData = self.data.get('ssh', {})

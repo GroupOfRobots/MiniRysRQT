@@ -10,8 +10,8 @@ from shared.base_widget.base_widget import BaseWidget
 from shared.enums import ControlKeyEnum
 from shared.enums import PackageNameEnum
 
-from .services.key_press_service import KeyPressService
 from .services.engines_value_service import EnginesValueService
+from .services.key_press_service import KeyPressService
 
 
 class JoystickWidget(BaseWidget):
@@ -22,7 +22,7 @@ class JoystickWidget(BaseWidget):
     MARGIN = (1 - BOUNDARY_DIAMETER) / 2
     MARGIN_HORIZONTAL = 2 * MARGIN
 
-    def __init__(self, stack=None):
+    def __init__(self, stack=None, node=None):
         super(JoystickWidget, self).__init__(stack, PackageNameEnum.Joystick)
 
         self.keyPressedThread = threading.Thread()
@@ -107,7 +107,6 @@ class JoystickWidget(BaseWidget):
         self.innerEllipseRx = self.widgetRx - self.joystickRx
         self.innerEllipseRy = self.widgetRy - self.joystickRy
 
-
     def calculateNewJoystickPosition(self):
         x = self.joystickPosition.x() + self.keyPressService.xMove
         y = self.joystickPosition.y() + self.keyPressService.yMove
@@ -140,7 +139,7 @@ class JoystickWidget(BaseWidget):
                 joystickR = math.sqrt(cartesianPositionX ** 2 + cartesianPositionY ** 2)
 
                 leftEngine, rightEngine = self.enginesValueService.calculateEnginesValue(angle, ellipseR, joystickR)
-                print(leftEngine, rightEngine,"aaa")
+                print(leftEngine, rightEngine, "aaa")
 
                 # print(angle, ellipseR, joystickR)
 

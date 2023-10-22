@@ -50,7 +50,6 @@ class DisplayProcessService:
         button.setIcon(QIcon(icon))
         layout.addWidget(button)
         layout.setAlignment(button, Qt.AlignCenter)
-
         button.clicked.connect(lambda: self.killProcess(pid))
 
         return cellWidget

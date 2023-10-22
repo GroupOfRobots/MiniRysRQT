@@ -11,7 +11,7 @@ class Joystick(Plugin):
 
         self.setObjectName('Joystick')
 
-        self._stack = JoystickStack()
+        self._stack = JoystickStack(self._node)
         self._stack.setWindowTitle('Joystick')
 
         setWidgetSerialNumber(context, self._stack)

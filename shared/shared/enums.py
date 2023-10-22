@@ -41,7 +41,9 @@ class PackageNameEnum(str, Enum):
     Dashboard = 'dashboard'
     DashboardDistanceSensors = 'dashboard_distance_sensors',
     DeletedRobotScreenWidget = 'shared',
+    NoRobotConfigurationScreenWidget = 'shared1',
     CameraPanel = 'camera_panel',
+    ProcessPanel = 'process_panel',
 
 
 packageNameToUIFileMap = {
@@ -53,5 +55,7 @@ packageNameToUIFileMap = {
     PackageNameEnum.Dashboard: 'dashboard.ui',
     PackageNameEnum.DashboardDistanceSensors: 'dashboard_distance_sensors.ui',
     PackageNameEnum.DeletedRobotScreenWidget: 'deleted_robot.ui',
-    PackageNameEnum.CameraPanel: 'camera_panel.ui'
+    PackageNameEnum.NoRobotConfigurationScreenWidget: 'no_robot_configuration.ui',
+    PackageNameEnum.CameraPanel: 'camera_panel.ui',
+    PackageNameEnum.ProcessPanel: 'process_panel.ui'
 }

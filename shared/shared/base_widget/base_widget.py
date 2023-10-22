@@ -4,18 +4,15 @@ import os
 from abc import abstractmethod
 
 from ament_index_python import get_resource
+from python_qt_binding import loadUi
 from python_qt_binding.QtCore import Qt
 from python_qt_binding.QtWidgets import QWidget
-from shared.inner_communication import innerCommunication
-from python_qt_binding import loadUi
-
-from ament_index_python import get_resource
-
 from shared.enums import packageNameToUIFileMap
+from shared.inner_communication import innerCommunication
 
 
 class BaseWidget(QWidget):
-    def __init__(self, stack=None, packageName =None):
+    def __init__(self, stack=None, packageName=None):
         super(BaseWidget, self).__init__()
         self.stack = stack
         self.packageName = packageName
@@ -35,11 +32,15 @@ class BaseWidget(QWidget):
         innerCommunication.addRobotSignal.connect(self.onAddRobotSignal)
         innerCommunication.updateRobotSignal.connect(self.onUpdateRobotSignal)
 
-    def initializeRobotsOptions(self):
+    def getDataFilePath(self):
         _, shared_package_path = get_resource('packages', 'shared')
-        dataFilePath = os.path.join(shared_package_path, 'share', 'shared', 'data', 'robots')
+        return os.path.join(shared_package_path, 'share', 'shared', 'data', 'robots')
 
-        for index, fileName in enumerate(os.listdir(dataFilePath)):
+    def initializeRobotsOptions(self):
+        dataFilePath = self.getDataFilePath()
+
+        files = enumerate(os.listdir(dataFilePath))
+        for index, fileName in files:
             filePath = dataFilePath + '/' + fileName
             dataFile = open(filePath)
             dataFromFile = json.load(dataFile)
@@ -52,7 +53,7 @@ class BaseWidget(QWidget):
 
         self.loadData(event)
 
-        robotName = self.data.get('robotName','')
+        robotName = self.data.get('robotName', '')
         self.comboBox.setItemText(index, robotName)
 
         if index == self.comboBox.currentIndex():
@@ -71,7 +72,7 @@ class BaseWidget(QWidget):
 
     def onAddRobotSignal(self, signalData):
         self.loadData(signalData)
-        self.addItemData( self.data, signalData['filePath'])
+        self.addItemData(self.data, signalData['filePath'])
 
     def setRobotOnScreen(self):
         currentData = self.comboBox.currentData()
@@ -88,7 +89,6 @@ class BaseWidget(QWidget):
         dataFile.close()
 
         self.namespace = self.data.get('namespace', '')
-
 
     def addItemData(self, data, filePath):
         id = data.get('id', None)
@@ -110,5 +110,6 @@ class BaseWidget(QWidget):
 
     def loadUI(self):
         _, packagePath = get_resource('packages', self.packageName)
-        uiFile = os.path.join(packagePath, 'share', self.packageName, 'resource', packageNameToUIFileMap[self.packageName])
+        uiFile = os.path.join(packagePath, 'share', self.packageName, 'resource',
+                              packageNameToUIFileMap[self.packageName])
         loadUi(uiFile, self)

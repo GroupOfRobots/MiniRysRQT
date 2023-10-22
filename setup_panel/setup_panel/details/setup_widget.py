@@ -4,29 +4,26 @@ import os
 
 from ament_index_python import get_resource
 from python_qt_binding import loadUi
-from python_qt_binding.QtWidgets import QWidget, QTableWidgetItem, QMessageBox
-from shared.enums import ControlKeyEnum
+from python_qt_binding.QtWidgets import QWidget, QMessageBox
 from shared.inner_communication import innerCommunication
 
 from .commands.commands import Commands
+from .controls.controls import Controls
 from .pid.pid_widget import PidWidget
 from .ssh_data.ssh_data import SshData
-from .controls.controls import Controls
 
 
 class SetupWidget(QWidget):
-    def __init__(self, stack=None, dataFilePath=None, addMode = False):
+    def __init__(self, stack=None, dataFilePath=None, addMode=False):
         super(SetupWidget, self).__init__()
 
         self.stack = stack
         self.addMode = addMode
 
-
         _, self.sharedPath = get_resource('packages', 'shared')
         _, self.packagePath = get_resource('packages', 'setup_panel')
         ui_file = os.path.join(self.packagePath, 'share', 'setup_panel', 'resource', 'setup.ui')
         loadUi(ui_file, self)
-
 
         self.defaultFilePath = os.path.join(self.sharedPath, 'share', 'shared', 'data', 'default.json')
         if dataFilePath:

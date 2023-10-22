@@ -14,14 +14,14 @@ from .services.kill_local_process_service import KillLocalProcessService
 from .services.display_process_service import DisplayProcessService
 
 PID_PROCESS_PATTERN = r"\b(\d+)\b"
-
+TIMER_INTERVAL=5000
 
 class ProcessPanelWidget(BaseWidget):
-    def __init__(self, stack=None, node=None, processPanel=None):
+    def __init__(self, stack=None, node=None, mainPanel=None):
         super(ProcessPanelWidget, self).__init__(stack, PackageNameEnum.ProcessPanel)
         _, self.packagePath = get_resource('packages', 'commands_panel')
 
-        self.processPanel = processPanel
+        self.processPanel = mainPanel
         self.setRobotOnScreen()
         self.sshCheckboxUI.stateChanged.connect(self.setupExecution)
 
@@ -58,9 +58,8 @@ class ProcessPanelWidget(BaseWidget):
             self.searchButtonUI.clicked.connect(self.executeSshCommand)
 
             self.timer.timeout.connect(self.executeSshCommand)
-
             if not self.timer.isActive():
-                self.timer.start(5000)
+                self.timer.start(TIMER_INTERVAL)
             self.executeSshCommand()
 
         else:
@@ -70,14 +69,14 @@ class ProcessPanelWidget(BaseWidget):
 
     def setupLocalExecution(self):
         self.disconnectFunctions()
-        self.commandSearchQueryLineEditUI.editingFinished.connect(self.executeLocalCommand)
+        self.commandSearchQueryLineEditUI.editingFinished.connect(self.executeLocalCommandAndClearFocus)
         self.searchButtonUI.clicked.connect(self.executeLocalCommand)
 
         self.closeSshConnection()
 
         self.timer.timeout.connect(self.executeLocalCommand)
         if not self.timer.isActive():
-            self.timer.start(5000)
+            self.timer.start(TIMER_INTERVAL)
         self.executeLocalCommand()
 
     def setupExecution(self, state):
@@ -111,6 +110,10 @@ class ProcessPanelWidget(BaseWidget):
         if searchQuery:
             command = command + " | grep " + searchQuery
         return command
+
+    def executeLocalCommandAndClearFocus(self):
+        self.commandSearchQueryLineEditUI.clearFocus()
+        self.executeLocalCommand()
 
     def executeLocalCommand(self):
         try:

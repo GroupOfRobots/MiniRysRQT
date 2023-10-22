@@ -6,7 +6,5 @@ from .commands_panel_widget import CommandsPanelWidget
 
 class CommandsPanelStack(StackWidget):
     def __init__(self, node=None):
-        super(CommandsPanelStack, self).__init__()
+        super(CommandsPanelStack, self).__init__(node=node,  constructor=CommandsPanelWidget)
 
-        self.mainChildWidget = CommandsPanelWidget(stack=self, node=node)
-        self.stack.addWidget(self.mainChildWidget)

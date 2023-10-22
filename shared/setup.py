@@ -9,6 +9,7 @@ setup(
     version='0.0.0',
     packages=[package_name,
               package_name + '/deleted_robot_screen',
+              package_name + '/no_robot_configuration_screen',
               package_name + '/utils',
               package_name + '/stack_widget',
               package_name + '/base_widget'],
@@ -19,6 +20,7 @@ setup(
         ('share/' + package_name + '/data', glob('*/*.json')),
         ('share/' + package_name + '/data/robots', glob('data/robots/*.json')),
         ('share/' + package_name + '/resource', ['resource/deleted_robot.ui']),
+        ('share/' + package_name + '/resource', ['resource/no_robot_configuration.ui']),
         ('share/' + package_name + '/imgs', glob('/imgs/*.png')),
         ('share/' + package_name + '/resource/imgs', glob('resource/imgs/*.png'))
     ],

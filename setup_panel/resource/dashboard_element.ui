@@ -37,6 +37,9 @@ qlineargradient:(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(255, 255, 255, 
      </item>
      <item>
       <widget class="QPushButton" name="modifyButton">
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
        <property name="text">
         <string>MODIFY</string>
        </property>
@@ -44,8 +47,15 @@ qlineargradient:(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(255, 255, 255, 
      </item>
      <item>
       <widget class="QPushButton" name="deleteButton">
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
        <property name="text">
-        <string>DELETE</string>
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>imgs/trashBin.png</normaloff>imgs/trashBin.png</iconset>
        </property>
       </widget>
      </item>
