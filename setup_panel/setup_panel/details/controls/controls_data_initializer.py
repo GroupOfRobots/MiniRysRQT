@@ -66,7 +66,7 @@ class ControlsDataInitializer:
         setDynamicTableItem = self.widget.dynamicTable.setItem
         setDynamicTableItem(motorControlPositionEnum, 0, self.createTableItem(data, 'leftEngine'))
         setDynamicTableItem(motorControlPositionEnum, 1, self.createTableItem(data, 'rightEngine'))
-        setDynamicTableItem(motorControlPositionEnum, 2, self.createTableItem(data, 'inertia'))
+        # setDynamicTableItem(motorControlPositionEnum, 2, self.createTableItem(data, 'inertia'))
 
     def setTwistControlsForKeyCombination(self, motorControlPositionEnum, dynamicTwist):
         dataKey = motorControlPositionToDataKeyMap[motorControlPositionEnum]

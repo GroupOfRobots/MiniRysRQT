@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>824</width>
+    <width>790</width>
     <height>904</height>
    </rect>
   </property>
@@ -112,7 +112,7 @@
       </size>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="controls">
       <attribute name="title">
@@ -132,8 +132,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>774</width>
-            <height>1199</height>
+            <width>740</width>
+            <height>1302</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_10">
@@ -149,14 +149,14 @@
               <enum>QFrame::Raised</enum>
              </property>
              <layout class="QFormLayout" name="formLayout">
-              <item row="1" column="0">
+              <item row="2" column="0">
                <widget class="QLabel" name="robotNameLabel">
                 <property name="text">
                  <string>ROBOT NAME</string>
                 </property>
                </widget>
               </item>
-              <item row="1" column="1">
+              <item row="2" column="1">
                <widget class="QLineEdit" name="robotNameInput">
                 <property name="maximumSize">
                  <size>
@@ -172,14 +172,14 @@
                 </property>
                </widget>
               </item>
-              <item row="5" column="0">
+              <item row="6" column="0">
                <widget class="QLabel" name="forwardKeyLabel">
                 <property name="text">
                  <string>FORWARD KEY</string>
                 </property>
                </widget>
               </item>
-              <item row="5" column="1">
+              <item row="6" column="1">
                <widget class="QLineEdit" name="forwardKeyInput">
                 <property name="minimumSize">
                  <size>
@@ -201,14 +201,14 @@
                 </property>
                </widget>
               </item>
-              <item row="7" column="0">
+              <item row="8" column="0">
                <widget class="QLabel" name="rightKeyLabel">
                 <property name="text">
                  <string>RIGHT KEY</string>
                 </property>
                </widget>
               </item>
-              <item row="7" column="1">
+              <item row="8" column="1">
                <widget class="QLineEdit" name="rightKeyInput">
                 <property name="maximumSize">
                  <size>
@@ -224,14 +224,14 @@
                 </property>
                </widget>
               </item>
-              <item row="9" column="0">
+              <item row="10" column="0">
                <widget class="QLabel" name="backwardKeyLabel">
                 <property name="text">
                  <string>BACKWARD KEY</string>
                 </property>
                </widget>
               </item>
-              <item row="9" column="1">
+              <item row="10" column="1">
                <widget class="QLineEdit" name="backwardKeyInput">
                 <property name="maximumSize">
                  <size>
@@ -247,14 +247,14 @@
                 </property>
                </widget>
               </item>
-              <item row="11" column="0">
+              <item row="12" column="0">
                <widget class="QLabel" name="leftKeyLabel">
                 <property name="text">
                  <string>LEFT KEY</string>
                 </property>
                </widget>
               </item>
-              <item row="11" column="1">
+              <item row="12" column="1">
                <widget class="QLineEdit" name="leftKeyInput">
                 <property name="maximumSize">
                  <size>
@@ -270,14 +270,14 @@
                 </property>
                </widget>
               </item>
-              <item row="12" column="0">
+              <item row="13" column="0">
                <widget class="QLabel" name="stableKeyLabel">
                 <property name="text">
                  <string>STABLE KEY</string>
                 </property>
                </widget>
               </item>
-              <item row="12" column="1">
+              <item row="13" column="1">
                <widget class="QLineEdit" name="stableKeyInput">
                 <property name="maximumSize">
                  <size>
@@ -293,14 +293,14 @@
                 </property>
                </widget>
               </item>
-              <item row="3" column="0">
+              <item row="4" column="0">
                <widget class="QLabel" name="namespaceNameUI">
                 <property name="text">
                  <string>NAMESPACE</string>
                 </property>
                </widget>
               </item>
-              <item row="3" column="1">
+              <item row="4" column="1">
                <widget class="QLineEdit" name="namespaceLineEditUI">
                 <property name="minimumSize">
                  <size>
@@ -319,11 +319,68 @@
                 </property>
                </widget>
               </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="label_10">
+                <property name="font">
+                 <font>
+                  <family>Ubuntu</family>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>GENERAL</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="0">
+               <widget class="QLabel" name="label_15">
+                <property name="font">
+                 <font>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
+                <property name="text">
+                 <string>KEYS</string>
+                </property>
+               </widget>
+              </item>
              </layout>
             </widget>
            </item>
            <item>
-            <widget class="Line" name="line_2">
+            <widget class="Line" name="line_3">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>2</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>2</height>
+              </size>
+             </property>
+             <property name="autoFillBackground">
+              <bool>false</bool>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background: black;</string>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Plain</enum>
+             </property>
+             <property name="lineWidth">
+              <number>8</number>
+             </property>
+             <property name="midLineWidth">
+              <number>5</number>
+             </property>
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
              </property>
@@ -331,12 +388,112 @@
            </item>
            <item>
             <widget class="QLabel" name="dynamicLabel">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
              <property name="text">
-              <string>DYNAMIC</string>
+              <string>CONTROL PANEL ENGINEES SETUP</string>
              </property>
             </widget>
            </item>
            <item>
+            <widget class="QLabel" name="motorCommandLabelUI">
+             <property name="font">
+              <font>
+               <family>Ubuntu</family>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>MOTOR COMMAND MESSAGE</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="Line" name="line">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item alignment="Qt::AlignTop">
+            <widget class="QTableWidget" name="dynamicTwistTableUI">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>300</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>300</height>
+              </size>
+             </property>
+             <row>
+              <property name="text">
+               <string>FORWARD</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>FORWARD+LEFT</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>FORWARD+RIGHT</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>RIGHT</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>BACKWARD</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>BACKWARD+LEFT</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>BACKWARD+RIGHT</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>LEFT</string>
+              </property>
+             </row>
+             <column>
+              <property name="text">
+               <string>LINEAR</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>ANGLE</string>
+              </property>
+             </column>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="twistLabelUI">
+             <property name="text">
+              <string>TWIST MESSAGE</string>
+             </property>
+            </widget>
+           </item>
+           <item alignment="Qt::AlignTop">
             <widget class="QTableWidget" name="dynamicTable">
              <property name="minimumSize">
               <size>
@@ -412,11 +569,6 @@
                <string>RIGHT ENGINE</string>
               </property>
              </column>
-             <column>
-              <property name="text">
-               <string>INTERTIA</string>
-              </property>
-             </column>
              <item row="0" column="0">
               <property name="text">
                <string/>
@@ -425,80 +577,35 @@
             </widget>
            </item>
            <item>
-            <widget class="Line" name="line">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QTableWidget" name="dynamicTwistTableUI">
+            <widget class="QLineEdit" name="lineEdit">
              <property name="minimumSize">
               <size>
                <width>0</width>
-               <height>300</height>
+               <height>2</height>
               </size>
              </property>
              <property name="maximumSize">
               <size>
                <width>16777215</width>
-               <height>300</height>
+               <height>2</height>
               </size>
              </property>
-             <row>
-              <property name="text">
-               <string>FORWARD</string>
-              </property>
-             </row>
-             <row>
-              <property name="text">
-               <string>FORWARD+LEFT</string>
-              </property>
-             </row>
-             <row>
-              <property name="text">
-               <string>FORWARD+RIGHT</string>
-              </property>
-             </row>
-             <row>
-              <property name="text">
-               <string>RIGHT</string>
-              </property>
-             </row>
-             <row>
-              <property name="text">
-               <string>BACKWARD</string>
-              </property>
-             </row>
-             <row>
-              <property name="text">
-               <string>BACKWARD+LEFT</string>
-              </property>
-             </row>
-             <row>
-              <property name="text">
-               <string>BACKWARD+RIGHT</string>
-              </property>
-             </row>
-             <row>
-              <property name="text">
-               <string>LEFT</string>
-              </property>
-             </row>
-             <column>
-              <property name="text">
-               <string>LINEAR</string>
-              </property>
-             </column>
-             <column>
-              <property name="text">
-               <string>ANGLE</string>
-              </property>
-             </column>
+             <property name="styleSheet">
+              <string notr="true">background: black;</string>
+             </property>
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="joystickLabel">
+            <widget class="QLabel" name="joystickLabelUI">
+             <property name="font">
+              <font>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">margin-top:10px</string>
+             </property>
              <property name="text">
               <string>JOYSTICK</string>
              </property>
@@ -944,7 +1051,7 @@ border-radius: 75px;
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>786</width>
+              <width>752</width>
               <height>707</height>
              </rect>
             </property>
