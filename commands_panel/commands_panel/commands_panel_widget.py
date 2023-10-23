@@ -1,10 +1,8 @@
 # This Python file uses the following encoding: utf-8
 
-from python_qt_binding.QtCore import Qt,pyqtSignal
-from python_qt_binding.QtGui import QColor, QFont,QCursor,QCursor,QTextCharFormat
-
-from python_qt_binding.QtWidgets import QPlainTextEdit, QVBoxLayout, QWidget,QPushButton
-
+from python_qt_binding.QtCore import Qt, pyqtSignal
+from python_qt_binding.QtGui import QColor, QFont, QCursor, QTextCharFormat
+from python_qt_binding.QtWidgets import QPlainTextEdit, QVBoxLayout, QWidget, QPushButton
 from shared.base_widget.base_widget import BaseWidget
 from shared.enums import PackageNameEnum
 
@@ -75,29 +73,29 @@ class CommandsPanelWidget(BaseWidget):
             self.commandsBoxLayoutUI.addWidget(element)
 
     def onCommandOutputSignal(self, commandOutput):
-        [command, output, errors] = commandOutput
+        [commandName, command, output, errors, firstLog] = commandOutput
 
-        if self.tabDictionary.get(command) is None:
-            self.addTab(command)
+        if firstLog and self.tabDictionary.get(commandName) is None:
+            self.addTab(commandName)
 
-        if (len(command)):
+        if firstLog and len(command):
             self.logFormat.setFontWeight(QFont.Bold)
-            self.insertLog("black", "COMMAND:", command)
+            self.insertLog("black", "COMMAND:", commandName)
             self.logFormat.setFontWeight(QFont.Normal)
 
-            self.insertLog("blue", command + "\n", command)
+            self.insertLog("blue", command + "\n", commandName)
 
         if len(output):
-            self.insertLog("black", output, command)
+            self.insertLog("black", output, commandName)
 
         if len(errors):
-            self.insertLog("red", errors, command)
+            self.insertLog("red", errors, commandName)
 
-    def insertLog(self, colorName, log, command):
+    def insertLog(self, colorName, log, commandName):
 
         color = QColor(colorName)
         self.logFormat.setForeground(color)
-        plainTextEdit = self.tabDictionary.get(command)
+        plainTextEdit = self.tabDictionary.get(commandName)
         plainTextEdit.setCurrentCharFormat(self.logFormat)
         plainTextEdit.insertPlainText(log + "\n")
 

@@ -112,7 +112,7 @@
       </size>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="controls">
       <attribute name="title">
@@ -880,14 +880,14 @@ border-radius: 75px;
            <item>
             <widget class="QLabel" name="label_3">
              <property name="text">
-              <string>COMMAND</string>
+              <string>COMMAND NAME</string>
              </property>
             </widget>
            </item>
            <item>
             <widget class="QLabel" name="label_4">
              <property name="text">
-              <string>COMMAND NAME</string>
+              <string>COMMAND BODY</string>
              </property>
             </widget>
            </item>

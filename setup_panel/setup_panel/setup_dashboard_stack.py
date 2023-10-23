@@ -6,11 +6,8 @@ from .details.setup_widget import SetupWidget
 from shared.stack_widget.stack_widget import StackWidget
 
 class SetupDashboardStackWidget(StackWidget):
-    def __init__(self):
-        super(SetupDashboardStackWidget, self).__init__()
-
-        self.mainChildWidget = SetupDashboardWidget(stack=self)
-        self.stack.addWidget(self.mainChildWidget)
+    def __init__(self, node, panel):
+        super(SetupDashboardStackWidget, self).__init__(node=node, constructor=SetupDashboardWidget, mainPanel=panel)
 
     def goToSettings(self, dataFilePath=None, addMode=False):
         if hasattr(self, 'setupWidget'):

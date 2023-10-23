@@ -4,12 +4,14 @@ import os.path
 
 from ament_index_python import get_resource
 from python_qt_binding import loadUi
-from python_qt_binding.QtWidgets import QWidget, QGroupBox, QFormLayout
-from .dashboard_element import DashboardElementWidget
+from python_qt_binding.QtWidgets import QWidget
 from shared.inner_communication import innerCommunication
 
+from .dashboard_element import DashboardElementWidget
+
+
 class SetupDashboardWidget(QWidget):
-    def __init__(self, stack=None):
+    def __init__(self, stack=None, node=None, mainPanel=None):
         super(SetupDashboardWidget, self).__init__()
 
         self.stack = stack
@@ -32,7 +34,7 @@ class SetupDashboardWidget(QWidget):
     def setupDashboardElements(self):
         for fileName in (os.listdir(self.dataFilePath)):
             element = DashboardElementWidget(fileName=fileName, stack=self.stack)
-            self.elementDictionary[self.dataFilePath + '/'+ fileName] = element
+            self.elementDictionary[self.dataFilePath + '/' + fileName] = element
             # self.elements.addWidget(element)
             self.elements.addWidget(element)
 
@@ -50,8 +52,8 @@ class SetupDashboardWidget(QWidget):
 
     def addDashboardElement(self, data):
         fileName = data['fileName']
-        element = DashboardElementWidget( fileName=fileName, stack=self.stack)
-        self.elementDictionary[self.dataFilePath + '/'+ fileName] = element
+        element = DashboardElementWidget(fileName=fileName, stack=self.stack)
+        self.elementDictionary[self.dataFilePath + '/' + fileName] = element
         # self.form.addRow(element)
         self.elements.addWidget(element)
         self.update()
@@ -62,4 +64,4 @@ class SetupDashboardWidget(QWidget):
         element.loadJson()
 
     def addNewRobot(self):
-        self.stack.goToSettings(addMode= True)
+        self.stack.goToSettings(addMode=True)

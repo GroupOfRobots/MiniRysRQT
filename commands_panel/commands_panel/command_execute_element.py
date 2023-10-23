@@ -1,12 +1,9 @@
 # This Python file uses the following encoding: utf-8
-import asyncio
 import os
 import re
-import shlex
 import signal
 import subprocess
 import threading
-import time
 from enum import Enum
 
 import paramiko
@@ -47,7 +44,7 @@ class CommandExecuteElementWidget(QWidget):
             self.stopCommand()
 
         else:
-            self.setRunningStatusIcon(RunStatusIcon.RUNNING)
+            self.setRunningStatusIcon(RunStatusIcon.STOP)
             self.commandThread = threading.Thread(target=self.runCommand)
             self.commandThread.start()
 
@@ -145,11 +142,11 @@ class CommandExecuteElementWidget(QWidget):
         else:
             self.executeCommandLocaly()
         self.isCommandRunning = False
-        print("wwwwwwwwwwwwwwwwwwwwwwwwwwwww")
         self.setRunningStatusIcon(RunStatusIcon.RUN)
 
     def executeCommandLocaly(self):
         command = self.command.get('command', '')
+        commandName = self.command.get('commandName')
 
         self.process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE,
                                         stderr=subprocess.PIPE, stdin=subprocess.PIPE)
@@ -161,8 +158,7 @@ class CommandExecuteElementWidget(QWidget):
         if err is not None:
             errorsString = err.decode("utf-8")
 
-        self.commandOutputSignal.emit([command, outputString, errorsString])
-
+        self.commandOutputSignal.emit([commandName, command, outputString, errorsString, True])
 
     def executeCommandViaSsh(self):
         sshData = self.data.get('ssh', {})
@@ -173,8 +169,7 @@ class CommandExecuteElementWidget(QWidget):
         password = sshData.get('password')
 
         command = self.command.get('command')
-        print("command")
-        print(command)
+        commandName = self.command.get('commandName', 'command')
 
         self.ssh = paramiko.SSHClient()
         self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -189,13 +184,14 @@ class CommandExecuteElementWidget(QWidget):
             stdout.channel.set_combine_stderr(True)
 
             self.pids = []
-            line = stdout.readline()
+            line = self.getLineWithoutNewLine(stdout)
 
-            self.commandOutputSignal.emit([command, line, ''])
+            self.commandOutputSignal.emit([commandName, command, line, '', True])
 
             while self.isCommandRunning:
-                line = stdout.readline()
-                self.commandOutputSignal.emit([command, line, ''])
+                line = self.getLineWithoutNewLine(stdout)
+
+                self.commandOutputSignal.emit([commandName, command, line, '', False])
                 pattern = "process started with pid \[(\d+)\]"
                 pattern2 = "\[(\d+)\]"
                 match = re.search(pattern, line)
@@ -216,6 +212,10 @@ class CommandExecuteElementWidget(QWidget):
             errorsString = ''.join(errors)
             self.ssh.close()
 
-            self.commandOutputSignal.emit([command, outputString, errorsString])
+            self.commandOutputSignal.emit([commandName, command, outputString, errorsString, False])
         except BaseException as exception:
-            self.commandOutputSignal.emit([command, "SSH ERROR", str(exception)])
+            self.commandOutputSignal.emit([commandName, command, "SSH ERROR", str(exception), False])
+
+    def getLineWithoutNewLine(self, stdout):
+        line = stdout.readline()
+        return line.replace('\n', '')
