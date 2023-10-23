@@ -400,7 +400,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="motorCommandLabelUI">
+            <widget class="QLabel" name="twisLabelUI">
              <property name="font">
               <font>
                <family>Ubuntu</family>
@@ -409,7 +409,7 @@
               </font>
              </property>
              <property name="text">
-              <string>MOTOR COMMAND MESSAGE</string>
+              <string>TWIST MESSAGE</string>
              </property>
             </widget>
            </item>
@@ -487,9 +487,9 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="twistLabelUI">
+            <widget class="QLabel" name="twistLabelaUI">
              <property name="text">
-              <string>TWIST MESSAGE</string>
+              <string>MOTOR COMMAND  MESSAGE</string>
              </property>
             </widget>
            </item>
@@ -1051,8 +1051,8 @@ border-radius: 75px;
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>752</width>
-              <height>707</height>
+              <width>86</width>
+              <height>44</height>
              </rect>
             </property>
             <property name="styleSheet">
