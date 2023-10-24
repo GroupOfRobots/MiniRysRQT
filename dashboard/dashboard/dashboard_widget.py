@@ -3,6 +3,7 @@ import math
 from collections import namedtuple
 
 from minirys_msgs.msg import BatteryStatus, AngularPose
+from nav_msgs.msg import Odometry
 from python_qt_binding.QtCore import Qt
 from python_qt_binding.QtGui import QPainter, QPen
 from rclpy.node import Node
@@ -38,7 +39,8 @@ class DashboardWidget(BaseWidget):
             SubscriberParam(None, BatteryStatus, '/internal/battery_status', self.batteryCallback),
             SubscriberParam(None, Float32, '/internal/temperature_cpu', self.temperatureCpuCallback),
             SubscriberParam(None, Float32, '/internal/temperature_main', self.temperatureMainCallback),
-            SubscriberParam(None, AngularPose, '/internal/angular_pose', self.angularPoseCallback)]
+            SubscriberParam(None, AngularPose, '/internal/angular_pose', self.angularPoseCallback),
+            SubscriberParam(None, Odometry, '/odom', self.odometryVelocityCallback)]
 
     def resetSubscribers(self):
         for subscriberParam in self.subscriberParams:
@@ -150,6 +152,20 @@ class DashboardWidget(BaseWidget):
     def angularPoseCallback(self, event):
         self.angularPosition = event.angular_position
         self.angleWidget.update()
+
+    def odometryVelocityCallback(self, event):
+        twist = event.twist.twist
+        linear = twist.linear
+        angular = twist.angular
+
+        self.xLinearVelcocityLcdUI.display(linear.x)
+        self.yLinearVelcocityLcdUI.display(linear.y)
+        self.zLinearVelcocityLcdUI.display(linear.z)
+
+        self.xAngularVelcocityLcdUI.display(angular.x)
+        self.yAngularVelcocityLcdUI.display(angular.y)
+        self.zAngularVelcocityLcdUI.display(angular.z)
+
 
 
 SubscriberParam = namedtuple('SubscriberParam', ["subscriber", "messageType", "topic", "callback"])

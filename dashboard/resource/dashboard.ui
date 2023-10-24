@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>599</width>
-    <height>626</height>
+    <height>637</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -93,6 +93,12 @@
      </property>
      <item row="0" column="1">
       <widget class="QGroupBox" name="rangeSensorsWrapper">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="styleSheet">
         <string notr="true"> QGroupBox {
  background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
@@ -129,6 +135,9 @@ QGroupBox:title {
             <property name="digitCount">
              <number>4</number>
             </property>
+            <property name="segmentStyle">
+             <enum>QLCDNumber::Flat</enum>
+            </property>
            </widget>
           </item>
          </layout>
@@ -157,6 +166,9 @@ QGroupBox:title {
             <property name="digitCount">
              <number>4</number>
             </property>
+            <property name="segmentStyle">
+             <enum>QLCDNumber::Flat</enum>
+            </property>
            </widget>
           </item>
          </layout>
@@ -181,7 +193,11 @@ QGroupBox:title {
            </widget>
           </item>
           <item>
-           <widget class="QLCDNumber" name="topDistanceLcdUI"/>
+           <widget class="QLCDNumber" name="topDistanceLcdUI">
+            <property name="segmentStyle">
+             <enum>QLCDNumber::Flat</enum>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
@@ -205,7 +221,11 @@ QGroupBox:title {
            </widget>
           </item>
           <item>
-           <widget class="QLCDNumber" name="leftDistanceLcdUI"/>
+           <widget class="QLCDNumber" name="leftDistanceLcdUI">
+            <property name="segmentStyle">
+             <enum>QLCDNumber::Flat</enum>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
@@ -229,7 +249,11 @@ QGroupBox:title {
            </widget>
           </item>
           <item alignment="Qt::AlignRight">
-           <widget class="QLCDNumber" name="rightDistanceLcdUI"/>
+           <widget class="QLCDNumber" name="rightDistanceLcdUI">
+            <property name="segmentStyle">
+             <enum>QLCDNumber::Flat</enum>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
@@ -259,7 +283,11 @@ QGroupBox:title {
            </widget>
           </item>
           <item alignment="Qt::AlignRight">
-           <widget class="QLCDNumber" name="bottomDistanceLcdUI"/>
+           <widget class="QLCDNumber" name="bottomDistanceLcdUI">
+            <property name="segmentStyle">
+             <enum>QLCDNumber::Flat</enum>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
@@ -276,6 +304,12 @@ QGroupBox:title {
        </property>
        <item>
         <widget class="QGroupBox" name="batteryGroupBox">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
          <property name="styleSheet">
           <string notr="true"> QGroupBox {
  	background-color: qlineargradient(
@@ -318,6 +352,9 @@ QGroupBox:title {
               <property name="autoFillBackground">
                <bool>false</bool>
               </property>
+              <property name="segmentStyle">
+               <enum>QLCDNumber::Flat</enum>
+              </property>
              </widget>
             </item>
            </layout>
@@ -348,7 +385,11 @@ QGroupBox:title {
              </widget>
             </item>
             <item alignment="Qt::AlignRight">
-             <widget class="QLCDNumber" name="voltageCell2Lcd"/>
+             <widget class="QLCDNumber" name="voltageCell2Lcd">
+              <property name="segmentStyle">
+               <enum>QLCDNumber::Flat</enum>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
@@ -382,6 +423,9 @@ QGroupBox:title {
               <property name="styleSheet">
                <string notr="true"/>
               </property>
+              <property name="segmentStyle">
+               <enum>QLCDNumber::Flat</enum>
+              </property>
              </widget>
             </item>
            </layout>
@@ -391,6 +435,12 @@ QGroupBox:title {
        </item>
        <item>
         <widget class="QGroupBox" name="groupBox_7">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
          <property name="styleSheet">
           <string notr="true"> QGroupBox {
  background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
@@ -414,15 +464,32 @@ QGroupBox:title {
            <number>30</number>
           </property>
           <item>
+           <widget class="Line" name="line_14">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
            <layout class="QHBoxLayout" name="horizontalLayout_2">
-            <item alignment="Qt::AlignRight">
+            <item alignment="Qt::AlignHCenter">
              <widget class="QLabel" name="label_3">
               <property name="text">
                <string>MAIN</string>
               </property>
              </widget>
             </item>
-            <item alignment="Qt::AlignRight">
+            <item>
+             <widget class="Line" name="line_16">
+              <property name="styleSheet">
+               <string notr="true">border: 1px dashed black;</string>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+             </widget>
+            </item>
+            <item alignment="Qt::AlignHCenter">
              <widget class="QLabel" name="label_2">
               <property name="text">
                <string>CPU</string>
@@ -433,7 +500,7 @@ QGroupBox:title {
           </item>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_6">
-            <item>
+            <item alignment="Qt::AlignHCenter">
              <widget class="QLCDNumber" name="temperatureMainLcd">
               <property name="minimumSize">
                <size>
@@ -447,9 +514,22 @@ QGroupBox:title {
               <property name="styleSheet">
                <string notr="true"/>
               </property>
+              <property name="segmentStyle">
+               <enum>QLCDNumber::Flat</enum>
+              </property>
              </widget>
             </item>
             <item>
+             <widget class="Line" name="line_15">
+              <property name="styleSheet">
+               <string notr="true">border: 1px dashed black;</string>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+             </widget>
+            </item>
+            <item alignment="Qt::AlignHCenter">
              <widget class="QLCDNumber" name="temperatureCpuLcd">
               <property name="minimumSize">
                <size>
@@ -459,6 +539,9 @@ QGroupBox:title {
               </property>
               <property name="styleSheet">
                <string notr="true"/>
+              </property>
+              <property name="segmentStyle">
+               <enum>QLCDNumber::Flat</enum>
               </property>
              </widget>
             </item>
@@ -473,6 +556,12 @@ QGroupBox:title {
    </item>
    <item>
     <widget class="QGroupBox" name="groupBox_5">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
      <property name="styleSheet">
       <string notr="true"> QGroupBox {
  background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
@@ -494,6 +583,12 @@ QGroupBox:title {
      <layout class="QHBoxLayout" name="horizontalLayout_3">
       <item>
        <widget class="QWidget" name="angleWidget" native="true">
+        <property name="font">
+         <font>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
         <layout class="QVBoxLayout" name="verticalLayout_3"/>
        </widget>
       </item>
@@ -508,16 +603,99 @@ QGroupBox:title {
        </widget>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout_6">
-        <item>
+       <layout class="QVBoxLayout" name="velocityLayoutUI">
+        <item alignment="Qt::AlignTop">
          <widget class="QLabel" name="label">
+          <property name="font">
+           <font>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
           <property name="text">
-           <string>VELOCITY</string>
+           <string>LINEAR VELOCITY</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLCDNumber" name="lcdNumber"/>
+         <layout class="QHBoxLayout" name="xLinearVelocityLayoutUI">
+          <item>
+           <widget class="QLabel" name="xLinearVelcocityLabelUI">
+            <property name="text">
+             <string>X</string>
+            </property>
+           </widget>
+          </item>
+          <item alignment="Qt::AlignRight">
+           <widget class="QLCDNumber" name="xLinearVelcocityLcdUI">
+            <property name="segmentStyle">
+             <enum>QLCDNumber::Flat</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="Line" name="line_9">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">border: 1px dashed black;</string>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="yLinearVelocityLayoutUI">
+          <item>
+           <widget class="QLabel" name="yLinearVelcocityLabelUI">
+            <property name="text">
+             <string>Y</string>
+            </property>
+           </widget>
+          </item>
+          <item alignment="Qt::AlignRight">
+           <widget class="QLCDNumber" name="yLinearVelcocityLcdUI">
+            <property name="segmentStyle">
+             <enum>QLCDNumber::Flat</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="Line" name="line_11">
+          <property name="styleSheet">
+           <string notr="true">border: 1px dashed black;</string>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="zLinearVelocityLayoutUI">
+          <item>
+           <widget class="QLabel" name="zLinearVelcocityLabelUI">
+            <property name="text">
+             <string>Z</string>
+            </property>
+           </widget>
+          </item>
+          <item alignment="Qt::AlignRight">
+           <widget class="QLCDNumber" name="zLinearVelcocityLcdUI">
+            <property name="segmentStyle">
+             <enum>QLCDNumber::Flat</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item>
          <widget class="Line" name="line_6">
@@ -529,15 +707,95 @@ QGroupBox:title {
           </property>
          </widget>
         </item>
-        <item>
+        <item alignment="Qt::AlignTop">
          <widget class="QLabel" name="label_4">
+          <property name="font">
+           <font>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
           <property name="text">
-           <string>POSITION</string>
+           <string>ANGULAR VELOCITY</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLCDNumber" name="lcdNumber_2"/>
+         <layout class="QHBoxLayout" name="xAngularVelocityLayoutUI_2">
+          <item>
+           <widget class="QLabel" name="xAngularVelcocityLcdUI_2">
+            <property name="text">
+             <string>X</string>
+            </property>
+           </widget>
+          </item>
+          <item alignment="Qt::AlignRight">
+           <widget class="QLCDNumber" name="xAngularVelcocityLcdUI">
+            <property name="segmentStyle">
+             <enum>QLCDNumber::Flat</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="Line" name="line_12">
+          <property name="styleSheet">
+           <string notr="true">border: 1px dashed black;</string>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="yAngularVelocityLayoutUI">
+          <item>
+           <widget class="QLabel" name="yAngularVelcocityLcdUI_2">
+            <property name="text">
+             <string>Y</string>
+            </property>
+           </widget>
+          </item>
+          <item alignment="Qt::AlignRight">
+           <widget class="QLCDNumber" name="yAngularVelcocityLcdUI">
+            <property name="segmentStyle">
+             <enum>QLCDNumber::Flat</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="Line" name="line_13">
+          <property name="styleSheet">
+           <string notr="true">border: 1px dashed black;</string>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="zAngularVelocityLayoutUI">
+          <item>
+           <widget class="QLabel" name="zAgunlarVelcocityLabelUI">
+            <property name="text">
+             <string>Z</string>
+            </property>
+           </widget>
+          </item>
+          <item alignment="Qt::AlignRight">
+           <widget class="QLCDNumber" name="zAngularVelcocityLcdUI">
+            <property name="frameShadow">
+             <enum>QFrame::Plain</enum>
+            </property>
+            <property name="segmentStyle">
+             <enum>QLCDNumber::Flat</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
        </layout>
       </item>
