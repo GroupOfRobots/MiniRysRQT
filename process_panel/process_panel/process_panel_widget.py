@@ -140,21 +140,24 @@ class ProcessPanelWidget(BaseWidget):
 
     def killProcess(self, pid):
         if self.sshCheckboxUI.checkState() == Qt.Checked:
-            try:
-                killCommand = f"sudo kill -9 {pid}"
-
-                stdin, stdout, stderr = self.ssh.exec_command(killCommand)
-                stdin.write('minirys\n')
-                stdin.flush()
-                self.executeSshCommand()
-
-            except Exception as exception:
-                print("Exception killProcess")
-                print(exception)
+            self.killSshProcess(pid)
         else:
             killed = KillLocalProcessService.kill(pid)
             if killed:
                 self.executeLocalCommand()
+
+    def killSshProcess(self, pid):
+        try:
+            killCommand = f"sudo kill -9 {pid}"
+
+            stdin, stdout, stderr = self.ssh.exec_command(killCommand)
+            stdin.write('minirys\n')
+            stdin.flush()
+            self.executeSshCommand()
+
+        except Exception as exception:
+            print("Exception killProcess")
+            print(exception)
 
     def closeSshConnection(self):
         if self.ssh:

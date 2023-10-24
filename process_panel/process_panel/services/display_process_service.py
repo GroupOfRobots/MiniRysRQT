@@ -22,6 +22,7 @@ class DisplayProcessService:
         for line in output:
             index += 1
             item = QTableWidgetItem(line)
+            item.setToolTip(line)
             self.processTableWidgetUI.setItem(index, 0, item)
 
             pid = self.getProcessPid(line)
