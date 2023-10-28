@@ -10,103 +10,93 @@
   "dynamic": {
     "forward": {
       "leftEngine": 100,
-      "rightEngine": 100,
-      "inertia": 1
+      "rightEngine": 100
     },
     "forwardLeft": {
       "leftEngine": 100,
-      "rightEngine": 100,
-      "inertia": 1
+      "rightEngine": 100
     },
     "forwardRight": {
       "leftEngine": 100,
-      "rightEngine": 100,
-      "inertia": 1
+      "rightEngine": 100
     },
     "right": {
       "leftEngine": 100,
-      "rightEngine": 100,
-      "inertia": 1
+      "rightEngine": 100
     },
     "backward": {
       "leftEngine": 100,
-      "rightEngine": 100,
-      "inertia": 1
+      "rightEngine": 100
     },
-   "backwardLeft": {
+    "backwardLeft": {
       "leftEngine": 100,
-      "rightEngine": 100,
-      "inertia": 1
+      "rightEngine": 100
     },
     "backwardRight": {
       "leftEngine": 100,
-      "rightEngine": 100,
-      "inertia": 1
+      "rightEngine": 100
     },
     "left": {
       "leftEngine": 100,
-      "rightEngine": 100,
-      "inertia": 1
+      "rightEngine": 100
     }
   },
   "dynamicTwist": {
     "forward": {
       "linear": 100,
-      "angle": 100,
-      "inertia": 1
+      "angular": 100
     },
     "forwardLeft": {
       "linear": 100,
-      "angle": 100,
-      "inertia": 1
+      "angular": 100
     },
     "forwardRight": {
       "linear": 100,
-      "angle": 100,
-      "inertia": 1
+      "angular": 100
     },
     "right": {
       "linear": 100,
-      "angle": 100,
-      "inertia": 1
+      "angular": 100
     },
     "backward": {
       "linear": 100,
-      "angle": 100,
-      "inertia": 1
+      "angular": 100
     },
-   "backwardLeft": {
+    "backwardLeft": {
       "linear": 100,
-      "angle": 100,
-      "inertia": 1
+      "angular": 100
     },
     "backwardRight": {
       "linear": 100,
-      "angle": 100,
-      "inertia": 1
+      "angular": 100
     },
     "left": {
       "linear": 100,
-      "angle": 100,
-      "inertia": 1
+      "angular": 100
     }
   },
   "joystick": {
-    "forward": {
-      "leftEngine": 90,
-      "rightEngine": 90
+    "motorCommand": {
+      "forward": {
+        "leftEngine": 90,
+        "rightEngine": 90
+      },
+      "right": {
+        "leftEngine": 90,
+        "rightEngine": 90
+      },
+      "backward": {
+        "leftEngine": 90,
+        "rightEngine": 90
+      },
+      "left": {
+        "leftEngine": 90,
+        "rightEngine": 90
+      }
     },
-    "right": {
-      "leftEngine": 90,
-      "rightEngine": 90
-    },
-     "backward": {
-      "leftEngine": 90,
-      "rightEngine": 90
-    },
-     "left": {
-      "leftEngine": 90,
-      "rightEngine": 90
+    "twist": {
+      "linear": 100,
+      "angular": 100
     }
   },
   "pid": {

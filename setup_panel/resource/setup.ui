@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>790</width>
-    <height>904</height>
+    <height>1082</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -131,9 +131,9 @@
           <property name="geometry">
            <rect>
             <x>0</x>
-            <y>0</y>
+            <y>-495</y>
             <width>740</width>
-            <height>1302</height>
+            <height>1456</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_10">
@@ -357,7 +357,7 @@
              <property name="minimumSize">
               <size>
                <width>0</width>
-               <height>2</height>
+               <height>3</height>
               </size>
              </property>
              <property name="maximumSize">
@@ -370,7 +370,7 @@
               <bool>false</bool>
              </property>
              <property name="styleSheet">
-              <string notr="true">background: black;</string>
+              <string notr="true">border: 1px solid black</string>
              </property>
              <property name="frameShadow">
               <enum>QFrame::Plain</enum>
@@ -581,7 +581,7 @@
              <property name="minimumSize">
               <size>
                <width>0</width>
-               <height>2</height>
+               <height>3</height>
               </size>
              </property>
              <property name="maximumSize">
@@ -591,7 +591,7 @@
               </size>
              </property>
              <property name="styleSheet">
-              <string notr="true">background: black;</string>
+              <string notr="true">border: 1px solid black</string>
              </property>
             </widget>
            </item>
@@ -608,6 +608,45 @@
              </property>
              <property name="text">
               <string>JOYSTICK</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_17">
+             <property name="text">
+              <string>TWIST MESSAGE</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTableWidget" name="joystickTwistTableUI">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>100</height>
+              </size>
+             </property>
+             <row>
+              <property name="text">
+               <string>LINEAR</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>ANGULAR</string>
+              </property>
+             </row>
+             <column>
+              <property name="text">
+               <string/>
+              </property>
+             </column>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_16">
+             <property name="text">
+              <string>MOTOR COMMAND  MESSAGE</string>
              </property>
             </widget>
            </item>
@@ -1051,8 +1090,8 @@ border-radius: 75px;
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>86</width>
-              <height>44</height>
+              <width>752</width>
+              <height>885</height>
              </rect>
             </property>
             <property name="styleSheet">

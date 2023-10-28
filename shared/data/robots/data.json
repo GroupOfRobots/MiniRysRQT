@@ -51,21 +51,27 @@
     }
   },
   "joystick": {
-    "forward": {
-      "leftEngine": 90,
-      "rightEngine": 90
+    "motorCommand": {
+      "forward": {
+        "leftEngine": 90,
+        "rightEngine": 90
+      },
+      "right": {
+        "leftEngine": 90,
+        "rightEngine": 90
+      },
+      "backward": {
+        "leftEngine": 90,
+        "rightEngine": 90
+      },
+      "left": {
+        "leftEngine": 90,
+        "rightEngine": 90
+      }
     },
-    "right": {
-      "leftEngine": 90,
-      "rightEngine": 90
-    },
-     "backward": {
-      "leftEngine": 90,
-      "rightEngine": 90
-    },
-     "left": {
-      "leftEngine": 90,
-      "rightEngine": 90
+    "twist": {
+      "linear": 100,
+      "angle": 100
     }
   },
   "ssh": {

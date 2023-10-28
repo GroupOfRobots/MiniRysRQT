@@ -50,22 +50,63 @@
       "inertia": 1
     }
   },
-  "joystick": {
+    "dynamicTwist": {
     "forward": {
-      "leftEngine": 90,
-      "rightEngine": 90
+      "linear": 100,
+      "angular": 100
+    },
+    "forwardLeft": {
+      "linear": 100,
+      "angular": 100
+    },
+    "forwardRight": {
+      "linear": 100,
+      "angular": 100
     },
     "right": {
-      "leftEngine": 90,
-      "rightEngine": 90
+      "linear": 100,
+      "angular": 100
     },
-     "backward": {
-      "leftEngine": 90,
-      "rightEngine": 90
+    "backward": {
+      "linear": 100,
+      "angular": 100
     },
-     "left": {
-      "leftEngine": 90,
-      "rightEngine": 90
+    "backwardLeft": {
+      "linear": 100,
+      "angular": 100
+    },
+    "backwardRight": {
+      "linear": 100,
+      "angular": 100
+    },
+    "left": {
+      "linear": 100,
+      "angular": 100
+    }
+  },
+
+  "joystick": {
+    "motorCommand": {
+      "forward": {
+        "leftEngine": 90,
+        "rightEngine": 90
+      },
+      "right": {
+        "leftEngine": 90,
+        "rightEngine": 90
+      },
+      "backward": {
+        "leftEngine": 90,
+        "rightEngine": 90
+      },
+      "left": {
+        "leftEngine": 90,
+        "rightEngine": 90
+      }
+    },
+    "twist": {
+      "linear": 100,
+      "angular": 100
     }
   },
   "ssh": {

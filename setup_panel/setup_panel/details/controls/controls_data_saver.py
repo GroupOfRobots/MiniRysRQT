@@ -1,7 +1,4 @@
-from shared.enums import ControlKeyEnum
 from shared.enums import MotorControlPositionEnum, motorControlPositionToDataKeyMap
-
-from python_qt_binding.QtWidgets import QTableWidgetItem
 
 
 class ControlsDataSaver:
@@ -42,14 +39,13 @@ class ControlsDataSaver:
         dynamic[dataKey] = {}
         dynamic[dataKey]['leftEngine'] = self.saveDynamicTableItem(motorControlPosition, 0)
         dynamic[dataKey]['rightEngine'] = self.saveDynamicTableItem(motorControlPosition, 1)
-        # dynamic[dataKey]['angle'] = self.saveDynamicTableItem(motorControlPositionInTableEnum, 2)
 
     def saveTwistControlsForKeyCombination(self, motorControlPosition, dynamicTwist):
         dataKey = motorControlPositionToDataKeyMap[motorControlPosition]
 
         dynamicTwist[dataKey] = {}
         dynamicTwist[dataKey]['linear'] = self.saveDynamicTwistTableItem(motorControlPosition, 0)
-        dynamicTwist[dataKey]['angle'] = self.saveDynamicTwistTableItem(motorControlPosition, 1)
+        dynamicTwist[dataKey]['angular'] = self.saveDynamicTwistTableItem(motorControlPosition, 1)
 
     def saveDynamicTwistTableItem(self, motorControlPosition, index):
         return self.widget.dynamicTwistTableUI.item(motorControlPosition, index).text()
@@ -60,14 +56,17 @@ class ControlsDataSaver:
     def saveJoystickDynamic(self):
         data = self.widget.data
 
-        data["joystick"]["forward"]["leftEngine"] = self.widget.joystickForward.item(0, 0).text()
-        data["joystick"]["forward"]["rightEngine"] = self.widget.joystickForward.item(0, 1).text()
+        data["joystick"]["motorCommand"]["forward"]["leftEngine"] = self.widget.joystickForward.item(0, 0).text()
+        data["joystick"]["motorCommand"]["forward"]["rightEngine"] = self.widget.joystickForward.item(0, 1).text()
 
-        data["joystick"]["right"]["leftEngine"] = self.widget.joystickRight.item(0, 0).text()
-        data["joystick"]["right"]["rightEngine"] = self.widget.joystickRight.item(0, 1).text()
+        data["joystick"]["motorCommand"]["right"]["leftEngine"] = self.widget.joystickRight.item(0, 0).text()
+        data["joystick"]["motorCommand"]["right"]["rightEngine"] = self.widget.joystickRight.item(0, 1).text()
 
-        data["joystick"]["backward"]["leftEngine"] = self.widget.joystickBackward.item(0, 0).text()
-        data["joystick"]["backward"]["rightEngine"] = self.widget.joystickBackward.item(0, 1).text()
+        data["joystick"]["motorCommand"]["backward"]["leftEngine"] = self.widget.joystickBackward.item(0, 0).text()
+        data["joystick"]["motorCommand"]["backward"]["rightEngine"] = self.widget.joystickBackward.item(0, 1).text()
 
-        data["joystick"]["left"]["leftEngine"] = self.widget.joystickLeft.item(0, 0).text()
-        data["joystick"]["left"]["rightEngine"] = self.widget.joystickLeft.item(0, 1).text()
+        data["joystick"]["motorCommand"]["left"]["leftEngine"] = self.widget.joystickLeft.item(0, 0).text()
+        data["joystick"]["motorCommand"]["left"]["rightEngine"] = self.widget.joystickLeft.item(0, 1).text()
+
+        data["joystick"]["twist"]["linear"] = self.widget.joystickTwistTableUI.item(0, 0).text()
+        data["joystick"]["twist"]["angular"] = self.widget.joystickTwistTableUI.item(1, 0).text()
