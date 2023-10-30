@@ -3,6 +3,7 @@ import math
 import threading
 import time
 
+from geometry_msgs.msg import Twist
 from python_qt_binding import QtCore
 from python_qt_binding.QtCore import Qt, QPoint
 from python_qt_binding.QtGui import QPainter, QBrush, QPen
@@ -25,6 +26,8 @@ class JoystickWidget(BaseWidget):
     def __init__(self, stack=None, node=None):
         super(JoystickWidget, self).__init__(stack, PackageNameEnum.Joystick)
 
+        self.node = node
+
         self.keyPressedThread = threading.Thread()
 
         self.setMouseTracking(False)
@@ -36,6 +39,8 @@ class JoystickWidget(BaseWidget):
 
         self.settingsButton.clicked.connect(self.settingsClicked)
 
+        self.publisher = self.node.create_publisher(Twist, self.namespace + '/cmd_vel', 10)
+
     def settingsClicked(self):
         self.stack.goToSettings(self.dataFilePath)
 
@@ -43,6 +48,25 @@ class JoystickWidget(BaseWidget):
         self.joystickPosition = event.pos()
         x = self.joystickPosition.x()
         y = self.joystickPosition.y()
+
+        cartesianPositionX = x - self.joystickWidget.width() * 0.5
+        cartesianPositionY = self.joystickWidget.height() * 0.5 - y
+
+        angle = math.radians(math.atan2(cartesianPositionY, cartesianPositionX) / math.pi * 180)
+        elipseR = self.calculateRadiusOfJoystickBoundary(angle)
+        joystickR = math.sqrt(cartesianPositionX ** 2 + cartesianPositionY ** 2)
+
+        # print(angle)
+        linear, angular = self.enginesValueService.calculateTwistEnginesValue(angle, joystickR, elipseR)
+        # print(linear, angular, "aaa")
+
+        msg = Twist()
+        msg.linear.y = float(linear)
+        msg.angular.z = float(angular)
+        self.publisher.publish(msg)
+        # print(angle, ellipseR, joystickR)
+
+        self.updateJoystickPosition(x, y)
 
         if self.checkIfPointIsInEllipse(x, y):
             self.update()
@@ -84,6 +108,10 @@ class JoystickWidget(BaseWidget):
         x = int(self.joystickWidget.width() * 0.5)
         y = int(self.joystickWidget.height() * 0.5)
         self.joystickPosition = QPoint(x, y)
+        msg = Twist()
+        msg.linear.y = float(0)
+        msg.angular.z = float(0)
+        self.publisher.publish(msg)
         self.update()
 
     def mouseReleaseEvent(self, event):
@@ -123,6 +151,16 @@ class JoystickWidget(BaseWidget):
                 ControlKeyEnum.STABLE in self.keyPressService.pressedKeys and len(
             self.keyPressService.pressedKeys) == 1)
 
+    def calculateRadiusOfJoystickBoundary(self, angle):
+        ellipseR = self.innerEllipseRx * self.innerEllipseRy * 0.25 / (math.sqrt(
+            (self.innerEllipseRx * 0.5) ** 2 * math.sin(angle) ** 2 + (
+                    self.innerEllipseRy * 0.5) ** 2 * math.cos(angle) ** 2))
+        return ellipseR
+
+    def getAngle(self, cartesianPositionY, cartesianPositionX):
+        angle = math.radians(math.atan2(cartesianPositionY, cartesianPositionX) / math.pi * 180)
+        return angle
+
     def calculateKeyPressed(self):
         while self.keyPressedFlag:
             x, y = self.calculateNewJoystickPosition()
@@ -133,14 +171,17 @@ class JoystickWidget(BaseWidget):
 
                 angle = math.radians(math.atan2(cartesianPositionY, cartesianPositionX) / math.pi * 180)
 
-                ellipseR = self.innerEllipseRx * self.innerEllipseRy * 0.25 / (math.sqrt(
-                    (self.innerEllipseRx * 0.5) ** 2 * math.sin(angle) ** 2 + (
-                            self.innerEllipseRy * 0.5) ** 2 * math.cos(angle) ** 2))
+                elipseR = self.calculateRadiusOfJoystickBoundary(angle)
                 joystickR = math.sqrt(cartesianPositionX ** 2 + cartesianPositionY ** 2)
 
-                leftEngine, rightEngine = self.enginesValueService.calculateEnginesValue(angle, ellipseR, joystickR)
-                print(leftEngine, rightEngine, "aaa")
+                leftEngine, rightEngine = self.enginesValueService.calculateMotorCommandEnginesValue(angle, joystickR, elipseR)
+                linear, angular = self.enginesValueService.calculateTwistEnginesValue(angle, joystickR, elipseR)
+                # print(linear, angular, "aaa")
 
+                msg = Twist()
+                msg.linear.y = float(linear)
+                msg.angular.z = float(angular)
+                self.publisher.publish(msg)
                 # print(angle, ellipseR, joystickR)
 
                 self.updateJoystickPosition(x, y)

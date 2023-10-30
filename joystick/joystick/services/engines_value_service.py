@@ -6,10 +6,14 @@ class EnginesValueService:
         self.setJoystickEngineData(joystickData)
 
     def setJoystickEngineData(self, joystickData):
-        self.joystickForwardData = joystickData.get("forward", {})
-        self.joystickRightData = joystickData.get("right", {})
-        self.joystickBackwartdData = joystickData.get("backward", {})
-        self.joystickLeftData = joystickData.get("right", {})
+
+        joystickMotorCommandData = joystickData.get('motorCommand', {})
+        self.joystickTwistData = joystickData.get('twist', {})
+
+        self.joystickForwardData = joystickMotorCommandData.get("forward", {})
+        self.joystickRightData = joystickMotorCommandData.get("right", {})
+        self.joystickBackwartdData = joystickMotorCommandData.get("backward", {})
+        self.joystickLeftData = joystickMotorCommandData.get("right", {})
 
     def getValue(self, data, fieldName):
         return int(data.get(fieldName, 0))
@@ -36,37 +40,48 @@ class EnginesValueService:
     def checkIfInBottomLeftQuarter(self, angle):
         return angle < (-math.pi * 0.5)
 
-    def calculateEnginesValue(self, angle, joystickR, elipseR):
+    def calculateMotorCommandEnginesValue(self, angle, joystickR, elipseR):
         joystickDeflection = joystickR / elipseR
 
-        leftEngine = 0
-        rightEngine = 0
+        #      pi/2
+        #        |
+        # pi     |      0
+        # ---------------
+        # -pi    |      0
+        #        |
+        #      -pi/2
 
         if self.checkIfInUpperRightQuarter(angle):
             angleFactor = angle / (math.pi * 0.5)
+            data1 = self.joystickRightData
+            data2 = self.joystickForwardData
 
-            leftEngine, rightEngine = self.calculateEnginesValueInQuarter(self.joystickRightData,
-                                                                          self.joystickForwardData,
-                                                                          angleFactor)
         elif self.checkIfInUpperLeftQuarter(angle):
             angleFactor = (angle - (math.pi * 0.5)) / (math.pi * 0.5)
-
-            leftEngine, rightEngine = self.calculateEnginesValueInQuarter(self.joystickForwardData,
-                                                                          self.joystickLeftData,
-                                                                          angleFactor)
+            data1 = self.joystickForwardData
+            data2 = self.joystickLeftData
 
         elif self.checkIfInBottomRightQuarter(angle):
             angleFactor = abs(angle / (math.pi * 0.5))
-
-            leftEngine, rightEngine = self.calculateEnginesValueInQuarter(self.joystickRightData,
-                                                                          self.joystickBackwartdData,
-                                                                          angleFactor)
+            data1 = self.joystickRightData
+            data2 = self.joystickBackwartdData
 
         elif self.checkIfInBottomLeftQuarter(angle):
             angleFactor = abs((angle + (math.pi * 0.5)) / (math.pi * 0.5))
+            data1 = self.joystickBackwartdData
+            data2 = self.joystickLeftData
 
-            leftEngine, rightEngine = self.calculateEnginesValueInQuarter(self.joystickBackwartdData,
-                                                                          self.joystickLeftData,
-                                                                          angleFactor)
+        leftEngine, rightEngine = self.calculateEnginesValueInQuarter(data1, data2, angleFactor)
+        return leftEngine * joystickDeflection, rightEngine * joystickDeflection
 
-        return leftEngine, rightEngine
+    def calculateTwistEnginesValue(self, angle, joystickR, elipseR):
+        joystickDeflection = joystickR / elipseR
+
+        baseLinear = float(self.joystickTwistData.get('linear', 0))
+        baseAngle = float(self.joystickTwistData.get('angular', 0))
+        sign = math.copysign(1, angle)
+
+        angleVelocity = sign * baseAngle * (1 - abs(angle) / (math.pi / 2)) * joystickDeflection
+        linearVelocity = sign * baseLinear * (1 - abs(abs(angle) - math.pi / 2) / (math.pi / 2)) * joystickDeflection
+        # print(angle, linearVelocity, angleVelocity)
+        return linearVelocity, angleVelocity
