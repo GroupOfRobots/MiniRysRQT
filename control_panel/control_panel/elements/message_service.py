@@ -35,7 +35,7 @@ class MessageService(QWidget):
 
         if dataKey is not None:
             msg.linear.y = float(self.dynamicTwist[dataKey]['linear'])
-            msg.angular.z = float(self.dynamicTwist[dataKey]['angle'])
+            msg.angular.z = float(self.dynamicTwist[dataKey]['angular'])
         elif not (keyState.forward or keyState.right or keyState.backward or keyState.left):
             msg.linear.y = 0.0
             msg.angular.z = 0.0

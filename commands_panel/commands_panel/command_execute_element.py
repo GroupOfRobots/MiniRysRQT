@@ -171,6 +171,8 @@ class CommandExecuteElementWidget(QWidget):
         command = self.command.get('command')
         commandName = self.command.get('commandName', 'command')
 
+        self.commandOutputSignal.emit([commandName, command, '', '', True])
+
         self.ssh = paramiko.SSHClient()
         self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
@@ -185,8 +187,7 @@ class CommandExecuteElementWidget(QWidget):
 
             self.pids = []
             line = self.getLineWithoutNewLine(stdout)
-
-            self.commandOutputSignal.emit([commandName, command, line, '', True])
+            self.commandOutputSignal.emit([commandName, command, line, '', False])
 
             while self.isCommandRunning:
                 line = self.getLineWithoutNewLine(stdout)
@@ -212,7 +213,7 @@ class CommandExecuteElementWidget(QWidget):
             errorsString = ''.join(errors)
             self.ssh.close()
 
-            self.commandOutputSignal.emit([commandName, command, outputString, errorsString, False])
+            # self.commandOutputSignal.emit([commandName, command, outputString, errorsString, False])
         except BaseException as exception:
             self.commandOutputSignal.emit([commandName, command, "SSH ERROR", str(exception), False])
 

@@ -65,9 +65,9 @@ class DashboardWidget(BaseWidget):
         voltageCell2 = float('{:.3f}'.format(event.voltage_cell2))
         voltageCell3 = float('{:.3f}'.format(event.voltage_cell3))
 
-        self.voltageCell1Lcd.display(voltageCell1)
-        self.voltageCell2Lcd.display(voltageCell2)
-        self.voltageCell3Lcd.display(voltageCell3)
+        self.voltageCell1LcdUI.display(voltageCell1)
+        self.voltageCell2LcdUI.display(voltageCell2)
+        self.voltageCell3LcdUI.display(voltageCell3)
 
         underVoltageError = event.undervoltage_error
         underVoltageWarning = event.undervoltage_warning
@@ -95,10 +95,10 @@ class DashboardWidget(BaseWidget):
             self.batteryGroupBox.setStyleSheet(self.previousStyleSheet)
 
     def temperatureCpuCallback(self, event):
-        self.temperatureCpuLcd.display(event.data)
+        self.temperatureCpuLcdUI.display(event.data)
 
     def temperatureMainCallback(self, event):
-        self.temperatureMainLcd.display(event.data)
+        self.temperatureMainLcdUI.display(event.data)
 
         # 0 - top
         # 1 - bottom
@@ -108,6 +108,7 @@ class DashboardWidget(BaseWidget):
         # 5 - left
 
     def topDistanceSensorCallback(self, event):
+        print(event)
         self.topDistanceLcdUI.display(event.range)
 
     def bottomDistanceSensorCallback(self, event):
@@ -158,14 +159,13 @@ class DashboardWidget(BaseWidget):
         linear = twist.linear
         angular = twist.angular
 
-        self.xLinearVelcocityLcdUI.display(linear.x)
-        self.yLinearVelcocityLcdUI.display(linear.y)
-        self.zLinearVelcocityLcdUI.display(linear.z)
-
-        self.xAngularVelcocityLcdUI.display(angular.x)
-        self.yAngularVelcocityLcdUI.display(angular.y)
-        self.zAngularVelcocityLcdUI.display(angular.z)
-
+        # self.xLinearVelcocityLcdUI.display(linear.x)
+        # self.yLinearVelcocityLcdUI.display(linear.y)
+        # self.zLinearVelcocityLcdUI.display(linear.z)
+        #
+        # self.xAngularVelcocityLcdUI.display(angular.x)
+        # self.yAngularVelcocityLcdUI.display(angular.y)
+        # self.zAngularVelcocityLcdUI.display(angular.z)
 
 
 SubscriberParam = namedtuple('SubscriberParam', ["subscriber", "messageType", "topic", "callback"])

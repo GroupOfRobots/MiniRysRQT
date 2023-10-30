@@ -60,8 +60,8 @@ class DashboardDistanceSensorsWidget(BaseWidget):
 
     def predefineSubscribers(self):
         topSensorSubsciberParam = SubscriberParam(None, Range, '/internal/distance_0',
-                                                  self.topDistanceSensorCallback, QPoint(250, 0), None, 'TOP',
-                                                  QLineF(260, 30, 260, 140), None)
+                                                  self.topDistanceSensorCallback, QPoint(220, 0), None, 'TOP',
+                                                  QLineF(250, 30, 250, 140), None)
 
         bottomSensorSubsciberParam = SubscriberParam(None, Range, '/internal/distance_1',
                                                      self.bottomDistanceSensorCallback, QPoint(220, 460),

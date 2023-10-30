@@ -348,7 +348,7 @@ QGroupBox:title {
              </widget>
             </item>
             <item alignment="Qt::AlignRight">
-             <widget class="QLCDNumber" name="voltageCell1Lcd">
+             <widget class="QLCDNumber" name="voltageCell1LcdUI">
               <property name="autoFillBackground">
                <bool>false</bool>
               </property>
@@ -385,7 +385,7 @@ QGroupBox:title {
              </widget>
             </item>
             <item alignment="Qt::AlignRight">
-             <widget class="QLCDNumber" name="voltageCell2Lcd">
+             <widget class="QLCDNumber" name="voltageCell2LcdUI">
               <property name="segmentStyle">
                <enum>QLCDNumber::Flat</enum>
               </property>
@@ -419,7 +419,7 @@ QGroupBox:title {
              </widget>
             </item>
             <item alignment="Qt::AlignRight">
-             <widget class="QLCDNumber" name="voltageCell3Lcd">
+             <widget class="QLCDNumber" name="voltageCell3LcdUI">
               <property name="styleSheet">
                <string notr="true"/>
               </property>
@@ -500,8 +500,8 @@ QGroupBox:title {
           </item>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_6">
-            <item alignment="Qt::AlignHCenter">
-             <widget class="QLCDNumber" name="temperatureMainLcd">
+            <item alignment="Qt::AlignRight">
+             <widget class="QLCDNumber" name="temperatureMainLcdUI">
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -529,8 +529,8 @@ QGroupBox:title {
               </property>
              </widget>
             </item>
-            <item alignment="Qt::AlignHCenter">
-             <widget class="QLCDNumber" name="temperatureCpuLcd">
+            <item alignment="Qt::AlignRight">
+             <widget class="QLCDNumber" name="temperatureCpuLcdUI">
               <property name="minimumSize">
                <size>
                 <width>0</width>

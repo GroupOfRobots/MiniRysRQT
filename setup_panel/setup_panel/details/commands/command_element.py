@@ -1,11 +1,10 @@
 # This Python file uses the following encoding: utf-8
 
-from shared.inner_communication import innerCommunication
-from python_qt_binding.QtWidgets import QPushButton, QWidget, QLineEdit, QTableWidget, QTableWidgetItem, QMessageBox
+import os
+
 from ament_index_python import get_resource
 from python_qt_binding import loadUi
-
-import os
+from python_qt_binding.QtWidgets import QWidget
 
 
 class CommandElementWidget(QWidget):
@@ -20,9 +19,8 @@ class CommandElementWidget(QWidget):
         if self.command:
             self.setupCommand()
 
-        # self.commandDeleteButtonUI.clicked.connect(lambda event: self.widget.deleteCommand(event, self))
-
         self.commandDeleteButtonUI.clicked.connect(lambda: self.widget.deleteCommand(self))
+        self.commandNameLineEditUI.textChanged.connect(self.setToolTip)
 
     def loadUi(self):
         _, packagePath = get_resource('packages', 'setup_panel')
@@ -32,10 +30,15 @@ class CommandElementWidget(QWidget):
     def setupCommand(self):
         commandName = self.command.get('commandName')
         self.commandNameLineEditUI.setText(commandName)
+        self.setToolTip(commandName)
+
         command = self.command.get('command')
         self.commandTextEditUI.setPlainText(command)
         executeViaSsh = self.command.get('executeViaSsh')
         self.executeViaSshCheckBoxUI.setChecked(executeViaSsh)
+
+    def setToolTip(self, toolTip):
+        self.commandNameLineEditUI.setToolTip(toolTip)
 
     def returnCommand(self):
         return {'commandName': self.commandNameLineEditUI.text(),
