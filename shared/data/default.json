@@ -43,36 +43,36 @@
   },
   "dynamicTwist": {
     "forward": {
-      "linear": 100,
-      "angular": 100
+      "linear": "-5",
+      "angular": "0"
     },
     "forwardLeft": {
-      "linear": 100,
-      "angular": 100
+      "linear": "-5",
+      "angular": "1"
     },
     "forwardRight": {
-      "linear": 100,
-      "angular": 100
+      "linear": "-5",
+      "angular": "-1"
     },
     "right": {
-      "linear": 100,
-      "angular": 100
+      "linear": "0",
+      "angular": "-3"
     },
     "backward": {
-      "linear": 100,
-      "angular": 100
+      "linear": "5",
+      "angular": "0"
     },
     "backwardLeft": {
-      "linear": 100,
-      "angular": 100
+      "linear": "5",
+      "angular": "-1"
     },
     "backwardRight": {
-      "linear": 100,
-      "angular": 100
+      "linear": "5",
+      "angular": "1"
     },
     "left": {
-      "linear": 100,
-      "angular": 100
+      "linear": "0",
+      "angular": "3"
     }
   },
   "joystick": {
