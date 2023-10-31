@@ -8,6 +8,7 @@ from python_qt_binding import QtCore
 from python_qt_binding.QtCore import Qt, QPoint
 from python_qt_binding.QtGui import QPainter, QBrush, QPen
 from shared.base_widget.base_widget import BaseWidget
+from shared.bool_publisher.bool_publisher import BoolPublisher
 from shared.enums import ControlKeyEnum
 from shared.enums import PackageNameEnum
 
@@ -27,6 +28,8 @@ class JoystickWidget(BaseWidget):
         super(JoystickWidget, self).__init__(stack, PackageNameEnum.Joystick)
 
         self.node = node
+        self.balancePublisher = BoolPublisher(self.balanceCheckBoxUI, self.node)
+        self.servoPublisher = BoolPublisher(self.servoCheckBoxUI, self.node)
 
         self.keyPressedThread = threading.Thread()
 
@@ -56,15 +59,12 @@ class JoystickWidget(BaseWidget):
         elipseR = self.calculateRadiusOfJoystickBoundary(angle)
         joystickR = math.sqrt(cartesianPositionX ** 2 + cartesianPositionY ** 2)
 
-        # print(angle)
         linear, angular = self.enginesValueService.calculateTwistEnginesValue(angle, joystickR, elipseR)
-        # print(linear, angular, "aaa")
 
         msg = Twist()
         msg.linear.y = float(linear)
         msg.angular.z = float(angular)
         self.publisher.publish(msg)
-        # print(angle, ellipseR, joystickR)
 
         self.updateJoystickPosition(x, y)
 
@@ -75,6 +75,8 @@ class JoystickWidget(BaseWidget):
         self.controlKeys = self.data.get('controlKeys')
         self.keyPressService = KeyPressService(self.controlKeys)
         self.enginesValueService = EnginesValueService(self.data.get("joystick", {}))
+        self.balancePublisher.setTopic(self.namespace, '/balance_mode')
+        self.servoPublisher.setTopic(self.namespace, '/servo_status')
 
         for key in self.controlKeys:
             controlValue = self.controlKeys[key].upper()
@@ -174,15 +176,14 @@ class JoystickWidget(BaseWidget):
                 elipseR = self.calculateRadiusOfJoystickBoundary(angle)
                 joystickR = math.sqrt(cartesianPositionX ** 2 + cartesianPositionY ** 2)
 
-                leftEngine, rightEngine = self.enginesValueService.calculateMotorCommandEnginesValue(angle, joystickR, elipseR)
+                leftEngine, rightEngine = self.enginesValueService.calculateMotorCommandEnginesValue(angle, joystickR,
+                                                                                                     elipseR)
                 linear, angular = self.enginesValueService.calculateTwistEnginesValue(angle, joystickR, elipseR)
-                # print(linear, angular, "aaa")
 
                 msg = Twist()
                 msg.linear.y = float(linear)
                 msg.angular.z = float(angular)
                 self.publisher.publish(msg)
-                # print(angle, ellipseR, joystickR)
 
                 self.updateJoystickPosition(x, y)
                 time.sleep(0.001)

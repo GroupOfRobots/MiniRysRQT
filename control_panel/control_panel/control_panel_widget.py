@@ -2,9 +2,9 @@
 
 from python_qt_binding.QtCore import Qt
 from shared.base_widget.base_widget import BaseWidget
+from shared.bool_publisher.bool_publisher import BoolPublisher
 from shared.enums import ControlKeyEnum, PackageNameEnum
 
-from .elements.bool_publisher import BoolPublisher
 from .elements.button import Button
 from .elements.key_state import getKeyState
 from .elements.message_service import MessageService

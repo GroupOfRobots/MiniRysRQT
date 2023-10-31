@@ -8,6 +8,7 @@ setup(
     name=package_name,
     version='0.0.0',
     packages=[package_name,
+              package_name + '/bool_publisher',
               package_name + '/deleted_robot_screen',
               package_name + '/no_robot_configuration_screen',
               package_name + '/utils',
