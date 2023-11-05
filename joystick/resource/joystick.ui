@@ -49,6 +49,9 @@
           <height>0</height>
          </size>
         </property>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
        </widget>
       </item>
       <item>
@@ -57,6 +60,9 @@
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
            <widget class="QCheckBox" name="balanceCheckBoxUI">
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
             <property name="layoutDirection">
              <enum>Qt::RightToLeft</enum>
             </property>
@@ -67,6 +73,9 @@
           </item>
           <item>
            <widget class="QCheckBox" name="servoCheckBoxUI">
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
             <property name="layoutDirection">
              <enum>Qt::RightToLeft</enum>
             </property>
@@ -89,7 +98,18 @@
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="comboBox_2"/>
+         <widget class="QComboBox" name="messageTypeComboBoxUI">
+          <item>
+           <property name="text">
+            <string>TWIST</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>MOTOR COMMAND</string>
+           </property>
+          </item>
+         </widget>
         </item>
        </layout>
       </item>
@@ -106,6 +126,9 @@
           <width>40</width>
           <height>40</height>
          </size>
+        </property>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
         </property>
         <property name="autoFillBackground">
          <bool>false</bool>

@@ -3,7 +3,6 @@ import math
 import threading
 import time
 
-from geometry_msgs.msg import Twist
 from python_qt_binding import QtCore
 from python_qt_binding.QtCore import Qt, QPoint
 from python_qt_binding.QtGui import QPainter, QBrush, QPen
@@ -14,6 +13,7 @@ from shared.enums import PackageNameEnum
 
 from .services.engines_value_service import EnginesValueService
 from .services.key_press_service import KeyPressService
+from .services.message_service import MessageService
 
 
 class JoystickWidget(BaseWidget):
@@ -31,6 +31,8 @@ class JoystickWidget(BaseWidget):
         self.balancePublisher = BoolPublisher(self.balanceCheckBoxUI, self.node)
         self.servoPublisher = BoolPublisher(self.servoCheckBoxUI, self.node)
 
+        self.messageService = MessageService(self.messageTypeComboBoxUI, self.node)
+
         self.keyPressedThread = threading.Thread()
 
         self.setMouseTracking(False)
@@ -42,8 +44,6 @@ class JoystickWidget(BaseWidget):
 
         self.settingsButton.clicked.connect(self.settingsClicked)
 
-        self.publisher = self.node.create_publisher(Twist, self.namespace + '/cmd_vel', 10)
-
     def settingsClicked(self):
         self.stack.goToSettings(self.dataFilePath)
 
@@ -52,31 +52,19 @@ class JoystickWidget(BaseWidget):
         x = self.joystickPosition.x()
         y = self.joystickPosition.y()
 
-        cartesianPositionX = x - self.joystickWidget.width() * 0.5
-        cartesianPositionY = self.joystickWidget.height() * 0.5 - y
-
-        angle = math.radians(math.atan2(cartesianPositionY, cartesianPositionX) / math.pi * 180)
-        elipseR = self.calculateRadiusOfJoystickBoundary(angle)
-        joystickR = math.sqrt(cartesianPositionX ** 2 + cartesianPositionY ** 2)
-
-        linear, angular = self.enginesValueService.calculateTwistEnginesValue(angle, joystickR, elipseR)
-
-        msg = Twist()
-        msg.linear.y = float(linear)
-        msg.angular.z = float(angular)
-        self.publisher.publish(msg)
-
-        self.updateJoystickPosition(x, y)
-
         if self.checkIfPointIsInEllipse(x, y):
+            self.updateJoystickPosition(x, y)
+            self.updateRobot(x, y)
             self.update()
 
     def initializeRobotSettings(self):
         self.controlKeys = self.data.get('controlKeys')
         self.keyPressService = KeyPressService(self.controlKeys)
         self.enginesValueService = EnginesValueService(self.data.get("joystick", {}))
+
         self.balancePublisher.setTopic(self.namespace, '/balance_mode')
         self.servoPublisher.setTopic(self.namespace, '/servo_status')
+        self.messageService.setup(self.namespace)
 
         for key in self.controlKeys:
             controlValue = self.controlKeys[key].upper()
@@ -110,10 +98,8 @@ class JoystickWidget(BaseWidget):
         x = int(self.joystickWidget.width() * 0.5)
         y = int(self.joystickWidget.height() * 0.5)
         self.joystickPosition = QPoint(x, y)
-        msg = Twist()
-        msg.linear.y = float(0)
-        msg.angular.z = float(0)
-        self.publisher.publish(msg)
+        self.updateRobot(x, y)
+
         self.update()
 
     def mouseReleaseEvent(self, event):
@@ -168,27 +154,33 @@ class JoystickWidget(BaseWidget):
             x, y = self.calculateNewJoystickPosition()
 
             if self.shouldUpdateJoystick(x, y):
-                cartesianPositionX = x - self.joystickWidget.width() * 0.5
-                cartesianPositionY = self.joystickWidget.height() * 0.5 - y
-
-                angle = math.radians(math.atan2(cartesianPositionY, cartesianPositionX) / math.pi * 180)
-
-                elipseR = self.calculateRadiusOfJoystickBoundary(angle)
-                joystickR = math.sqrt(cartesianPositionX ** 2 + cartesianPositionY ** 2)
-
-                leftEngine, rightEngine = self.enginesValueService.calculateMotorCommandEnginesValue(angle, joystickR,
-                                                                                                     elipseR)
-                linear, angular = self.enginesValueService.calculateTwistEnginesValue(angle, joystickR, elipseR)
-
-                msg = Twist()
-                msg.linear.y = float(linear)
-                msg.angular.z = float(angular)
-                self.publisher.publish(msg)
+                self.updateRobot(x, y)
 
                 self.updateJoystickPosition(x, y)
                 time.sleep(0.001)
             else:
                 time.sleep(0.1)
+
+    def getJoystickSituation(self, x, y):
+        cartesianPositionX = x - self.joystickWidget.width() * 0.5
+        cartesianPositionY = self.joystickWidget.height() * 0.5 - y
+
+        angle = math.radians(math.atan2(cartesianPositionY, cartesianPositionX) / math.pi * 180)
+
+        elipseR = self.calculateRadiusOfJoystickBoundary(angle)
+        joystickR = math.sqrt(cartesianPositionX ** 2 + cartesianPositionY ** 2)
+
+        return angle, elipseR, joystickR
+
+    def updateRobot(self, x, y):
+        angle, elipseR, joystickR = self.getJoystickSituation(x, y)
+        if self.messageTypeComboBoxUI.currentIndex() == 0:
+            linear, angular = self.enginesValueService.calculateTwistEnginesValue(angle, joystickR, elipseR)
+            self.messageService.publishTwist(linear, angular)
+        else:
+            leftEngine, rightEngine = self.enginesValueService.calculateMotorCommandEnginesValue(angle, joystickR,
+                                                                                                 elipseR)
+            self.messageService.publishMotorCommand(leftEngine, rightEngine)
 
     def checkIfPointIsInEllipse(self, x, y):
         h = self.joystickWidget.width() * 0.5
