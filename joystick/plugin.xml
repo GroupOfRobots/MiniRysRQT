@@ -13,7 +13,7 @@
       </group>
       -->
       <label>Joystick</label>
-      <icon type="theme">face-monkey</icon>
+      <icon type="theme">input-gaming</icon>
       <statustip>Joystick interface</statustip>
     </qtgui>
   </class>

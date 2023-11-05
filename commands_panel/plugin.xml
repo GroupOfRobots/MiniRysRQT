@@ -13,7 +13,7 @@
 <!--      </group>-->
 <!--      &ndash;&gt;-->
       <label>Commands</label>
-      <icon type="theme">face-cool</icon>
+      <icon type="theme">system-run</icon>
       <statustip>Commands panel interface</statustip>
     </qtgui>
   </class>

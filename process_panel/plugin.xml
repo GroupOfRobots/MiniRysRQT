@@ -13,8 +13,7 @@
 <!--      </group>-->
 <!--      &ndash;&gt;-->
       <label>Process</label>
-      <icon type="theme">face-angel
-      </icon>
+      <icon type="theme">system-search</icon>
       <statustip>Process panel interface</statustip>
     </qtgui>
   </class>
