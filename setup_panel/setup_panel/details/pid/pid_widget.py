@@ -1,6 +1,7 @@
 # from python_qt_binding.QtWidgets import QWidget
-from python_qt_binding.QtCore import QObject
 from python_qt_binding.QtWidgets import QWidget
+
+from rclpy.parameter import Parameter
 
 
 class PidWidget(QWidget):
@@ -8,8 +9,11 @@ class PidWidget(QWidget):
         super(PidWidget, self).__init__()
         self.widget = widget
         data = self.widget.data
+        self.setData(data)
 
+    def setData(self, data):
         pidData = data.get('pid', {})
+
         self.setPidAngle(pidData.get('pidAngle', {}))
         self.setPidSpeed(pidData.get('pidSpeed', {}))
 
@@ -40,9 +44,9 @@ class PidWidget(QWidget):
             "pidAngle": {}
         }
 
-        self.widget.data['pid']["pidSpeed"]["Kp"]=self.widget.pidSpeedKpUI.value()
-        self.widget.data['pid']["pidSpeed"]["Ki"]=self.widget.pidSpeedKiUI.value()
-        self.widget.data['pid']["pidSpeed"]["Kd"]=self.widget.pidSpeedKdUI.value()
+        self.widget.data['pid']["pidSpeed"]["Kp"] = self.widget.pidSpeedKpUI.value()
+        self.widget.data['pid']["pidSpeed"]["Ki"] = self.widget.pidSpeedKiUI.value()
+        self.widget.data['pid']["pidSpeed"]["Kd"] = self.widget.pidSpeedKdUI.value()
 
         self.widget.data['pid']["pidAngle"]["Kp"] = self.widget.pidAngleKpUI.value()
         self.widget.data['pid']["pidAngle"]["Ki"] = self.widget.pidAngleKiUI.value()

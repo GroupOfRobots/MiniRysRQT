@@ -7,10 +7,11 @@ class ControlsDataInitializer:
     def __init__(self, widget, controlKeys, data):
         self.widget = widget
         self.controlKeys = controlKeys
-        self.data = data
-        self.setData()
+        self.setData(data)
 
-    def setData(self):
+    def setData(self, data):
+        self.data = data
+
         self.setRobotName()
         self.setNamespace()
         self.setControlKeys()

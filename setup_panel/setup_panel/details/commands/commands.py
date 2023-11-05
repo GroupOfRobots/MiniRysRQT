@@ -1,12 +1,9 @@
 # This Python file uses the following encoding: utf-8
 
-from shared.inner_communication import innerCommunication
-from python_qt_binding.QtWidgets import QPushButton, QWidget, QLineEdit, QTableWidget, QTableWidgetItem, QMessageBox
-from ament_index_python import get_resource
-from python_qt_binding import loadUi
+from python_qt_binding.QtWidgets import QWidget
 
-import os
 from .command_element import CommandElementWidget
+
 
 class Commands(QWidget):
     def __init__(self, widget=None, command=None):
@@ -14,10 +11,11 @@ class Commands(QWidget):
 
         self.widget = widget
         self.command = command
-        self.data = widget.data
-        self.setupCommandsElements()
+        self.setupCommandsElements(self.widget.data)
 
-    def setupCommandsElements(self):
+    def setupCommandsElements(self, data):
+        self.data = data
+
         self.widget.addNewCommandButtonUI.clicked.connect(self.addNewCommand)
         commands = self.data.get('commands', [])
         for command in commands:
@@ -31,9 +29,10 @@ class Commands(QWidget):
     def deleteCommand(self, commandElement):
         self.widget.commandElementsBoxUI.removeWidget(commandElement)
         commandElement.deleteLater()
-        commandElement= None
+        commandElement = None
 
     def saveCommands(self):
+        print(self.widget)
         self.widget.data['commands'] = []
         for index in range(0, self.widget.commandElementsBoxUI.count()):
             commandElement = self.widget.commandElementsBoxUI.itemAt(index).widget()
