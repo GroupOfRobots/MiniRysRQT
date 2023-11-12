@@ -43,6 +43,7 @@ class PackageNameEnum(str, Enum):
     DeletedRobotScreenWidget = 'shared',
     NoRobotConfigurationScreenWidget = 'shared1',
     CameraPanel = 'camera_panel',
+    CameraVideoRecorderPanel = 'camera_video_recorder_panel',
     ProcessPanel = 'process_panel',
 
 
@@ -57,5 +58,6 @@ packageNameToUIFileMap = {
     PackageNameEnum.DeletedRobotScreenWidget: 'deleted_robot.ui',
     PackageNameEnum.NoRobotConfigurationScreenWidget: 'no_robot_configuration.ui',
     PackageNameEnum.CameraPanel: 'camera_panel.ui',
+    PackageNameEnum.CameraVideoRecorderPanel: 'camera_video_recorder_panel.ui',
     PackageNameEnum.ProcessPanel: 'process_panel.ui'
 }

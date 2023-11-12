@@ -1,0 +1,20 @@
+<library path="lib">
+  <class name="CameraVideoRecorderPanel" type="camera_video_recorder_panel.camera_video_recorder_panel.CameraVideoRecorderPanel" base_class_type="rqt_gui_py::Plugin">
+    <description>
+      Camera video recorder panel gui
+    </description>
+    <qtgui>
+<!--      &lt;!&ndash; optional grouping...-->
+<!--      <group>-->
+<!--        <label>Group</label>-->
+<!--      </group>-->
+<!--      <group>-->
+<!--        <label>Subgroup</label>-->
+<!--      </group>-->
+<!--      &ndash;&gt;-->
+      <label>Camera video recorder</label>
+      <icon type="theme">camera-video</icon>
+      <statustip>Camera video recorder on robot panel interface</statustip>
+    </qtgui>
+  </class>
+</library>
