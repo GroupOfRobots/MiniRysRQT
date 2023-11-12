@@ -15,3 +15,6 @@ class Controls(QWidget):
         self.controlKeyValidator = ControlKeyValidator(self.widget, self.controlKeys)
         self.controlsDataInitializer = ControlsDataInitializer(self.widget, self.controlKeys, self.data)
         self.controlsDataSaver = ControlsDataSaver(self.widget, self.controlKeys, self.data)
+
+    def setData(self, data):
+        self.controlsDataInitializer.setData(data)

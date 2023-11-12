@@ -7,6 +7,7 @@ from setup_panel.details.setup_widget import SetupWidget
 
 from ament_index_python import get_resource
 from shared.no_robot_configuration_screen.no_robot_configuration_screen_widget import NoRobotConfigurationScreenWidget
+from abc import abstractmethod
 
 class StackWidget(QWidget):
     def __init__(self, node=None,constructor=None, mainPanel=None):
@@ -24,6 +25,7 @@ class StackWidget(QWidget):
         self.mainChildWidget = None
         self.initWidget()
 
+    @abstractmethod
     def initWidget(self):
         if self.checkIfRobotsConfigurationFilesExists():
             self.createWidget()

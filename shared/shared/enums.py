@@ -14,7 +14,7 @@ class MotorControlPositionEnum(int, Enum):
     FORWARD_LEFT = 1
     FORWARD_RIGHT = 2
     RIGHT = 3
-    BACKWARD = 4  # position is preserved if stable key is pressed
+    BACKWARD = 4
     BACKWARD_LEFT = 5
     BACKWARD_RIGHT = 6
     LEFT = 7
@@ -46,6 +46,21 @@ class PackageNameEnum(str, Enum):
     CameraVideoRecorderPanel = 'camera_video_recorder_panel',
     ProcessPanel = 'process_panel',
 
+
+packageNameToDisplayNameMap = {
+    PackageNameEnum.ControlPanel: 'Control Panel',
+    PackageNameEnum.Joystick: 'Joystick',
+    PackageNameEnum.CommandsPanel: 'Commands Panel',
+    PackageNameEnum.SetupPanel: 'Setup Panel',
+    PackageNameEnum.FanPanel: 'Fan Panel',
+    PackageNameEnum.Dashboard: 'Dashboard',
+    PackageNameEnum.DashboardDistanceSensors: 'Dashboard Distance Sensors',
+    PackageNameEnum.DeletedRobotScreenWidget: 'Deleted Robot',
+    PackageNameEnum.NoRobotConfigurationScreenWidget: 'No Robot Configuration',
+    PackageNameEnum.CameraPanel: 'Camera Panel',
+    PackageNameEnum.CameraVideoRecorderPanel: 'Camera Video Recorder Panel',
+    PackageNameEnum.ProcessPanel: 'Process Panel'
+}
 
 packageNameToUIFileMap = {
     PackageNameEnum.ControlPanel: 'control_panel.ui',

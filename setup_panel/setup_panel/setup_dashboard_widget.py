@@ -15,6 +15,7 @@ class SetupDashboardWidget(QWidget):
         super(SetupDashboardWidget, self).__init__()
 
         self.stack = stack
+        self.node=node
 
         self.loadUi()
 
@@ -36,7 +37,7 @@ class SetupDashboardWidget(QWidget):
             element = DashboardElementWidget(fileName=fileName, stack=self.stack)
             self.elementDictionary[self.dataFilePath + '/' + fileName] = element
             # self.elements.addWidget(element)
-            self.elements.addWidget(element)
+            self.elementsBoxLayoutUI.addWidget(element)
 
     def loadUi(self):
         _, packagePath = get_resource('packages', 'setup_panel')
@@ -46,17 +47,17 @@ class SetupDashboardWidget(QWidget):
     def onDeleteRobotSignal(self, data):
         dataFilePath = data['filePath']
         element = self.elementDictionary[dataFilePath]
-        # self.form.removeRow(element)
-        self.elements.removeWidget(element)
-        self.update()
+        self.elementDictionary.pop(dataFilePath)
+        self.elementsBoxLayoutUI.removeWidget(element)
+        self.elementsBoxLayoutUI.update()
+
 
     def addDashboardElement(self, data):
         fileName = data['fileName']
         element = DashboardElementWidget(fileName=fileName, stack=self.stack)
         self.elementDictionary[self.dataFilePath + '/' + fileName] = element
-        # self.form.addRow(element)
-        self.elements.addWidget(element)
-        self.update()
+        self.elementsBoxLayoutUI.addWidget(element)
+        self.elementsBoxLayoutUI.update()
 
     def onUpdateRobotSignal(self, data):
         filePath = data['filePath']

@@ -1,5 +1,5 @@
 {
-  "robotName": "rys",
+  "robotName": "",
   "namespace": "minirys",
   "controlKeys": {
     "forward": "W",
@@ -96,8 +96,8 @@
       }
     },
     "twist": {
-      "linear": 100,
-      "angular": 100
+      "linear": -5,
+      "angular": -3
     }
   },
   "pid": {
@@ -124,5 +124,13 @@
       "commandName": "Prepare gpio",
       "command": "./prepare_gpio.sh"
     }
-  ]
+  ],
+  "videoRecorder": {
+    "output": "minirys-recording.mjpeg",
+    "quality": "HIGH",
+    "config": {
+      "width": 640,
+      "height": 480
+    }
+  }
 }

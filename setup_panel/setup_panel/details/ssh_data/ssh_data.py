@@ -5,9 +5,9 @@ class SshData(QWidget):
     def __init__(self, widget):
         super(SshData, self).__init__()
         self.widget = widget
-        self.setSshData(self.widget.data)
+        self.setData(self.widget.data)
 
-    def setSshData(self,data):
+    def setData(self,data):
         self.sshData = data.get('ssh', {})
         self.widget.sshHostInputUI.setText(self.sshData.get('host'))
         self.widget.sshPortInputUI.setText(self.sshData.get('port'))

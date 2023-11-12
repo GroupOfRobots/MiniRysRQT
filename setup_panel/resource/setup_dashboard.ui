@@ -72,6 +72,9 @@
           <height>16777215</height>
          </size>
         </property>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
         <property name="text">
          <string>ADD NEW ROBOT</string>
         </property>
@@ -96,8 +99,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>642</width>
-        <height>480</height>
+        <width>646</width>
+        <height>485</height>
        </rect>
       </property>
       <property name="sizePolicy">
@@ -114,7 +117,7 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_4">
           <item>
-           <layout class="QVBoxLayout" name="elements"/>
+           <layout class="QVBoxLayout" name="elementsBoxLayoutUI"/>
           </item>
          </layout>
         </widget>

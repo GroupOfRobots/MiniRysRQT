@@ -11,9 +11,9 @@ class Commands(QWidget):
 
         self.widget = widget
         self.command = command
-        self.setupCommandsElements(self.widget.data)
+        self.setData(self.widget.data)
 
-    def setupCommandsElements(self, data):
+    def setData(self, data):
         self.data = data
 
         self.widget.addNewCommandButtonUI.clicked.connect(self.addNewCommand)

@@ -52,6 +52,33 @@ class PidWidget(QWidget):
         self.widget.data['pid']["pidAngle"]["Ki"] = self.widget.pidAngleKiUI.value()
         self.widget.data['pid']["pidAngle"]["Kd"] = self.widget.pidAngleKdUI.value()
 
+        namespace = self.widget.data.get("namespace")
+
+        print(namespace)
+
+        self.widget.node.declare_parameters(
+            namespace=namespace,
+            parameters=[("my_str", "a"), ("my_int", "b"),("my_double_array", "c")]
+        )
+        # self.widget.node.declare_parameter('my_str', Parameter.Type.STRING)
+        # self.widget.node.declare_parameter('my_int', Parameter.Type.INTEGER)
+        # self.widget.node.declare_parameter('my_double_array', Parameter.Type.DOUBLE_ARRAY)
+
+        #
+        param_str = Parameter(namespace+'.my_str', Parameter.Type.STRING, 'Set from code')
+        param_int = Parameter(namespace+'.my_int', Parameter.Type.INTEGER, 12)
+        param_double_array = Parameter(namespace+'.my_double_array', Parameter.Type.DOUBLE_ARRAY, [1.1, 2.2])
+        # self.widget.node.set_parameters([param_str, param_int, param_double_array])
+
+        # self.widget.node.declare_parameters(
+        #     namespace=namespace,
+        #     parameters=[("bar", "default_value")]
+        # )
+        #
+        # param_str = Parameter('bar', Parameter.Type.STRING, 'Set from code')
+        # print(param_str)
+        # self.widget.node.set_parameters([param_str])
+
     # def test(self, event):
     #     print("event12325")
     #     print("event")

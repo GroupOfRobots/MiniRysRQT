@@ -7,6 +7,7 @@ from ament_index_python import get_resource
 from python_qt_binding import loadUi
 from python_qt_binding.QtCore import Qt
 from python_qt_binding.QtWidgets import QWidget
+from shared.enums import packageNameToDisplayNameMap
 from shared.enums import packageNameToUIFileMap
 from shared.inner_communication import innerCommunication
 
@@ -16,6 +17,7 @@ class BaseWidget(QWidget):
         super(BaseWidget, self).__init__()
         self.stack = stack
         self.packageName = packageName
+        self.displayName = packageNameToDisplayNameMap[packageName]
 
         self.currentDataFile = None
         self.data = None

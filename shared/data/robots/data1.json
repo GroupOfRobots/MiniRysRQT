@@ -1,90 +1,82 @@
 {
+  "robotName": "robot1",
   "id": 1,
-  "robotName": "pawel",
+  "namespace": "minirys",
   "controlKeys": {
-    "forward": "w",
-    "right": "d",
-    "backward": "s",
-    "left": "a",
+    "forward": "W",
+    "right": "D",
+    "backward": "S",
+    "left": "A",
     "stable": "Q"
   },
- "dynamic": {
+  "dynamic": {
     "forward": {
       "leftEngine": 100,
-      "rightEngine": 100,
-      "inertia": 1
+      "rightEngine": 100
     },
     "forwardLeft": {
       "leftEngine": 100,
-      "rightEngine": 100,
-      "inertia": 1
+      "rightEngine": 100
     },
     "forwardRight": {
       "leftEngine": 100,
-      "rightEngine": 100,
-      "inertia": 1
+      "rightEngine": 100
     },
     "right": {
       "leftEngine": 100,
-      "rightEngine": 100,
-      "inertia": 1
+      "rightEngine": 100
     },
     "backward": {
       "leftEngine": 100,
-      "rightEngine": 100,
-      "inertia": 1
-    },
-   "backwardLeft": {
-      "leftEngine": 100,
-      "rightEngine": 100,
-      "inertia": 1
-    },
-    "backwardRight": {
-      "leftEngine": 100,
-      "rightEngine": 100,
-      "inertia": 1
-    },
-    "left": {
-      "leftEngine": 100,
-      "rightEngine": 100,
-      "inertia": 1
-    }
-  },
-    "dynamicTwist": {
-    "forward": {
-      "linear": 100,
-      "angular": 100
-    },
-    "forwardLeft": {
-      "linear": 100,
-      "angular": 100
-    },
-    "forwardRight": {
-      "linear": 100,
-      "angular": 100
-    },
-    "right": {
-      "linear": 100,
-      "angular": 100
-    },
-    "backward": {
-      "linear": 100,
-      "angular": 100
+      "rightEngine": 100
     },
     "backwardLeft": {
-      "linear": 100,
-      "angular": 100
+      "leftEngine": 100,
+      "rightEngine": 100
     },
     "backwardRight": {
-      "linear": 100,
-      "angular": 100
+      "leftEngine": 100,
+      "rightEngine": 100
     },
     "left": {
-      "linear": 100,
-      "angular": 100
+      "leftEngine": 100,
+      "rightEngine": 100
     }
   },
-
+  "dynamicTwist": {
+    "forward": {
+      "linear": "-5",
+      "angular": "0"
+    },
+    "forwardLeft": {
+      "linear": "-5",
+      "angular": "1"
+    },
+    "forwardRight": {
+      "linear": "-5",
+      "angular": "-1"
+    },
+    "right": {
+      "linear": "0",
+      "angular": "-3"
+    },
+    "backward": {
+      "linear": "5",
+      "angular": "0"
+    },
+    "backwardLeft": {
+      "linear": "5",
+      "angular": "-1"
+    },
+    "backwardRight": {
+      "linear": "5",
+      "angular": "1"
+    },
+    "left": {
+      "linear": "0",
+      "angular": "3"
+    }
+  },
   "joystick": {
     "motorCommand": {
       "forward": {
@@ -109,10 +101,37 @@
       "angular": 100
     }
   },
+  "pid": {
+    "pidSpeed": {
+      "Kp": 1,
+      "Ki": 2,
+      "Kd": 3
+    },
+    "pidAngle": {
+      "Kp": 4,
+      "Ki": 5,
+      "Kd": 6
+    }
+  },
   "ssh": {
-    "host": "",
+    "host": "192.168.102.11",
     "port": "22",
     "username": "minirys",
     "password": "minirys"
+  },
+  "commands": [
+    {
+      "executeViaSsh": true,
+      "commandName": "Prepare gpio",
+      "command": "./prepare_gpio.sh"
+    }
+  ],
+  "videoRecorder": {
+    "output": "minirys-recording.mjpeg",
+    "quality": "HIGH",
+    "config": {
+      "width": 640,
+      "height": 480
+    }
   }
 }

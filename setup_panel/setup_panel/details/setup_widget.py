@@ -11,6 +11,7 @@ from .commands.commands import Commands
 from .controls.controls import Controls
 from .pid.pid_widget import PidWidget
 from .ssh_data.ssh_data import SshData
+from .video_recorder.video_recorder import VideoRecorder
 
 
 class SetupWidget(QWidget):
@@ -43,6 +44,7 @@ class SetupWidget(QWidget):
         self.pidWidget = PidWidget(self)
         self.controls = Controls(self)
         self.commands = Commands(self)
+        self.videoRecorder = VideoRecorder(self)
 
     def initData(self):
         self.loadData(self.dataFilePath)
@@ -54,10 +56,12 @@ class SetupWidget(QWidget):
         if reply == QMessageBox.Yes:
             self.loadData(self.defaultFilePath)
 
-            self.sshData.setSshData(self.data)
+            self.sshData.setData(self.data)
             self.pidWidget.setData(self.data)
-            self.commands.setupCommandsElements(self.data)
-            self.controls.controlsDataInitializer.setData(self.data)
+            self.commands.setData(self.data)
+            self.controls.setData(self.data)
+            self.videoRecorder.setData(self.data)
+
 
     def goBack(self):
         self.stack.stack.setCurrentIndex(0)
@@ -67,6 +71,7 @@ class SetupWidget(QWidget):
         self.controls.controlsDataSaver.save()
         self.pidWidget.savePidData()
         self.sshData.saveSshData()
+        self.videoRecorder.saveData()
 
         if self.addMode:
             self.addNewRobot()
