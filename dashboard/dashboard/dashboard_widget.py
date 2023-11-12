@@ -159,13 +159,8 @@ class DashboardWidget(BaseWidget):
         linear = twist.linear
         angular = twist.angular
 
-        # self.xLinearVelcocityLcdUI.display(linear.x)
-        # self.yLinearVelcocityLcdUI.display(linear.y)
-        # self.zLinearVelcocityLcdUI.display(linear.z)
-        #
-        # self.xAngularVelcocityLcdUI.display(angular.x)
-        # self.yAngularVelcocityLcdUI.display(angular.y)
-        # self.zAngularVelcocityLcdUI.display(angular.z)
+        self.yLinearVelcocityLcdUI.display(linear.y)
+        self.zAngularVelcocityLcdUI.display(angular.z)
 
 
 SubscriberParam = namedtuple('SubscriberParam', ["subscriber", "messageType", "topic", "callback"])

@@ -618,84 +618,11 @@ QGroupBox:title {
          </widget>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="xLinearVelocityLayoutUI">
-          <item>
-           <widget class="QLabel" name="xLinearVelcocityLabelUI">
-            <property name="text">
-             <string>X</string>
-            </property>
-           </widget>
-          </item>
-          <item alignment="Qt::AlignRight">
-           <widget class="QLCDNumber" name="xLinearVelcocityLcdUI">
-            <property name="segmentStyle">
-             <enum>QLCDNumber::Flat</enum>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <widget class="Line" name="line_9">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">border: 1px dashed black;</string>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+         <widget class="QLCDNumber" name="yLinearVelcocityLcdUI">
+          <property name="segmentStyle">
+           <enum>QLCDNumber::Flat</enum>
           </property>
          </widget>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="yLinearVelocityLayoutUI">
-          <item>
-           <widget class="QLabel" name="yLinearVelcocityLabelUI">
-            <property name="text">
-             <string>Y</string>
-            </property>
-           </widget>
-          </item>
-          <item alignment="Qt::AlignRight">
-           <widget class="QLCDNumber" name="yLinearVelcocityLcdUI">
-            <property name="segmentStyle">
-             <enum>QLCDNumber::Flat</enum>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <widget class="Line" name="line_11">
-          <property name="styleSheet">
-           <string notr="true">border: 1px dashed black;</string>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="zLinearVelocityLayoutUI">
-          <item>
-           <widget class="QLabel" name="zLinearVelcocityLabelUI">
-            <property name="text">
-             <string>Z</string>
-            </property>
-           </widget>
-          </item>
-          <item alignment="Qt::AlignRight">
-           <widget class="QLCDNumber" name="zLinearVelcocityLcdUI">
-            <property name="segmentStyle">
-             <enum>QLCDNumber::Flat</enum>
-            </property>
-           </widget>
-          </item>
-         </layout>
         </item>
         <item>
          <widget class="Line" name="line_6">
@@ -721,81 +648,14 @@ QGroupBox:title {
          </widget>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="xAngularVelocityLayoutUI_2">
-          <item>
-           <widget class="QLabel" name="xAngularVelcocityLcdUI_2">
-            <property name="text">
-             <string>X</string>
-            </property>
-           </widget>
-          </item>
-          <item alignment="Qt::AlignRight">
-           <widget class="QLCDNumber" name="xAngularVelcocityLcdUI">
-            <property name="segmentStyle">
-             <enum>QLCDNumber::Flat</enum>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <widget class="Line" name="line_12">
-          <property name="styleSheet">
-           <string notr="true">border: 1px dashed black;</string>
+         <widget class="QLCDNumber" name="zAngularVelcocityLcdUI">
+          <property name="frameShadow">
+           <enum>QFrame::Plain</enum>
           </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+          <property name="segmentStyle">
+           <enum>QLCDNumber::Flat</enum>
           </property>
          </widget>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="yAngularVelocityLayoutUI">
-          <item>
-           <widget class="QLabel" name="yAngularVelcocityLcdUI_2">
-            <property name="text">
-             <string>Y</string>
-            </property>
-           </widget>
-          </item>
-          <item alignment="Qt::AlignRight">
-           <widget class="QLCDNumber" name="yAngularVelcocityLcdUI">
-            <property name="segmentStyle">
-             <enum>QLCDNumber::Flat</enum>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <widget class="Line" name="line_13">
-          <property name="styleSheet">
-           <string notr="true">border: 1px dashed black;</string>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="zAngularVelocityLayoutUI">
-          <item>
-           <widget class="QLabel" name="zAgunlarVelcocityLabelUI">
-            <property name="text">
-             <string>Z</string>
-            </property>
-           </widget>
-          </item>
-          <item alignment="Qt::AlignRight">
-           <widget class="QLCDNumber" name="zAngularVelcocityLcdUI">
-            <property name="frameShadow">
-             <enum>QFrame::Plain</enum>
-            </property>
-            <property name="segmentStyle">
-             <enum>QLCDNumber::Flat</enum>
-            </property>
-           </widget>
-          </item>
-         </layout>
         </item>
        </layout>
       </item>
