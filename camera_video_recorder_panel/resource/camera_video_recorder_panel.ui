@@ -147,33 +147,6 @@ background-color:none;</string>
              </property>
             </widget>
            </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_6">
-             <item>
-              <widget class="QSlider" name="imageWidthSliderUI">
-               <property name="minimum">
-                <number>100</number>
-               </property>
-               <property name="maximum">
-                <number>3280</number>
-               </property>
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QSpinBox" name="imageWidthSpinBoxUI">
-               <property name="minimum">
-                <number>100</number>
-               </property>
-               <property name="maximum">
-                <number>3280</number>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
           </layout>
          </item>
          <item>
@@ -197,34 +170,14 @@ background-color:none;</string>
              </property>
             </widget>
            </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_5">
-             <item>
-              <widget class="QSlider" name="imageHeightSliderUI">
-               <property name="minimum">
-                <number>100</number>
-               </property>
-               <property name="maximum">
-                <number>2464</number>
-               </property>
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QSpinBox" name="imageHeightSpinBoxUI">
-               <property name="minimum">
-                <number>100</number>
-               </property>
-               <property name="maximum">
-                <number>2464</number>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
           </layout>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_4">
+           <property name="text">
+            <string>OUTPUT</string>
+           </property>
+          </widget>
          </item>
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -237,28 +190,11 @@ background-color:none;</string>
               </size>
              </property>
              <property name="text">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;ASPECT RATIO&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;QUALITY&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
             </widget>
            </item>
-           <item>
-            <layout class="QVBoxLayout" name="verticalLayout_6">
-             <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-              <widget class="QCheckBox" name="aspectRatioCheckBoxUI">
-               <property name="text">
-                <string/>
-               </property>
-               <property name="checked">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
           </layout>
-         </item>
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayout_3"/>
          </item>
         </layout>
        </item>
@@ -279,36 +215,6 @@ background-color:none;</string>
         </widget>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_2">
-         <item alignment="Qt::AlignHCenter">
-          <widget class="QLabel" name="counterLabelUI">
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>20</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Connecting</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="displayFramerateUI">
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>20</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Frame rate</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
         <widget class="Line" name="line_2">
          <property name="styleSheet">
           <string notr="true">border: 1px solid black;</string>
@@ -321,7 +227,7 @@ background-color:none;</string>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_7">
          <item alignment="Qt::AlignHCenter">
-          <widget class="QPushButton" name="screenshotButtonUI">
+          <widget class="QPushButton" name="recordButtonUI">
            <property name="cursor">
             <cursorShape>PointingHandCursor</cursorShape>
            </property>
@@ -332,7 +238,7 @@ padding: 5px;
 background: gray;</string>
            </property>
            <property name="text">
-            <string>Capture screenshot</string>
+            <string>START RECORDING</string>
            </property>
           </widget>
          </item>

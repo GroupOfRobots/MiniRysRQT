@@ -1,17 +1,9 @@
 # This Python file uses the following encoding: utf-8
 
-import os
-
-from python_qt_binding.QtWidgets import QAbstractSpinBox
 from shared.base_widget.base_widget import BaseWidget
-
-from std_msgs.msg import Float32
-from ament_index_python import get_resource
-from python_qt_binding import loadUi
-
-from shared.inner_communication import innerCommunication
-
 from shared.enums import PackageNameEnum
+from shared.inner_communication import innerCommunication
+from std_msgs.msg import Float32
 
 
 class FanPanelWidget(BaseWidget):

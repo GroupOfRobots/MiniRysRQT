@@ -7,6 +7,7 @@ from ament_index_python import get_resource
 from python_qt_binding.QtCore import Qt, QTimer
 from python_qt_binding.QtWidgets import QTableWidgetItem, QHeaderView, QAbstractItemView
 from shared.base_widget.base_widget import BaseWidget
+from shared.alert.alert import Alert
 from shared.enums import PackageNameEnum
 
 from .services.kill_local_process_service import KillLocalProcessService
@@ -50,7 +51,7 @@ class ProcessPanelWidget(BaseWidget):
             pass
 
     def setupSshExecution(self):
-        sshChannelCreated = self.createSSHChannel()
+        sshChannelCreated = self.createSshChannel()
 
         if sshChannelCreated:
             self.disconnectFunctions()
@@ -85,7 +86,7 @@ class ProcessPanelWidget(BaseWidget):
         else:
            self.setupLocalExecution()
 
-    def createSSHChannel(self):
+    def createSshChannel(self):
         sshData = self.data.get('ssh', {})
 
         host = sshData.get('host')
@@ -97,11 +98,11 @@ class ProcessPanelWidget(BaseWidget):
         self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
         try:
-            self.ssh.connect(host, port, username, password, timeout=5)
+            self.ssh.connect(host, port, username, password, timeout=1)
             return True
         except BaseException as exception:
-            print("BaseException createSSHChannel")
-            print(exception)
+            exceptionToDisplay="SSH connection: " + str(exception)
+            Alert(self.displayName, exceptionToDisplay)
             return False
 
     def getCommand(self):

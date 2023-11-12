@@ -7,7 +7,7 @@ class CameraVideoRecorderPanel(Plugin):
         super(CameraVideoRecorderPanel, self).__init__(context)
         self.setObjectName('CameraVideoRecorderPanel')
 
-        self._stack = CameraVideoRecorderPanelStack(context.node)
+        self._stack = CameraVideoRecorderPanelStack(node=context.node)
         self._stack.setWindowTitle('Camera Video Recorder Panel')
 
         setWidgetSerialNumber(context, self._stack)

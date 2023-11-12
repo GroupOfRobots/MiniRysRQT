@@ -83,7 +83,7 @@
       </item>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
-        <item>
+        <item alignment="Qt::AlignRight">
          <widget class="QLabel" name="label">
           <property name="text">
            <string>message</string>

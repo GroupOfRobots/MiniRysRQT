@@ -33,7 +33,6 @@ class CameraConnectionThread(QThread):
                     self.counter = 0
                     self.timestamp = time.time()
             except Exception as exception:
-                print(exception)
                 self.counter = 0
                 self.counterLabelUI.setText('Trying to reconnect: ')
                 self.tryingToConnect()
@@ -50,7 +49,7 @@ class CameraConnectionThread(QThread):
                 self.connectedToService()
                 return
             except Exception as exception:
-                print(exception)
+                # print(exception)
                 pass
 
     def run(self):

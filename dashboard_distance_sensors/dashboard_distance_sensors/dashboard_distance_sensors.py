@@ -16,5 +16,6 @@ class DashboardDistanceSensors(Plugin):
         context.add_widget(self._stack)
 
     def shutdown_plugin(self):
-        print("aaaaaaaaaaaa")
+        pass
+        # print("aaaaaaaaaaaa")
         # DashboardDistanceSensorsWidget.onDestroyed()

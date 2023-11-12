@@ -39,18 +39,6 @@
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
-       <widget class="QWidget" name="widget" native="true">
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <item>
-          <widget class="QComboBox" name="comboBox"/>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item>
-       <widget class="QWidget" name="widget_3" native="true"/>
-      </item>
-      <item>
        <widget class="QWidget" name="widget_2" native="true">
         <property name="minimumSize">
          <size>
@@ -68,7 +56,7 @@
          <item row="0" column="0">
           <widget class="QPushButton" name="set">
            <property name="text">
-            <string>PushButton</string>
+            <string/>
            </property>
           </widget>
          </item>
