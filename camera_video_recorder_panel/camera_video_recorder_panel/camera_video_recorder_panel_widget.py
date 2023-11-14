@@ -42,5 +42,3 @@ class CameraVideoRecorderPanelWidget(BaseWidget):
     def onShtudownPlugin(self):
         self.cameraConnectionThread.terminate()
 
-    def settingsClicked(self):
-        self.stack.goToSettings(self.dataFilePath)

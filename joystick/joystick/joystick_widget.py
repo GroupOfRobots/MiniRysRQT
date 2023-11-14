@@ -43,9 +43,6 @@ class JoystickWidget(BaseWidget):
 
         self.settingsButton.clicked.connect(self.settingsClicked)
 
-    def settingsClicked(self):
-        self.stack.goToSettings(self.dataFilePath)
-
     def joystickWidgetMouseMove(self, event):
         self.joystickPosition = event.pos()
         x = self.joystickPosition.x()

@@ -110,3 +110,6 @@ class BaseWidget(QWidget):
     def initializeRobotSettings(self):
         print('abstractmethod')
         pass
+
+    def settingsClicked(self):
+        self.stack.goToSettings(self.dataFilePath)

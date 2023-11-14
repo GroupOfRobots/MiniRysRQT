@@ -84,9 +84,6 @@ class ControlPanelWidget(BaseWidget):
         if msg is not None:
             self.messageService.publisher.publish(msg)
 
-    def settingsClicked(self):
-        self.stack.goToSettings(self.dataFilePath)
-
     def buttonClicked(self, isPressed, controlKeyEnum):
         self.pressedKeys[controlKeyEnum] = isPressed
         self.sendMessageOnKeyStateBase()

@@ -151,9 +151,6 @@ class CameraPanelWidget(BaseWidget):
     def onShtudownPlugin(self):
         self.cameraConnectionThread.terminate()
 
-    def settingsClicked(self):
-        self.stack.goToSettings(self.dataFilePath)
-
     @pyqtSlot(QImage)
     def displayImage(self, image):
         imageWidth = self.cameraStreamDisplayUI.width()
