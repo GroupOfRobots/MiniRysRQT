@@ -19,7 +19,7 @@ TIMER_INTERVAL=5000
 
 class ProcessPanelWidget(BaseWidget):
     def __init__(self, stack=None, node=None, mainPanel=None):
-        super(ProcessPanelWidget, self).__init__(stack, PackageNameEnum.ProcessPanel)
+        super(ProcessPanelWidget, self).__init__(stack, PackageNameEnum.ProcessPanel, node=node)
         _, self.packagePath = get_resource('packages', 'commands_panel')
 
         self.processPanel = mainPanel

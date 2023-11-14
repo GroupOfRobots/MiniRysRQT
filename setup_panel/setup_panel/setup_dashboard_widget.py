@@ -16,7 +16,7 @@ class SetupDashboardWidget(QWidget):
         super(SetupDashboardWidget, self).__init__()
 
         self.stack = stack
-        self.node=node
+        self.node = node
 
         loadUiFile(self, PackageNameEnum.SetupPanel, 'setup_dashboard.ui')
 

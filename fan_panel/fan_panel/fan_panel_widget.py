@@ -10,7 +10,7 @@ class FanPanelWidget(BaseWidget):
     activeRobotsMap = {}
 
     def __init__(self, stack=None, node=None, mainPanel=None):
-        super(FanPanelWidget, self).__init__(stack, PackageNameEnum.FanPanel)
+        super(FanPanelWidget, self).__init__(stack, PackageNameEnum.FanPanel, node=node)
 
         self.fanPanel = mainPanel
         self.id = None

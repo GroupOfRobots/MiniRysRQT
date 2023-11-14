@@ -12,9 +12,8 @@ from .elements.message_service import MessageService
 
 class ControlPanelWidget(BaseWidget):
     def __init__(self, stack=None, node=None):
-        super(ControlPanelWidget, self).__init__(stack, PackageNameEnum.ControlPanel)
+        super(ControlPanelWidget, self).__init__(stack, PackageNameEnum.ControlPanel, node=node)
 
-        self.node = node
         self.balancePublisher = BoolPublisher(self.balanceCheckBoxUI, self.node)
         self.servoPublisher = BoolPublisher(self.servoCheckBoxUI, self.node)
         self.messageService = MessageService(self.messageTypeComboBoxUI, self.node)

@@ -25,9 +25,8 @@ class JoystickWidget(BaseWidget):
     MARGIN_HORIZONTAL = 2 * MARGIN
 
     def __init__(self, stack=None, node=None):
-        super(JoystickWidget, self).__init__(stack, PackageNameEnum.Joystick)
+        super(JoystickWidget, self).__init__(stack, PackageNameEnum.Joystick, node=node)
 
-        self.node = node
         self.balancePublisher = BoolPublisher(self.balanceCheckBoxUI, self.node)
         self.servoPublisher = BoolPublisher(self.servoCheckBoxUI, self.node)
 

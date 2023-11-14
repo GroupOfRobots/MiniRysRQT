@@ -16,10 +16,8 @@ class DashboardDistanceSensorsWidget(BaseWidget):
     displayDistanceSensorSignal = pyqtSignal(object)
 
     def __init__(self, stack=None, node=Node):
-        super(DashboardDistanceSensorsWidget, self).__init__(stack, PackageNameEnum.DashboardDistanceSensors)
-        print(self.namespace)
+        super(DashboardDistanceSensorsWidget, self).__init__(stack, PackageNameEnum.DashboardDistanceSensors, node=node)
 
-        self.node = node
         self.predefineSubscribers()
 
         self.createCanvas()

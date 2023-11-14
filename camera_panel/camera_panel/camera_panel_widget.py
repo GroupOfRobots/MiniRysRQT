@@ -14,7 +14,7 @@ from .threads.host_not_defined_alert_thread import HostNotDefinedAlertThread
 
 class CameraPanelWidget(BaseWidget):
     def __init__(self, stack=None, node=None):
-        super(CameraPanelWidget, self).__init__(stack, PackageNameEnum.CameraPanel)
+        super(CameraPanelWidget, self).__init__(stack, PackageNameEnum.CameraPanel, node=node)
 
         self.setRobotOnScreen()
         self.settingsButtonUI.clicked.connect(self.settingsClicked)

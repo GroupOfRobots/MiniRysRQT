@@ -13,7 +13,7 @@ class CommandsPanelWidget(BaseWidget):
     commandOutputSignal = pyqtSignal(object, name="commandExecutionOutput")
 
     def __init__(self, stack=None, node=None):
-        super(CommandsPanelWidget, self).__init__(stack, PackageNameEnum.CommandsPanel)
+        super(CommandsPanelWidget, self).__init__(stack=stack, packageName=PackageNameEnum.CommandsPanel, node=node)
 
         self.commandOutputSignal.connect(self.onCommandOutputSignal)
 

@@ -9,7 +9,7 @@ from .threads.camera_connection_thread import CameraConnectionThread
 
 class CameraVideoRecorderPanelWidget(BaseWidget):
     def __init__(self, stack=None, node=None):
-        super(CameraVideoRecorderPanelWidget, self).__init__(stack, PackageNameEnum.CameraVideoRecorderPanel)
+        super(CameraVideoRecorderPanelWidget, self).__init__(stack, PackageNameEnum.CameraVideoRecorderPanel, node=node)
 
         self.setRobotOnScreen()
         self.settingsButtonUI.clicked.connect(self.settingsClicked)

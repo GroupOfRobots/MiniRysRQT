@@ -13,11 +13,12 @@ from shared.utils.load_ui_file import loadUiFile
 
 
 class BaseWidget(QWidget):
-    def __init__(self, stack=None, packageName=None):
+    def __init__(self, stack=None, packageName=None, node=None):
         super(BaseWidget, self).__init__()
         self.stack = stack
         self.packageName = packageName
         self.displayName = packageNameToDisplayNameMap[packageName]
+        self.node = node
 
         self.currentDataFile = None
         self.data = None

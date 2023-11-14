@@ -15,9 +15,8 @@ from std_msgs.msg import Float32
 
 class DashboardWidget(BaseWidget):
     def __init__(self, stack=None, node=Node):
-        super(DashboardWidget, self).__init__(stack, PackageNameEnum.Dashboard)
+        super(DashboardWidget, self).__init__(stack, PackageNameEnum.Dashboard, node=node)
 
-        self.node = node
         self.predefineSubscribers()
 
         self.setRobotOnScreen()

@@ -69,6 +69,6 @@ class StackWidget(QWidget):
     def goToSettings(self, dataFilePath=None):
         if hasattr(self, 'setupWidget'):
             self.stack.removeWidget(self.setupWidget)
-        self.setupWidget = SetupWidget(stack=self, dataFilePath=dataFilePath)
+        self.setupWidget = SetupWidget(stack=self, dataFilePath=dataFilePath, node=self.node)
         self.stack.addWidget(self.setupWidget)
         self.stack.setCurrentWidget(self.setupWidget)
