@@ -1,10 +1,10 @@
 # This Python file uses the following encoding: utf-8
 
-import os
+from shared.utils.load_ui_file import loadUiFile
 
-from ament_index_python import get_resource
-from python_qt_binding import loadUi
 from python_qt_binding.QtWidgets import QWidget
+
+from shared.enums import PackageNameEnum, packageNameToUIFileMap
 
 
 class CommandElementWidget(QWidget):
@@ -14,18 +14,13 @@ class CommandElementWidget(QWidget):
         self.widget = widget
         self.command = command
 
-        self.loadUi()
+        loadUiFile(self, PackageNameEnum.SetupPanel, 'command_element.ui')
 
         if self.command:
             self.setupCommand()
 
         self.commandDeleteButtonUI.clicked.connect(lambda: self.widget.deleteCommand(self))
         self.commandNameLineEditUI.textChanged.connect(self.setToolTip)
-
-    def loadUi(self):
-        _, packagePath = get_resource('packages', 'setup_panel')
-        uiFile = os.path.join(packagePath, 'share', 'setup_panel', 'resource', 'command_element.ui')
-        loadUi(uiFile, self)
 
     def setupCommand(self):
         commandName = self.command.get('commandName')

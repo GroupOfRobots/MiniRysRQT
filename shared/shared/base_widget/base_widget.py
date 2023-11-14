@@ -4,12 +4,12 @@ import os
 from abc import abstractmethod
 
 from ament_index_python import get_resource
-from python_qt_binding import loadUi
 from python_qt_binding.QtCore import Qt
 from python_qt_binding.QtWidgets import QWidget
 from shared.enums import packageNameToDisplayNameMap
 from shared.enums import packageNameToUIFileMap
 from shared.inner_communication import innerCommunication
+from shared.utils.load_ui_file import loadUiFile
 
 
 class BaseWidget(QWidget):
@@ -23,7 +23,7 @@ class BaseWidget(QWidget):
         self.data = None
         self.namespace = ''
 
-        self.loadUI()
+        loadUiFile(self, packageName, packageNameToUIFileMap[self.packageName])
         self.initializeRobotsOptions()
         self.comboBox.currentIndexChanged.connect(self.setRobotOnScreen)
 
@@ -109,9 +109,3 @@ class BaseWidget(QWidget):
     def initializeRobotSettings(self):
         print('abstractmethod')
         pass
-
-    def loadUI(self):
-        _, packagePath = get_resource('packages', self.packageName)
-        uiFile = os.path.join(packagePath, 'share', self.packageName, 'resource',
-                              packageNameToUIFileMap[self.packageName])
-        loadUi(uiFile, self)

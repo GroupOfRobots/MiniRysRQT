@@ -8,9 +8,10 @@ from enum import Enum
 
 import paramiko
 from ament_index_python import get_resource
-from python_qt_binding import loadUi
 from python_qt_binding.QtGui import QIcon, QPixmap
 from python_qt_binding.QtWidgets import QWidget
+from shared.enums import PackageNameEnum
+from shared.utils.load_ui_file import loadUiFile
 
 
 class RunStatusIcon(str, Enum):
@@ -30,14 +31,10 @@ class CommandExecuteElementWidget(QWidget):
         self.pids = []
         self.process = None
 
-        self.loadUi()
+        loadUiFile(self, PackageNameEnum.CommandsPanel, 'command_execute_element.ui')
         self.isCommandRunning = False
         self.commandLabelUI.setText(self.command.get('commandName', ''))
         self.commandButtonUI.clicked.connect(self.commandButtonClicked)
-
-    def loadUi(self):
-        uiFile = os.path.join(self.packagePath, 'share', 'commands_panel', 'resource', 'command_execute_element.ui')
-        loadUi(uiFile, self)
 
     def commandButtonClicked(self):
         if self.isCommandRunning:
