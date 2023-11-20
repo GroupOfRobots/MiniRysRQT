@@ -9,6 +9,7 @@ setup(
     version='0.0.0',
     packages=[package_name,
               package_name + '/alert',
+              package_name + '/spinner',
               package_name + '/bool_publisher',
               package_name + '/deleted_robot_screen',
               package_name + '/no_robot_configuration_screen',
