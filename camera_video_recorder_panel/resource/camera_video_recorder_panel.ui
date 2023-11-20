@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>709</width>
+    <width>699</width>
     <height>587</height>
    </rect>
   </property>
@@ -108,7 +108,7 @@ background-color:none;</string>
         </property>
         <property name="icon">
          <iconset>
-          <normaloff>imgs/settings1.png</normaloff>imgs/settings1.png</iconset>
+          <normaloff>imgs/settings.png</normaloff>imgs/settings.png</iconset>
         </property>
        </widget>
       </item>
@@ -125,94 +125,235 @@ background-color:none;</string>
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>691</width>
+        <width>681</width>
         <height>513</height>
        </rect>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0,0,1">
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <property name="sizeConstraint">
+          <enum>QLayout::SetMinimumSize</enum>
+         </property>
          <item>
-          <layout class="QVBoxLayout" name="verticalLayout_7">
-           <item alignment="Qt::AlignHCenter">
-            <widget class="QLabel" name="label_2">
-             <property name="maximumSize">
-              <size>
-               <width>16777215</width>
-               <height>20</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>WIDTH</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayout_8">
-           <item alignment="Qt::AlignHCenter">
-            <widget class="QLabel" name="label">
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>16777215</width>
-               <height>20</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>HEIGHT</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_4">
-           <property name="text">
-            <string>OUTPUT</string>
+          <widget class="QGroupBox" name="widthGroupBoxUI">
+           <property name="styleSheet">
+            <string notr="true"> QGroupBox {
+ 	background-color: qlineargradient(
+													x1: 0, y1: 0, x2: 0, y2: 1,
+                                   			     stop: 0 #bbbbbb, stop: 1 #eeeeee);
+ 	border: 2px solid #222222;
+ 	border-radius: 5px;
+ 	margin-top: 0; /* leave space at the top for the title */
+}
+
+QGroupBox:title {
+	top: 10px;
+	left:10px;
+}</string>
            </property>
+           <layout class="QVBoxLayout" name="verticalLayout_7">
+            <property name="sizeConstraint">
+             <enum>QLayout::SetMinimumSize</enum>
+            </property>
+            <item alignment="Qt::AlignHCenter|Qt::AlignTop">
+             <widget class="QLabel" name="label_2">
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>20</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">font-weight: bold; </string>
+              </property>
+              <property name="text">
+               <string>WIDTH</string>
+              </property>
+             </widget>
+            </item>
+            <item alignment="Qt::AlignHCenter|Qt::AlignTop">
+             <widget class="QLabel" name="widthLabelUI">
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>20</height>
+               </size>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </item>
          <item>
-          <layout class="QVBoxLayout" name="verticalLayout_5">
-           <item alignment="Qt::AlignTop">
-            <widget class="QLabel" name="label_3">
-             <property name="maximumSize">
-              <size>
-               <width>16777215</width>
-               <height>20</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;QUALITY&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
+          <widget class="QGroupBox" name="">
+           <property name="styleSheet">
+            <string notr="true"> QGroupBox {
+ 	background-color: qlineargradient(
+													x1: 0, y1: 0, x2: 0, y2: 1,
+                                   			     stop: 0 #bbbbbb, stop: 1 #eeeeee);
+ 	border: 2px solid #222222;
+ 	border-radius: 5px;
+ 	margin-top: 0; /* leave space at the top for the title */
+}
+
+QGroupBox:title {
+	top: 10px;
+	left:10px;
+}</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_8">
+            <property name="sizeConstraint">
+             <enum>QLayout::SetMinimumSize</enum>
+            </property>
+            <item alignment="Qt::AlignHCenter|Qt::AlignTop">
+             <widget class="QLabel" name="label">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>20</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">font-weight: bold; </string>
+              </property>
+              <property name="text">
+               <string>HEIGHT</string>
+              </property>
+             </widget>
+            </item>
+            <item alignment="Qt::AlignHCenter|Qt::AlignTop">
+             <widget class="QLabel" name="heightLabelUI">
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>20</height>
+               </size>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="">
+           <property name="styleSheet">
+            <string notr="true"> QGroupBox {
+ 	background-color: qlineargradient(
+													x1: 0, y1: 0, x2: 0, y2: 1,
+                                   			     stop: 0 #bbbbbb, stop: 1 #eeeeee);
+ 	border: 2px solid #222222;
+ 	border-radius: 5px;
+ 	margin-top: 0; /* leave space at the top for the title */
+}
+
+QGroupBox:title {
+	top: 10px;
+	left:10px;
+}</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_3">
+            <property name="sizeConstraint">
+             <enum>QLayout::SetMinimumSize</enum>
+            </property>
+            <item alignment="Qt::AlignHCenter|Qt::AlignTop">
+             <widget class="QLabel" name="label_4">
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>20</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">font-weight: bold; </string>
+              </property>
+              <property name="text">
+               <string>OUTPUT</string>
+              </property>
+             </widget>
+            </item>
+            <item alignment="Qt::AlignHCenter|Qt::AlignTop">
+             <widget class="QLabel" name="outputLabelUI">
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>20</height>
+               </size>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="qualityGroupBoxUI">
+           <property name="styleSheet">
+            <string notr="true"> QGroupBox {
+ 	background-color: qlineargradient(
+													x1: 0, y1: 0, x2: 0, y2: 1,
+                                   			     stop: 0 #bbbbbb, stop: 1 #eeeeee);
+ 	border: 2px solid #222222;
+ 	border-radius: 5px;
+ 	margin-top: 0; /* leave space at the top for the title */
+}
+
+QGroupBox:title {
+	top: 10px;
+	left:10px;
+}</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_9">
+            <property name="sizeConstraint">
+             <enum>QLayout::SetMinimumSize</enum>
+            </property>
+            <item alignment="Qt::AlignHCenter|Qt::AlignTop">
+             <widget class="QLabel" name="label_3">
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>20</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">font-weight: bold; </string>
+              </property>
+              <property name="text">
+               <string>QUALITY</string>
+              </property>
+             </widget>
+            </item>
+            <item alignment="Qt::AlignHCenter|Qt::AlignTop">
+             <widget class="QLabel" name="qualityLabelUI">
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>20</height>
+               </size>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
          </item>
         </layout>
-       </item>
-       <item>
-        <widget class="Line" name="line">
-         <property name="styleSheet">
-          <string notr="true">border: 1px solid black;</string>
-         </property>
-         <property name="lineWidth">
-          <number>0</number>
-         </property>
-         <property name="midLineWidth">
-          <number>0</number>
-         </property>
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
        </item>
        <item>
         <widget class="Line" name="line_2">
@@ -232,7 +373,7 @@ background-color:none;</string>
             <cursorShape>PointingHandCursor</cursorShape>
            </property>
            <property name="styleSheet">
-            <string notr="true">border: 1px solid black;
+            <string notr="true">font-weight: bold; border: 1px solid black;
 border-radius: 5px;
 padding: 5px;
 background: gray;</string>
@@ -259,20 +400,20 @@ background: gray;</string>
          <property name="title">
           <string/>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_4">
+         <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0">
           <item>
-           <widget class="QLabel" name="cameraStreamDisplayUI">
+           <widget class="QWidget" name="widgetUI" native="true">
             <property name="minimumSize">
              <size>
-              <width>100</width>
-              <height>100</height>
+              <width>0</width>
+              <height>50</height>
              </size>
             </property>
-            <property name="styleSheet">
-             <string notr="true"/>
-            </property>
-            <property name="text">
-             <string/>
+            <property name="sizeIncrement">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
             </property>
            </widget>
           </item>

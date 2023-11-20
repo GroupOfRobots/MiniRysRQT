@@ -13,7 +13,3 @@ class CameraVideoRecorderPanel(Plugin):
         setWidgetSerialNumber(context, self._stack)
 
         context.add_widget(self._stack)
-
-    def shutdown_plugin(self):
-        self._stack.mainChildWidget.onShtudownPlugin()
-
