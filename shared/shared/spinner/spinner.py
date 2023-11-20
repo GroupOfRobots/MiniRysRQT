@@ -96,6 +96,11 @@ class Spinner(QWidget):
             self.timer.stop()
             self.currentCounter = 0
 
+        # FIX
+        # QBackingStore::endPaint() called with active painter; did you forget to destroy it or call QPainter::end() on it?
+        self.update()
+
+
     def setNumberOfLines(self, lines):
         self.numberOfLines = lines
         self.currentCounter = 0
