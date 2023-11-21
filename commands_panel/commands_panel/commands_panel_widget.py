@@ -10,6 +10,8 @@ from .command_execute_element import CommandExecuteElementWidget
 
 
 class CommandsPanelWidget(BaseWidget):
+    # Extracted outside constructor due the following error
+    # https://stackoverflow.com/questions/2970312/pyqt4-qtcore-pyqtsignal-object-has-no-attribute-connect
     commandOutputSignal = pyqtSignal(object, name="commandExecutionOutput")
 
     def __init__(self, stack=None, node=None):
@@ -47,7 +49,6 @@ class CommandsPanelWidget(BaseWidget):
         button.setMinimumWidth(150)
         button.setMaximumWidth(150)
 
-        # Create a widget to hold the plain text edit (optional)
         widget = QWidget()
         layout = QVBoxLayout(widget)
         layout.addWidget(button)
@@ -92,12 +93,9 @@ class CommandsPanelWidget(BaseWidget):
             self.insertLog("red", errors, commandName)
 
     def insertLog(self, colorName, log, commandName):
-
         color = QColor(colorName)
         self.logFormat.setForeground(color)
         plainTextEdit = self.tabDictionary.get(commandName)
         plainTextEdit.setCurrentCharFormat(self.logFormat)
         plainTextEdit.insertPlainText(log + "\n")
 
-    def settingsClicked(self):
-        self.stack.goToSettings(self.dataFilePath)

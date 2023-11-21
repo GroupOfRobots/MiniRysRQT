@@ -41,7 +41,7 @@ class PackageNameEnum(str, Enum):
     Dashboard = 'dashboard'
     DashboardDistanceSensors = 'dashboard_distance_sensors',
     DeletedRobotScreenWidget = 'shared',
-    NoRobotConfigurationScreenWidget = 'shared1',
+    NoRobotConfigurationScreenWidget = 'shared1', # TODO jakoś ominąć shared
     CameraPanel = 'camera_panel',
     CameraVideoRecorderPanel = 'camera_video_recorder_panel',
     ProcessPanel = 'process_panel',

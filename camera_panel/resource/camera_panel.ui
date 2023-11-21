@@ -326,7 +326,7 @@ background-color:none;</string>
             <cursorShape>PointingHandCursor</cursorShape>
            </property>
            <property name="styleSheet">
-            <string notr="true">border: 1px solid black;
+            <string notr="true">font-weight: bold; border: 1px solid black;
 border-radius: 5px;
 padding: 5px;
 background: gray;</string>

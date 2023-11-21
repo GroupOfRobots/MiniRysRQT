@@ -27,4 +27,4 @@ class VideoRecorder(QWidget):
         self.widget.data['videoRecorder']["output"] = self.widget.videoRecorderOutputLineEditUI.text()
         self.widget.data['videoRecorder']["quality"] = self.widget.videoRecorderQualityComboBoxUI.currentText()
         self.widget.data['videoRecorder']["config"]["width"] = self.widget.videoRecorderConfigWidthSpinBoxUI.value()
-        self.widget.data['videoRecorder']["config"]["width"] = self.widget.videoRecorderConfigHeightSpinBoxUI.value()
+        self.widget.data['videoRecorder']["config"]["height"] = self.widget.videoRecorderConfigHeightSpinBoxUI.value()

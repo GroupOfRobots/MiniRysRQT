@@ -5,17 +5,17 @@ import subprocess
 import paramiko
 from ament_index_python import get_resource
 from python_qt_binding.QtCore import Qt, QTimer
-from python_qt_binding.QtWidgets import QTableWidgetItem, QHeaderView, QAbstractItemView
-from shared.base_widget.base_widget import BaseWidget
+from python_qt_binding.QtWidgets import QHeaderView, QAbstractItemView
 from shared.alert.alert import Alert
+from shared.base_widget.base_widget import BaseWidget
 from shared.enums import PackageNameEnum
 
+from .services.display_process_service import DisplayProcessService
 from .services.kill_local_process_service import KillLocalProcessService
 
-from .services.display_process_service import DisplayProcessService
-
 PID_PROCESS_PATTERN = r"\b(\d+)\b"
-TIMER_INTERVAL=5000
+TIMER_INTERVAL = 5000
+
 
 class ProcessPanelWidget(BaseWidget):
     def __init__(self, stack=None, node=None, mainPanel=None):
@@ -82,9 +82,9 @@ class ProcessPanelWidget(BaseWidget):
 
     def setupExecution(self, state):
         if state == Qt.Checked:
-           self.setupSshExecution()
+            self.setupSshExecution()
         else:
-           self.setupLocalExecution()
+            self.setupLocalExecution()
 
     def createSshChannel(self):
         sshData = self.data.get('ssh', {})
@@ -101,7 +101,7 @@ class ProcessPanelWidget(BaseWidget):
             self.ssh.connect(host, port, username, password, timeout=1)
             return True
         except BaseException as exception:
-            exceptionToDisplay="SSH connection: " + str(exception)
+            exceptionToDisplay = "SSH connection: " + str(exception)
             Alert(self.displayName, exceptionToDisplay)
             return False
 

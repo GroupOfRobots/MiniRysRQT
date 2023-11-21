@@ -1,5 +1,6 @@
 # This Python file uses the following encoding: utf-8
 
+from minirys_msgs.srv import RecordVideoStart, RecordVideoStop
 from python_qt_binding.QtWidgets import QFileDialog
 from shared.alert.alert import Alert
 from shared.base_widget.base_widget import BaseWidget
@@ -18,6 +19,7 @@ class CameraVideoRecorderPanelWidget(BaseWidget):
         self.settingsButtonUI.clicked.connect(self.settingsClicked)
 
         self.recordButtonUI.clicked.connect(self.onRecordButtonClicked)
+        self.fileSizeWrapperWidgetUI.setVisible(False);
 
         self.isRecording = False
 
@@ -25,8 +27,19 @@ class CameraVideoRecorderPanelWidget(BaseWidget):
 
         self.fetchRecordingSpinner = FetchRecordingSpinner(self.widgetUI)
 
+        self.recordVideoStartService = self.node.create_client(RecordVideoStart, 'start_video_recording')
+        self.recordVideoStopService = self.node.create_client(RecordVideoStop, 'stop_video_recording')
+
     def onRecordButtonClicked(self):
         if not self.isRecording:
+            req = RecordVideoStart.Request()
+            req.width = self.width
+            req.height = self.height
+            req.quality = self.quality
+            response = self.recordVideoStartService.call(req)
+            print("aaaaaaaaaaaaaaaa", response)
+
+            # self.publisher.publish(msg)
             self.startRecording()
         else:
             self.stopRecording()
@@ -34,42 +47,43 @@ class CameraVideoRecorderPanelWidget(BaseWidget):
     def startRecording(self):
         self.recordingSpinner.start()
 
-        url = self.startRecordingRequestUrl()
-
-        jsonBody = {'width': self.width, 'height': self.height, 'output': self.output}
-
-        # requests.post(url, timeout=2.50, json=jsonBody)
-
         self.isRecording = True
         self.recordButtonUI.setText("RECORDING")
 
     def stopRecording(self):
         self.isRecording = False
-        url = self.stopRecordingRequestUrl()
-        # requests.post(url)
+
+        req = RecordVideoStop.Request()
+
+        response = self.recordVideoStopService.call(req)
+        print(response, "response")
+        remoteVideoFilePath = response.video_file_path
+
         self.recordingSpinner.stop()
 
         self.filePath = self.getVideoFilePath()
 
         if self.filePath == '':
             self.recordButtonUI.setText("START RECORDING")
-            Alert(self.displayName, "You canceled action hence video will be lost")
+            Alert(self.displayName, "You canceled action hence video will not be fetched")
             return
 
         self.recordButtonUI.setText("FETCHING FILE")
         self.recordButtonUI.setEnabled(False)
 
-        self.fetchFile()
+        self.fetchFile(remoteVideoFilePath)
 
-    def fetchFile(self):
+    def fetchFile(self, remoteVideoFilePath):
+        self.fileSizeWrapperWidgetUI.setVisible(True)
         self.fetchRecordingSpinner.start()
-
         self.fetchFileThread = FetchFileThread(filePath=self.filePath,
-                                               fileName=self.output,
+                                               remoteVideoFilePath=remoteVideoFilePath,
                                                host=self.host,
                                                port=self.port,
                                                username=self.username,
-                                               password=self.password)
+                                               password=self.password,
+                                               fileSizeLabelUI=self.fileSizeLabelUI,
+                                               )
         self.fetchFileThread.finished.connect(self.onFetchFileThreadFinished)
         self.fetchFileThread.start()
 
@@ -77,6 +91,7 @@ class CameraVideoRecorderPanelWidget(BaseWidget):
         self.fetchRecordingSpinner.stop()
         self.recordButtonUI.setText("START RECORDING")
         self.recordButtonUI.setEnabled(True)
+        self.fileSizeWrapperWidgetUI.setVisible(False)
 
     def getVideoFilePath(self):
         options = QFileDialog.Options()
@@ -91,8 +106,8 @@ class CameraVideoRecorderPanelWidget(BaseWidget):
         sshData = self.data.get('ssh', {})
         self.host = sshData.get('host')
         self.username = sshData.get('username')
-        self.password = sshData.get('minirys')
-        self.port = sshData.get('port')
+        self.password = sshData.get('password')
+        self.port = int(sshData.get('port'))
 
         videoRecorder = self.data.get("videoRecorder", {})
         self.output = videoRecorder.get("output", None)
@@ -112,9 +127,3 @@ class CameraVideoRecorderPanelWidget(BaseWidget):
         self.heightLabelUI.setText(str(self.height))
         self.outputLabelUI.setText(self.output)
         self.qualityLabelUI.setText(self.quality)
-
-    def startRecordingRequestUrl(self):
-        return 'http://' + self.host + ':8000/start-recording'
-
-    def stopRecordingRequestUrl(self):
-        return 'http://' + self.host + ':8000/stop-recording'

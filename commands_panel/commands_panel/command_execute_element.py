@@ -3,6 +3,7 @@ import os
 import re
 import signal
 import subprocess
+import sys
 import threading
 from enum import Enum
 
@@ -15,7 +16,8 @@ from shared.utils.load_ui_file import loadUiFile
 
 
 class RunStatusIcon(str, Enum):
-    RUNNING = 'runningArrow.png'
+    TEST = 'hourglass.png'
+    RUNNING = 'runningIcon.png'
     RUN = 'runArrow.png'
     STOP = 'stopIcon.png'
 
@@ -24,14 +26,16 @@ class CommandExecuteElementWidget(QWidget):
     def __init__(self, command=None, data=None, commandOutputSignal=None):
         super(CommandExecuteElementWidget, self).__init__()
         _, self.packagePath = get_resource('packages', 'commands_panel')
+
         self.command = command
         self.data = data
         self.commandOutputSignal = commandOutputSignal
 
-        self.pids = []
+        self.processesPids = []
         self.process = None
 
         loadUiFile(self, PackageNameEnum.CommandsPanel, 'command_execute_element.ui')
+
         self.isCommandRunning = False
         self.commandLabelUI.setText(self.command.get('commandName', ''))
         self.commandButtonUI.clicked.connect(self.commandButtonClicked)
@@ -39,9 +43,8 @@ class CommandExecuteElementWidget(QWidget):
     def commandButtonClicked(self):
         if self.isCommandRunning:
             self.stopCommand()
-
         else:
-            self.setRunningStatusIcon(RunStatusIcon.STOP)
+            self.setRunningStatusIcon(RunStatusIcon.RUNNING)
             self.commandThread = threading.Thread(target=self.runCommand)
             self.commandThread.start()
 
@@ -51,12 +54,11 @@ class CommandExecuteElementWidget(QWidget):
         self.commandButtonUI.setIcon(QIcon(icon))
 
     def stopCommand(self):
-        print("stopCommand")
-        if self.command.get('executeViaSsh'):
+        if self.isSshCommand():
             running_command = self.command.get('command')
             print("self.pids")
-            print(self.pids)
-            if self.pids and len(self.pids) and None:
+            print(self.processesPids)
+            if self.processesPids and len(self.processesPids) and None:
                 self.killProcessesWithPid()
                 # break
             else:
@@ -91,18 +93,22 @@ class CommandExecuteElementWidget(QWidget):
                     print("aaaaaawwwwwwwwwww")
 
         else:
-            print("self.process123456")
-            self.process.send_signal(signal.SIGINT)
+            # print("self.pr22222ocess123456")
+            # # self.process.wait(timeout=0.1)
+            try:
+                self.process.wait(timeout=0.1)
+            except subprocess.TimeoutExpired:
+                print('Terminating the whole process group...', file=sys.stderr)
+                print(self.process.pid)
+                os.killpg(os.getpgid(self.process.pid), signal.SIGTERM)
 
-            # print(self.process)
-            # # os.kill(self.process.pid, signal.SIGTERM)
-            # # self.process.send_signal(signal.SIGTERM)
-            self.process.terminate()
-            self.process.kill()
+            # self.process.send_signal(signal.SIGINT)
+            # #
+            # self.process.terminate()
+            # self.process.kill()
 
         self.commandThread.join()
-        self.isCommandRunning = False
-        self.setRunningStatusIcon(RunStatusIcon.RUN)
+        self.commandExecutionFinished()
 
     def safeCast(self, val, to_type, default=None):
         try:
@@ -112,7 +118,7 @@ class CommandExecuteElementWidget(QWidget):
             return default
 
     def killProcessesWithPid(self):
-        for pid in self.pids:
+        for pid in self.processesPids:
             self.killProcessWithPid(pid)
 
     def killProcessWithPid(self, pid):
@@ -134,10 +140,16 @@ class CommandExecuteElementWidget(QWidget):
 
     def runCommand(self):
         self.isCommandRunning = True
-        if self.command.get('executeViaSsh'):
+        if self.isSshCommand():
             self.executeCommandViaSsh()
         else:
             self.executeCommandLocaly()
+        self.commandExecutionFinished()
+
+    def isSshCommand(self):
+        return self.command.get('executeViaSsh')
+
+    def commandExecutionFinished(self):
         self.isCommandRunning = False
         self.setRunningStatusIcon(RunStatusIcon.RUN)
 
@@ -146,7 +158,9 @@ class CommandExecuteElementWidget(QWidget):
         commandName = self.command.get('commandName')
 
         self.process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE,
-                                        stderr=subprocess.PIPE, stdin=subprocess.PIPE)
+                                        stderr=subprocess.PIPE, stdin=subprocess.PIPE, start_new_session=True)
+
+        print("PID", self.process.pid)
 
         out, err = self.process.communicate()
 
@@ -155,7 +169,7 @@ class CommandExecuteElementWidget(QWidget):
         if err is not None:
             errorsString = err.decode("utf-8")
 
-        self.commandOutputSignal.emit([commandName, command, outputString, errorsString, True])
+        self.emitCommandOutput(commandName, command, outputString, errorsString, True)
 
     def executeCommandViaSsh(self):
         sshData = self.data.get('ssh', {})
@@ -168,7 +182,7 @@ class CommandExecuteElementWidget(QWidget):
         command = self.command.get('command')
         commandName = self.command.get('commandName', 'command')
 
-        self.commandOutputSignal.emit([commandName, command, '', '', True])
+        self.emitCommandOutput(commandName, command, '', '', True)
 
         self.ssh = paramiko.SSHClient()
         self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -182,24 +196,24 @@ class CommandExecuteElementWidget(QWidget):
             stdin, stdout, stderr = self.ssh.exec_command(command)
             stdout.channel.set_combine_stderr(True)
 
-            self.pids = []
+            self.processesPids = []
             line = self.getLineWithoutNewLine(stdout)
-            self.commandOutputSignal.emit([commandName, command, line, '', False])
+            self.emitCommandOutput(commandName, command, line, '', False)
 
             while self.isCommandRunning:
                 line = self.getLineWithoutNewLine(stdout)
 
-                self.commandOutputSignal.emit([commandName, command, line, '', False])
+                self.emitCommandOutput(commandName, command, line, '', False)
                 pattern = "process started with pid \[(\d+)\]"
                 pattern2 = "\[(\d+)\]"
                 match = re.search(pattern, line)
                 match2 = re.search(pattern2, line)
                 if match:
                     pid = match.group(1)
-                    self.pids.append(int(pid))
+                    self.processesPids.append(int(pid))
                 elif match2:
                     pid = match2.group(1)
-                    self.pids.append(int(pid))
+                    self.processesPids.append(int(pid))
 
                 if not line:
                     self.isCommandRunning = False
@@ -212,7 +226,10 @@ class CommandExecuteElementWidget(QWidget):
 
             # self.commandOutputSignal.emit([commandName, command, outputString, errorsString, False])
         except BaseException as exception:
-            self.commandOutputSignal.emit([commandName, command, "SSH ERROR", str(exception), False])
+            self.emitCommandOutput(commandName, command, "SSH ERROR", str(exception), False)
+
+    def emitCommandOutput(self, commandName, command, output, errors, firstLog):
+        self.commandOutputSignal.emit([commandName, command, output, errors, firstLog])
 
     def getLineWithoutNewLine(self, stdout):
         line = stdout.readline()

@@ -1091,7 +1091,7 @@ border-radius: 75px;
               <x>0</x>
               <y>0</y>
               <width>752</width>
-              <height>885</height>
+              <height>873</height>
              </rect>
             </property>
             <property name="styleSheet">
@@ -1135,8 +1135,14 @@ border-radius: 75px;
              <height>16777215</height>
             </size>
            </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
            <property name="styleSheet">
-            <string notr="true">background: lightGray;</string>
+            <string notr="true">font-weight: bold; border: 1px solid black;
+border-radius: 5px;
+padding: 5px;
+background: gray;</string>
            </property>
            <property name="text">
             <string>ADD NEW COMMAND</string>
@@ -1542,7 +1548,27 @@ border-radius: 75px;
            </layout>
           </item>
           <item>
-           <spacer name="verticalSpacer_2">
+           <layout class="QHBoxLayout" name="horizontalLayout_20">
+            <item alignment="Qt::AlignHCenter">
+             <widget class="QPushButton" name="testParamsButtonUI">
+              <property name="cursor">
+               <cursorShape>PointingHandCursor</cursorShape>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">font-weight: bold; border: 1px solid black;
+border-radius: 5px;
+padding: 5px;
+background: gray;</string>
+              </property>
+              <property name="text">
+               <string>TEST PARAMS</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <spacer name="spacer">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
             </property>

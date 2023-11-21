@@ -37,8 +37,20 @@ qlineargradient:(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(255, 255, 255, 
      </item>
      <item>
       <widget class="QPushButton" name="modifyButton">
+       <property name="maximumSize">
+        <size>
+         <width>100</width>
+         <height>16777215</height>
+        </size>
+       </property>
        <property name="cursor">
         <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font-weight: bold; border: 1px solid black;
+border-radius: 5px;
+padding: 5px;
+background: gray;</string>
        </property>
        <property name="text">
         <string>MODIFY</string>
