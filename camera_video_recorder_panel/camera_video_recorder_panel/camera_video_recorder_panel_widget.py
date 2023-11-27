@@ -1,5 +1,4 @@
 # This Python file uses the following encoding: utf-8
-
 from minirys_msgs.srv import RecordVideoStart, RecordVideoStop
 from python_qt_binding.QtWidgets import QFileDialog
 from shared.alert.alert import Alert
@@ -9,6 +8,8 @@ from shared.enums import PackageNameEnum
 from .elements.fetch_recording_spinner import FetchRecordingSpinner
 from .elements.recording_spinner import RecordingSpinner
 from .threads.fetch_file_thread import FetchFileThread
+from .threads.start_recording_thread import StartRecordingThread
+from .threads.stop_recording_thread import StopRecordingThread
 
 
 class CameraVideoRecorderPanelWidget(BaseWidget):
@@ -32,30 +33,21 @@ class CameraVideoRecorderPanelWidget(BaseWidget):
 
     def onRecordButtonClicked(self):
         if not self.isRecording:
-            req = RecordVideoStart.Request()
-            req.width = self.width
-            req.height = self.height
-            req.quality = self.quality
-            response = self.recordVideoStartService.call(req)
-            print("aaaaaaaaaaaaaaaa", response)
-
-            # self.publisher.publish(msg)
-            self.startRecording()
+            self.test = StartRecordingThread(self)
+            self.test.startRecordingResponse.connect(self.startRecording)
+            self.test.start()
         else:
-            self.stopRecording()
+            self.test1 = StopRecordingThread(self)
+            self.test1.stopRecordingResponse.connect(self.stopRecording)
+            self.test1.start()
 
-    def startRecording(self):
+    def startRecording(self, response):
+        # print(response)
         self.recordingSpinner.start()
-
         self.isRecording = True
-        self.recordButtonUI.setText("RECORDING")
 
-    def stopRecording(self):
+    def stopRecording(self, response):
         self.isRecording = False
-
-        req = RecordVideoStop.Request()
-
-        response = self.recordVideoStopService.call(req)
         print(response, "response")
         remoteVideoFilePath = response.video_file_path
 

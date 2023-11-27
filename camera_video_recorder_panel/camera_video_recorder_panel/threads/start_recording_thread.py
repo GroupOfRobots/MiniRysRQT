@@ -1,0 +1,29 @@
+from minirys_msgs.srv import RecordVideoStart
+from python_qt_binding.QtCore import QThread, pyqtSignal
+from shared.alert.alert import Alert
+
+
+class StartRecordingThread(QThread):
+    startRecordingResponse = pyqtSignal(object)
+
+    def __init__(self, cameraVideoRecorderPanelWidget):
+        super(QThread, self).__init__()
+        self.cameraVideoRecorderPanelWidget = cameraVideoRecorderPanelWidget
+        self.recordButtonUI = cameraVideoRecorderPanelWidget.recordButtonUI
+        self.recordVideoStartService = cameraVideoRecorderPanelWidget.recordVideoStartService
+
+    def run(self):
+        self.recordButtonUI.setEnabled(False)
+        while not self.recordVideoStartService.wait_for_service(timeout_sec=2.0):
+            self.recordButtonUI.setEnabled(True)
+            Alert(self.cameraVideoRecorderPanelWidget.displayName, "Recording service not available")
+            return
+        self.recordButtonUI.setEnabled(True)
+
+        req = RecordVideoStart.Request()
+        req.width = self.cameraVideoRecorderPanelWidget.width
+        req.height = self.cameraVideoRecorderPanelWidget.height
+        req.quality = self.cameraVideoRecorderPanelWidget.quality
+        response = self.recordVideoStartService.call(req)
+
+        self.startRecordingResponse.emit(response)
