@@ -15,18 +15,9 @@ from .threads.host_not_defined_alert_thread import HostNotDefinedAlertThread
 class CameraPanelWidget(BaseWidget):
     def __init__(self, stack=None, node=None):
         super(CameraPanelWidget, self).__init__(stack, PackageNameEnum.CameraPanel, node=node)
-
         self.setRobotOnScreen()
-        self.settingsButtonUI.clicked.connect(self.settingsClicked)
 
-        self.cameraConnectionThread = CameraConnectionThread(url=self.getRequestUrl(),
-                                                             displayFramerateUI=self.displayFramerateUI,
-                                                             counterLabelUI=self.counterLabelUI,
-                                                             imageWidth=int(self.imageWidthSliderUI.value()),
-                                                             imageHeight=int(self.imageHeightSliderUI.value()))
-
-        self.cameraConnectionThread.changePixmap.connect(self.displayImage)
-        self.cameraConnectionThread.start()
+        self.initCameraConnectionThread()
 
         self.screenshotButtonUI.clicked.connect(self.captureScreenshot)
 
@@ -44,11 +35,26 @@ class CameraPanelWidget(BaseWidget):
             self.showAlertThatHostIsNotDefined()
 
         try:
-            if self.cameraConnectionThread is not None:
-                self.cameraConnectionThread.url = self.getRequestUrl()
-                self.cameraConnectionThread.host = self.host
+            # if self.cameraConnectionThread is not None:
+            self.setCameraConnectionThreadData()
         except AttributeError:
             pass
+
+
+    def initCameraConnectionThread(self):
+        self.cameraConnectionThread = CameraConnectionThread(url=self.getRequestUrl(),
+                                                             displayFramerateUI=self.displayFramerateUI,
+                                                             screenshotButtonUI=self.screenshotButtonUI,
+                                                             counterLabelUI=self.counterLabelUI,
+                                                             imageWidth=int(self.imageWidthSliderUI.value()),
+                                                             imageHeight=int(self.imageHeightSliderUI.value()))
+
+        self.cameraConnectionThread.changePixmap.connect(self.displayImage)
+        self.cameraConnectionThread.start()
+
+    def setCameraConnectionThreadData(self):
+        self.cameraConnectionThread.url = self.getRequestUrl()
+        self.cameraConnectionThread.host = self.host
 
     def getRequestUrl(self):
         return 'http://' + self.host + ':8000/stream.mjpg'
@@ -150,6 +156,13 @@ class CameraPanelWidget(BaseWidget):
 
     def onShtudownPlugin(self):
         self.cameraConnectionThread.terminate()
+
+    def cleanup(self):
+        self.cameraConnectionThread.terminate()
+
+    def restoreFunctionalities(self):
+        self.cameraConnectionThread.resetCounters()
+        self.cameraConnectionThread.start()
 
     @pyqtSlot(QImage)
     def displayImage(self, image):

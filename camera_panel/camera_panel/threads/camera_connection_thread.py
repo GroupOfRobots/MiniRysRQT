@@ -11,9 +11,10 @@ class CameraConnectionThread(QThread):
     exceptionCounter = 0
     timestamp = 0
 
-    def __init__(self, url, displayFramerateUI, counterLabelUI, imageWidth, imageHeight):
+    def __init__(self, url, displayFramerateUI,screenshotButtonUI, counterLabelUI, imageWidth, imageHeight):
         super(QThread, self).__init__()
         self.displayFramerateUI = displayFramerateUI
+        self.screenshotButtonUI = screenshotButtonUI
         self.counterLabelUI = counterLabelUI
         self.imageWidth = imageWidth
         self.imageHeight = imageHeight
@@ -21,6 +22,7 @@ class CameraConnectionThread(QThread):
 
     def connectedToService(self):
         image = QImage()
+        self.screenshotButtonUI.setEnabled(True)
         while True:
             try:
                 jsonBody = {'width': self.imageWidth, 'height': self.imageHeight}
@@ -33,8 +35,9 @@ class CameraConnectionThread(QThread):
                     self.counter = 0
                     self.timestamp = time.time()
             except Exception as exception:
-                self.counter = 0
+                self.resetCounters()
                 self.counterLabelUI.setText('Trying to reconnect: ')
+                self.screenshotButtonUI.setEnabled(False)
                 self.tryingToConnect()
 
     def tryingToConnect(self):
@@ -58,6 +61,7 @@ class CameraConnectionThread(QThread):
             self.counterLabelUI.setText('Framerate: ')
             self.connectedToService()
         except:
+            self.screenshotButtonUI.setEnabled(False)
             self.tryingToConnect()
 
     def setFrameWidth(self, width):
@@ -65,3 +69,10 @@ class CameraConnectionThread(QThread):
 
     def setFrameHeight(self, height):
         self.imageHeight = height
+
+    def resetCounters(self):
+        self.counter = 0
+        self.exceptionCounter = 0
+        self.timestamp = 0
+
+        self.displayFramerateUI.setText("")

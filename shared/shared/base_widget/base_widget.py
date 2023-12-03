@@ -115,5 +115,15 @@ class BaseWidget(QWidget):
         print('abstractmethod')
         pass
 
+    # clean threads, open connections to prevent memory leaking
+    @abstractmethod
+    def cleanup(self):
+        pass
+
+    # restore previously stopped threads, connections
+    @abstractmethod
+    def restoreFunctionalities(self):
+        pass
+
     def settingsClicked(self):
         self.stack.goToSettings(self.dataFilePath)

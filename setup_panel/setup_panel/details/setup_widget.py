@@ -62,9 +62,8 @@ class SetupWidget(QWidget):
             self.controls.setData(self.data)
             self.videoRecorder.setData(self.data)
 
-
     def goBack(self):
-        self.stack.stack.setCurrentIndex(0)
+        self.stack.comeBackFromSettings()
 
     def saveClicked(self):
         self.commands.saveCommands()

@@ -1,21 +1,22 @@
 # This Python file uses the following encoding: utf-8
 import os
-
-from python_qt_binding.QtWidgets import QWidget, QStackedWidget, QStackedLayout
-from ..deleted_robot_screen.deleted_robot_screen_widget import DeletedRobotScreenWidget
-from setup_panel.details.setup_widget import SetupWidget
-
-from ament_index_python import get_resource
-from shared.no_robot_configuration_screen.no_robot_configuration_screen_widget import NoRobotConfigurationScreenWidget
 from abc import abstractmethod
 
+from ament_index_python import get_resource
+from python_qt_binding.QtWidgets import QWidget, QStackedWidget, QStackedLayout
+from setup_panel.details.setup_widget import SetupWidget
+from shared.no_robot_configuration_screen.no_robot_configuration_screen_widget import NoRobotConfigurationScreenWidget
+
+from ..deleted_robot_screen.deleted_robot_screen_widget import DeletedRobotScreenWidget
+
+
 class StackWidget(QWidget):
-    def __init__(self, node=None,constructor=None, mainPanel=None):
+    def __init__(self, node=None, constructor=None, mainPanel=None):
         super(StackWidget, self).__init__()
         self.stack = QStackedWidget(self)
-        self.node=node
-        self.constructor=constructor
-        self.mainPanel=mainPanel
+        self.node = node
+        self.constructor = constructor
+        self.mainPanel = mainPanel
 
         layout = QStackedLayout(self)
         layout.addWidget(self.stack)
@@ -30,8 +31,8 @@ class StackWidget(QWidget):
         if self.checkIfRobotsConfigurationFilesExists():
             self.createWidget()
         else:
-            self.noRobotConfigurationScreenWidget=NoRobotConfigurationScreenWidget(stack = self, node= self.node)
-            self.mainChildWidget =self.noRobotConfigurationScreenWidget
+            self.noRobotConfigurationScreenWidget = NoRobotConfigurationScreenWidget(stack=self, node=self.node)
+            self.mainChildWidget = self.noRobotConfigurationScreenWidget
             self.stack.addWidget(self.mainChildWidget)
 
     def addFirstRobot(self):
@@ -55,12 +56,14 @@ class StackWidget(QWidget):
         return os.path.join(shared_package_path, 'share', 'shared', 'data', 'robots')
 
     def goToDeletedRobotScreen(self):
+        self.mainChildWidget.cleanup()
         self.deletedRobotScreenWidget = DeletedRobotScreenWidget(stack=self)
         self.stack.addWidget(self.deletedRobotScreenWidget)
         self.stack.setCurrentWidget(self.deletedRobotScreenWidget)
 
     def onDeletedRobotScreenReturn(self):
         self.mainChildWidget.setRobotOnScreen()
+        self.mainChildWidget.restoreFunctionalities()
         self.stack.setCurrentWidget(self.mainChildWidget)
         self.stack.removeWidget(self.deletedRobotScreenWidget)
         self.deletedRobotScreenWidget.deleteLater()
@@ -69,6 +72,12 @@ class StackWidget(QWidget):
     def goToSettings(self, dataFilePath=None):
         if hasattr(self, 'setupWidget'):
             self.stack.removeWidget(self.setupWidget)
+        self.mainChildWidget.cleanup()
+
         self.setupWidget = SetupWidget(stack=self, dataFilePath=dataFilePath, node=self.node)
         self.stack.addWidget(self.setupWidget)
         self.stack.setCurrentWidget(self.setupWidget)
+
+    def comeBackFromSettings(self):
+        self.stack.setCurrentIndex(0)
+        self.mainChildWidget.restoreFunctionalities()
