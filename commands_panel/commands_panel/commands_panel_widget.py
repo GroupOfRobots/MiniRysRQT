@@ -24,7 +24,6 @@ class CommandsPanelWidget(BaseWidget):
         self.logFormat = QTextCharFormat()
         self.clearAllConsoleButtonUI.clicked.connect(self.clearAllTabs)
         self.closeAllConsoleButtonUI.clicked.connect(self.closeAllTabs)
-        self.settingsButtonUI.clicked.connect(self.settingsClicked)
 
         self.logsTabWidgetUI.setTabsClosable(True)
         self.logsTabWidgetUI.tabCloseRequested.connect(self.tabCloseRequested)

@@ -89,7 +89,6 @@ class ControlPanelWidget(BaseWidget):
         self.sendMessageOnKeyStateBase()
 
     def defineButtons(self):
-        self.settingsButton.clicked.connect(self.settingsClicked)
 
         self.forwardButtonElement = Button(self.forwardButton)
         self.rightButtonElement = Button(self.rightButton)

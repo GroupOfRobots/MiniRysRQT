@@ -74,7 +74,7 @@
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="settingsButton">
+       <widget class="QPushButton" name="settingsButtonUI">
         <property name="minimumSize">
          <size>
           <width>15</width>
@@ -86,6 +86,9 @@
           <width>40</width>
           <height>40</height>
          </size>
+        </property>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
         </property>
         <property name="autoFillBackground">
          <bool>false</bool>
@@ -99,7 +102,7 @@ background-color:none;</string>
         </property>
         <property name="icon">
          <iconset>
-          <normaloff>imgs/settings1.png</normaloff>imgs/settings1.png</iconset>
+          <normaloff>imgs/settings.png</normaloff>imgs/settings.png</iconset>
         </property>
        </widget>
       </item>

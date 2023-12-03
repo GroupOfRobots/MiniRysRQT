@@ -13,6 +13,7 @@ from shared.utils.load_ui_file import loadUiFile
 
 
 class BaseWidget(QWidget):
+    settingsButtonUI = None
     def __init__(self, stack=None, packageName=None, node=None):
         super(BaseWidget, self).__init__()
         self.stack = stack
@@ -30,6 +31,9 @@ class BaseWidget(QWidget):
 
         self.setFocusPolicy(Qt.ClickFocus)
         self.setFocus()
+
+        if self.settingsButtonUI is not None:
+            self.settingsButtonUI.clicked.connect(self.settingsClicked)
 
         innerCommunication.deleteRobotSignal.connect(self.onDeleteRobotSignal)
         innerCommunication.addRobotSignal.connect(self.onAddRobotSignal)

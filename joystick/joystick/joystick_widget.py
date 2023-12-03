@@ -41,7 +41,6 @@ class JoystickWidget(BaseWidget):
         self.comboBox.currentIndexChanged.connect(self.setRobotOnScreen)
         self.joystickWidget.mouseMoveEvent = self.joystickWidgetMouseMove
 
-        self.settingsButton.clicked.connect(self.settingsClicked)
 
     def joystickWidgetMouseMove(self, event):
         self.joystickPosition = event.pos()

@@ -74,6 +74,20 @@
         </property>
        </spacer>
       </item>
+      <item>
+       <widget class="QPushButton" name="settingsButtonUI">
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>imgs/settings.png</normaloff>imgs/settings.png</iconset>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>

@@ -74,6 +74,20 @@
         </property>
        </spacer>
       </item>
+      <item>
+       <widget class="QPushButton" name="settingsButtonUI">
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>imgs/settings1.png</normaloff>imgs/settings1.png</iconset>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
@@ -132,6 +146,12 @@ QGroupBox:title {
           </item>
           <item alignment="Qt::AlignRight">
            <widget class="QLCDNumber" name="frontDistanceLcdUI">
+            <property name="font">
+             <font>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
             <property name="digitCount">
              <number>4</number>
             </property>
@@ -163,6 +183,12 @@ QGroupBox:title {
           </item>
           <item>
            <widget class="QLCDNumber" name="backDistanceLcdUI">
+            <property name="font">
+             <font>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
             <property name="digitCount">
              <number>4</number>
             </property>
@@ -194,6 +220,12 @@ QGroupBox:title {
           </item>
           <item>
            <widget class="QLCDNumber" name="topDistanceLcdUI">
+            <property name="font">
+             <font>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
             <property name="segmentStyle">
              <enum>QLCDNumber::Flat</enum>
             </property>
@@ -222,6 +254,12 @@ QGroupBox:title {
           </item>
           <item>
            <widget class="QLCDNumber" name="leftDistanceLcdUI">
+            <property name="font">
+             <font>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
             <property name="segmentStyle">
              <enum>QLCDNumber::Flat</enum>
             </property>
@@ -250,6 +288,12 @@ QGroupBox:title {
           </item>
           <item alignment="Qt::AlignRight">
            <widget class="QLCDNumber" name="rightDistanceLcdUI">
+            <property name="font">
+             <font>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
             <property name="segmentStyle">
              <enum>QLCDNumber::Flat</enum>
             </property>
@@ -284,6 +328,12 @@ QGroupBox:title {
           </item>
           <item alignment="Qt::AlignRight">
            <widget class="QLCDNumber" name="bottomDistanceLcdUI">
+            <property name="font">
+             <font>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
             <property name="segmentStyle">
              <enum>QLCDNumber::Flat</enum>
             </property>
@@ -349,6 +399,12 @@ QGroupBox:title {
             </item>
             <item alignment="Qt::AlignRight">
              <widget class="QLCDNumber" name="voltageCell1LcdUI">
+              <property name="font">
+               <font>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
               <property name="autoFillBackground">
                <bool>false</bool>
               </property>
@@ -386,6 +442,12 @@ QGroupBox:title {
             </item>
             <item alignment="Qt::AlignRight">
              <widget class="QLCDNumber" name="voltageCell2LcdUI">
+              <property name="font">
+               <font>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
               <property name="segmentStyle">
                <enum>QLCDNumber::Flat</enum>
               </property>
@@ -420,6 +482,12 @@ QGroupBox:title {
             </item>
             <item alignment="Qt::AlignRight">
              <widget class="QLCDNumber" name="voltageCell3LcdUI">
+              <property name="font">
+               <font>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
               <property name="styleSheet">
                <string notr="true"/>
               </property>
@@ -508,6 +576,12 @@ QGroupBox:title {
                 <height>25</height>
                </size>
               </property>
+              <property name="font">
+               <font>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
               <property name="autoFillBackground">
                <bool>false</bool>
               </property>
@@ -536,6 +610,12 @@ QGroupBox:title {
                 <width>0</width>
                 <height>25</height>
                </size>
+              </property>
+              <property name="font">
+               <font>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
               </property>
               <property name="styleSheet">
                <string notr="true"/>
@@ -619,6 +699,12 @@ QGroupBox:title {
         </item>
         <item>
          <widget class="QLCDNumber" name="yLinearVelcocityLcdUI">
+          <property name="font">
+           <font>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
           <property name="segmentStyle">
            <enum>QLCDNumber::Flat</enum>
           </property>
@@ -649,6 +735,12 @@ QGroupBox:title {
         </item>
         <item>
          <widget class="QLCDNumber" name="zAngularVelcocityLcdUI">
+          <property name="font">
+           <font>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
           <property name="frameShadow">
            <enum>QFrame::Plain</enum>
           </property>
