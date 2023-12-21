@@ -1,83 +1,174 @@
 # from python_qt_binding.QtWidgets import QWidget
-from python_qt_binding.QtWidgets import QWidget
+from threading import Event
 
+from python_qt_binding.QtWidgets import QWidget
+from rcl_interfaces.msg import Parameter as ParameterMsg
+from rcl_interfaces.srv import GetParameters
+from rcl_interfaces.srv import SetParameters
 from rclpy.parameter import Parameter
+from shared.alert.alert import Alert
+from shared.services.parameters_server_service import ParametersServerService
 
 
 class PidWidget(QWidget):
     def __init__(self, widget):
         super(PidWidget, self).__init__()
         self.widget = widget
-        data = self.widget.data
-        self.setData(data)
-        self.widget.testParamsButtonUI.clicked.connect(self.testParams)
+        self.setData(self.widget.data)
+        self.parametersServerService = ParametersServerService(widget)
+
+        self.robotNode = self.findRobotNode()
+        if self.robotNode:
+            self.setParamsClients()
+            self.initialParams = self.getCurrentParams()
+            self.widget.testParamsButtonUI.clicked.connect(self.setParameters)
+            self.widget.testParamsButtonUI.setToolTip("Tests PID params for previously set namespace\n"
+                                                      " GUI will make best effort to restore previous params on BACK click")
+
+            self.widget.backButton.clicked.connect(self.restoreInitialParameters)
+            self.widget.saveButton.clicked.connect(self.setParameters)
+
+        else:
+            self.widget.testParamsButtonUI.setEnabled(False)
+            self.widget.testParamsButtonUI.setToolTip("Node which uses PID params is currently unavailable")
+        # self.widget.restoreDefaultButton.clicked.connect(self.restoreDefault)
 
     def setData(self, data):
-        pidData = data.get('pid', {})
+        self.data = data
+        self.displayData()
 
-        self.setPidAngle(pidData.get('pidAngle', {}))
-        self.setPidSpeed(pidData.get('pidSpeed', {}))
+    # # it is important to notice that restoreDefault function is called after setData
+    # # Hence curre
+    # def restoreDefault(self):
+    #     self.setParameters()
 
-    def setPidAngle(self, pidAngleData):
-        self.widget.pidAngleKpUI.setValue(pidAngleData.get('Kp', 0))
-        self.widget.pidAngleKiUI.setValue(pidAngleData.get('Ki', 0))
-        self.widget.pidAngleKdUI.setValue(pidAngleData.get('Kd', 0))
+    def displayData(self):
+        pidData = self.data.get('pid', {})
 
-    def setPidSpeed(self, pidSpeedData):
-        self.widget.pidSpeedKpUI.setValue(pidSpeedData.get('Kp', 0))
-        self.widget.pidSpeedKiUI.setValue(pidSpeedData.get('Ki', 0))
-        self.widget.pidSpeedKdUI.setValue(pidSpeedData.get('Kd', 0))
+        self.widget.pidAngleKpUI.setValue(pidData.get('pidAngleKp', 0))
+        self.widget.pidAngleTiUI.setValue(pidData.get('pidAngleTi', 0))
+        self.widget.pidAngleTdUI.setValue(pidData.get('pidAngleTd', 0))
+
+        self.widget.pidSpeedKpUI.setValue(pidData.get('pidSpeedKp', 0))
+        self.widget.pidSpeedTiUI.setValue(pidData.get('pidSpeedTi', 0))
+        self.widget.pidSpeedTdUI.setValue(pidData.get('pidSpeedTd', 0))
 
     def savePidData(self):
-        self.widget.data['pid'] = {
-            "pidSpeed": {},
-            "pidAngle": {}
-        }
+        self.widget.data['pid'] = {}
 
-        self.widget.data['pid']["pidSpeed"]["Kp"] = self.widget.pidSpeedKpUI.value()
-        self.widget.data['pid']["pidSpeed"]["Ki"] = self.widget.pidSpeedKiUI.value()
-        self.widget.data['pid']["pidSpeed"]["Kd"] = self.widget.pidSpeedKdUI.value()
+        self.widget.data['pid']["pidSpeedKp"] = self.widget.pidSpeedKpUI.value()
+        self.widget.data['pid']["pidSpeedTi"] = self.widget.pidSpeedTiUI.value()
+        self.widget.data['pid']["pidSpeedTd"] = self.widget.pidSpeedTdUI.value()
 
-        self.widget.data['pid']["pidAngle"]["Kp"] = self.widget.pidAngleKpUI.value()
-        self.widget.data['pid']["pidAngle"]["Ki"] = self.widget.pidAngleKiUI.value()
-        self.widget.data['pid']["pidAngle"]["Kd"] = self.widget.pidAngleKdUI.value()
+        self.widget.data['pid']["pidAngleKp"] = self.widget.pidAngleKpUI.value()
+        self.widget.data['pid']["pidAngleTi"] = self.widget.pidAngleTiUI.value()
+        self.widget.data['pid']["pidAngleTd"] = self.widget.pidAngleTdUI.value()
 
-        namespace = self.widget.data.get("namespace")
+    def findRobotNode(self):
+        namesAndNamespaces = self.widget.node.get_node_names_and_namespaces()
+        if len(namesAndNamespaces) == 0:
+            return
 
-        print(namespace)
-        print(self.widget)
-        print(self.widget.node)
+        robotNamespace = self.data.get("namespace")
 
+        correctNamespacesElement = [(name, namespace) for name, namespace in namesAndNamespaces if
+                                    robotNamespace in namespace]
 
-        # self.widget.node.declare_parameter('my_str', Parameter.Type.STRING)
-        # self.widget.node.declare_parameter('my_int', Parameter.Type.INTEGER)
-        # self.widget.node.declare_parameter('my_double_array', Parameter.Type.DOUBLE_ARRAY)
+        if len(correctNamespacesElement) == 0:
+            return
 
-        #
-        # param_str = Parameter(namespace+'.my_str', Parameter.Type.STRING, 'Set from code')
-        # param_int = Parameter(namespace+'.my_int', Parameter.Type.INTEGER, 12)
-        # param_double_array = Parameter(namespace+'.my_double_array', Parameter.Type.DOUBLE_ARRAY, [1.1, 2.2])
-        # self.widget.node.set_parameters([param_str, param_int, param_double_array])
+        nodes = [(name, namespace) for name, namespace in namesAndNamespaces if 'motors_controller_cs' in name]
+        if len(nodes) == 0:
+            return
+        node = nodes[0]
+        return node
 
-        # self.widget.node.declare_parameters(
-        #     namespace=namespace,
-        #     parameters=[("bar", "default_value")]
-        # )
-        #
-        # param_str = Parameter('bar', Parameter.Type.STRING, 'Set from code')
-        # print(param_str)
-        # self.widget.node.set_parameters([param_str])
+    def setParamsClients(self):
+        nodeName = self.robotNode[0]
+        nodeNamespace = self.robotNode[1]
+        if nodeNamespace == '/':
+            self.getParamsClient = self.widget.node.create_client(
+                GetParameters, f'{nodeName}/get_parameters'.format_map(locals())
+            )
+            self.setParamsClient = self.widget.node.create_client(
+                SetParameters, f'{nodeName}/set_parameters'.format_map(locals())
+            )
+        else:
+            self.getParamsClient = self.widget.node.create_client(
+                GetParameters, f'{nodeNamespace}/{nodeName}/get_parameters'.format_map(locals())
+            )
+            self.setParamsClient = self.widget.node.create_client(
+                SetParameters, f'{nodeNamespace}/{nodeName}/set_parameters'.format_map(locals())
+            )
 
-    # def test(self, event):
-    #     print("event12325")
-    #     print("event")
-    #     print(event)
+    def getCurrentParams(self):
+        names = ["pidSpeedKp", "pidSpeedTi", "pidSpeedTd", "pidAngleKp", "pidAngleTi", "pidAngleTd"]
 
-    def testParams(self):
-        # pidSpeedKp: 0.0013  # 0.001 0.05 to za duzo 0.01 git
-        # pidSpeedKi: 0.05  # 0.00000005 0.0005 git 0.5 to zajebiscie duzy uchyb ustalony 5.5 ogromne oscylacje
-        # pidSpeedKd: 0.0016  # 0.01
-        # pidAngleKp: 43.3  # 100.0
-        # pidAngleKi: 0.5  # 0.8   #1.61
-        # pidAngleKd: 0.09  # 0
-        pass
+        getParametersRequest = GetParameters.Request()
+        getParametersRequest.names = names
+        getParametersResponse = self.callService(self.getParamsClient, getParametersRequest)
+
+        response = [
+            Parameter.from_parameter_msg(ParameterMsg(name=name, value=value))
+            for name, value in zip(names, getParametersResponse.values)
+        ]
+
+        print("response", response)
+
+        if response is None or len(response) == 0:
+            return
+
+        self.widget.currentPidSpeedKpUI.setText(str(response[0].value))
+        self.widget.currentpidSpeedTiUI.setText(str(response[1].value))
+        self.widget.currentpidSpeedTdUI.setText(str(response[2].value))
+
+        self.widget.currentPidAngleKpUI.setText(str(response[3].value))
+        self.widget.currentpidAngleTiUI.setText(str(response[4].value))
+        self.widget.currentpidAngleTdUI.setText(str(response[5].value))
+        return response
+
+    def restoreInitialParameters(self):
+        if self.initialParams is None:
+            return
+        setParametersRequest = SetParameters.Request()
+        setParametersRequest.parameters = [p.to_parameter_msg() for p in self.initialParams]
+        response = self.callService(self.setParamsClient, setParametersRequest)
+
+    def setParameters(self):
+        pidSpeedKpParam = Parameter('pidSpeedKp', Parameter.Type.DOUBLE, self.widget.pidSpeedKpUI.value())
+        pidSpeedTiParam = Parameter('pidSpeedTi', Parameter.Type.DOUBLE, self.widget.pidSpeedTiUI.value())
+        pidSpeedTdParam = Parameter('pidSpeedTd', Parameter.Type.DOUBLE, self.widget.pidSpeedTdUI.value())
+
+        pidAngleKpParam = Parameter('pidAngleKp', Parameter.Type.DOUBLE, self.widget.pidAngleKpUI.value())
+        pidAngleTiParam = Parameter('pidAngleTi', Parameter.Type.DOUBLE, self.widget.pidAngleTiUI.value())
+        pidAngleTdParam = Parameter('pidAngleTd', Parameter.Type.DOUBLE, self.widget.pidAngleTdUI.value())
+
+        parameters = [pidSpeedKpParam, pidSpeedTiParam, pidSpeedTdParam, pidAngleKpParam, pidAngleTiParam,
+                      pidAngleTdParam]
+        setParametersRequest = SetParameters.Request()
+        setParametersRequest.parameters = [p.to_parameter_msg() for p in parameters]
+        response = self.callService(self.setParamsClient, setParametersRequest)
+        self.getCurrentParams()
+
+    def callService(self, client, request, timeout=1.0):
+        if not client.service_is_ready() and not client.wait_for_service(timeout):
+            print("wait for service")
+            exceptionToDisplay = "Service timeout"
+            Alert("Setup widget", exceptionToDisplay)
+            return
+
+        # It is possible that a node has the parameter services but is not
+        # spinning. In that is the case, the client call will time out.
+        event = Event()
+        future = client.call_async(request)
+        future.add_done_callback(lambda _: event.set())
+
+        event.wait(timeout)
+
+        result = future.result()
+        if result is None:
+            exceptionToDisplay = "Service result was None"
+            Alert("PID widget: ", exceptionToDisplay)
+            return
+
+        return future.result()

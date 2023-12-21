@@ -33,29 +33,52 @@ qlineargradient:(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(255, 255, 255, 
        <property name="text">
         <string>ROBOT NAME</string>
        </property>
+       <property name="wordWrap">
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="modifyButton">
-       <property name="maximumSize">
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
         <size>
-         <width>100</width>
-         <height>16777215</height>
+         <width>40</width>
+         <height>20</height>
         </size>
        </property>
-       <property name="cursor">
-        <cursorShape>PointingHandCursor</cursorShape>
+      </spacer>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <property name="rightMargin">
+        <number>10</number>
        </property>
-       <property name="styleSheet">
-        <string notr="true">font-weight: bold; border: 1px solid black;
+       <item>
+        <widget class="QPushButton" name="modifyButton">
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">font-weight: bold; border: 1px solid black;
 border-radius: 5px;
 padding: 5px;
 background: gray;</string>
-       </property>
-       <property name="text">
-        <string>MODIFY</string>
-       </property>
-      </widget>
+         </property>
+         <property name="text">
+          <string>MODIFY</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item>
       <widget class="QPushButton" name="deleteButton">

@@ -112,7 +112,7 @@
       </size>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="controls">
       <attribute name="title">
@@ -1182,6 +1182,16 @@ background: gray;</string>
               </property>
              </widget>
             </item>
+            <item>
+             <widget class="QLabel" name="label_35">
+              <property name="styleSheet">
+               <string notr="true">font-weight: bold;</string>
+              </property>
+              <property name="text">
+               <string>PID ROBOT SETUP</string>
+              </property>
+             </widget>
+            </item>
            </layout>
           </item>
           <item>
@@ -1222,6 +1232,63 @@ background: gray;</string>
               <property name="styleSheet">
                <string notr="true">background: lightGray;</string>
               </property>
+              <property name="decimals">
+               <number>4</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_11">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_23">
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>50</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Kp</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="currentPidSpeedKpUI">
+              <property name="minimumSize">
+               <size>
+                <width>100</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>100</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">background: lightGray;</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
              </widget>
             </item>
             <item>
@@ -1240,9 +1307,9 @@ background: gray;</string>
            </layout>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="pidSpeedKiWrapperUI">
+           <layout class="QHBoxLayout" name="pidSpeedTiWrapperUI">
             <item>
-             <widget class="QLabel" name="pidSpeedKiLabelUI">
+             <widget class="QLabel" name="pidSpeedTiLabelUI">
               <property name="minimumSize">
                <size>
                 <width>50</width>
@@ -1256,12 +1323,12 @@ background: gray;</string>
                </size>
               </property>
               <property name="text">
-               <string>Ki</string>
+               <string>Ti</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="pidSpeedKiUI">
+             <widget class="QDoubleSpinBox" name="pidSpeedTiUI">
               <property name="minimumSize">
                <size>
                 <width>100</width>
@@ -1281,6 +1348,63 @@ background: gray;</string>
                <string notr="true">background: 1 solid;
  background: lightGray;</string>
               </property>
+              <property name="decimals">
+               <number>4</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_12">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_25">
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>50</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Ti</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="currentpidSpeedTiUI">
+              <property name="minimumSize">
+               <size>
+                <width>100</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>100</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">background: lightGray;</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
              </widget>
             </item>
             <item>
@@ -1299,9 +1423,9 @@ background: gray;</string>
            </layout>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="pidSpeedKdWrapperUI">
+           <layout class="QHBoxLayout" name="pidSpeedTdWrapperUI">
             <item>
-             <widget class="QLabel" name="pidSpeedKdLabelUI">
+             <widget class="QLabel" name="pidSpeedTdLabelUI">
               <property name="minimumSize">
                <size>
                 <width>50</width>
@@ -1315,12 +1439,12 @@ background: gray;</string>
                </size>
               </property>
               <property name="text">
-               <string>Kd</string>
+               <string>Td</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="pidSpeedKdUI">
+             <widget class="QDoubleSpinBox" name="pidSpeedTdUI">
               <property name="minimumSize">
                <size>
                 <width>100</width>
@@ -1335,6 +1459,63 @@ background: gray;</string>
               </property>
               <property name="styleSheet">
                <string notr="true">background: lightGray;</string>
+              </property>
+              <property name="decimals">
+               <number>4</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_13">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_27">
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>50</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Td</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="currentpidSpeedTdUI">
+              <property name="minimumSize">
+               <size>
+                <width>100</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>100</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">background: lightGray;</string>
+              </property>
+              <property name="text">
+               <string/>
               </property>
              </widget>
             </item>
@@ -1414,11 +1595,68 @@ background: gray;</string>
               <property name="styleSheet">
                <string notr="true">background: lightGray;</string>
               </property>
+              <property name="decimals">
+               <number>4</number>
+              </property>
               <property name="minimum">
-               <double>-1000.000000000000000</double>
+               <double>0.000000000000000</double>
               </property>
               <property name="maximum">
                <double>1000.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_14">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_29">
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>50</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Kp</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="currentPidAngleKpUI">
+              <property name="minimumSize">
+               <size>
+                <width>100</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>100</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">background: lightGray;</string>
+              </property>
+              <property name="text">
+               <string/>
               </property>
              </widget>
             </item>
@@ -1454,12 +1692,12 @@ background: gray;</string>
                </size>
               </property>
               <property name="text">
-               <string>Ki</string>
+               <string>Ti</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="pidAngleKiUI">
+             <widget class="QDoubleSpinBox" name="pidAngleTiUI">
               <property name="minimumSize">
                <size>
                 <width>100</width>
@@ -1474,6 +1712,63 @@ background: gray;</string>
               </property>
               <property name="styleSheet">
                <string notr="true">background: lightGray;</string>
+              </property>
+              <property name="decimals">
+               <number>4</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_15">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_31">
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>50</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Ti</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="currentpidAngleTiUI">
+              <property name="minimumSize">
+               <size>
+                <width>100</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>100</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">background: lightGray;</string>
+              </property>
+              <property name="text">
+               <string/>
               </property>
              </widget>
             </item>
@@ -1509,12 +1804,12 @@ background: gray;</string>
                </size>
               </property>
               <property name="text">
-               <string>Kd</string>
+               <string>Td</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="pidAngleKdUI">
+             <widget class="QDoubleSpinBox" name="pidAngleTdUI">
               <property name="minimumSize">
                <size>
                 <width>100</width>
@@ -1529,6 +1824,63 @@ background: gray;</string>
               </property>
               <property name="styleSheet">
                <string notr="true">background: lightGray;</string>
+              </property>
+              <property name="decimals">
+               <number>4</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_16">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_33">
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>50</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Td</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="currentpidAngleTdUI">
+              <property name="minimumSize">
+               <size>
+                <width>100</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>100</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">background: lightGray;</string>
+              </property>
+              <property name="text">
+               <string/>
               </property>
              </widget>
             </item>

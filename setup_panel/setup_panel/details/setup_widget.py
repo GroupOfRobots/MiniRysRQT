@@ -2,16 +2,17 @@
 import json
 import os
 
-from ament_index_python import get_resource
-from python_qt_binding import loadUi
 from python_qt_binding.QtWidgets import QWidget, QMessageBox
+from shared.enums import PackageNameEnum
 from shared.inner_communication import innerCommunication
+from shared.utils.load_ui_file import loadUiFile
 
 from .commands.commands import Commands
 from .controls.controls import Controls
 from .pid.pid_widget import PidWidget
 from .ssh_data.ssh_data import SshData
 from .video_recorder.video_recorder import VideoRecorder
+from ament_index_python import get_resource
 
 
 class SetupWidget(QWidget):
@@ -23,9 +24,7 @@ class SetupWidget(QWidget):
         self.node = node
 
         _, self.sharedPath = get_resource('packages', 'shared')
-        _, self.packagePath = get_resource('packages', 'setup_panel')
-        ui_file = os.path.join(self.packagePath, 'share', 'setup_panel', 'resource', 'setup.ui')
-        loadUi(ui_file, self)
+        loadUiFile(self, PackageNameEnum.SetupPanel, 'setup.ui')
 
         self.defaultFilePath = os.path.join(self.sharedPath, 'share', 'shared', 'data', 'default.json')
         if dataFilePath:
@@ -149,3 +148,4 @@ class SetupWidget(QWidget):
         dataFile = open(dataFilePath)
         self.data = json.loads(dataFile.read())
         dataFile.close()
+

@@ -61,3 +61,9 @@ class SetupDashboardWidget(QWidget):
 
     def addNewRobot(self):
         self.stack.goToSettings(addMode=True)
+
+    def cleanup(self):
+        pass
+
+    def restoreFunctionalities(self):
+        pass
