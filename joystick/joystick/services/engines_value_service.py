@@ -83,5 +83,4 @@ class EnginesValueService:
 
         angleVelocity = sign * baseAngle * (1 - abs(angle) / (math.pi / 2)) * joystickDeflection
         linearVelocity = sign * baseLinear * (1 - abs(abs(angle) - math.pi / 2) / (math.pi / 2)) * joystickDeflection
-        # print(angle, linearVelocity, angleVelocity)
         return linearVelocity, angleVelocity

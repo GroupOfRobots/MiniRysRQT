@@ -7,7 +7,8 @@ from python_qt_binding import QtCore
 from python_qt_binding.QtCore import Qt, QPoint
 from python_qt_binding.QtGui import QPainter, QBrush, QPen
 from shared.base_widget.base_widget import BaseWidget
-from shared.bool_publisher.bool_publisher import BoolPublisher
+from shared.publishers.bool_publisher import BoolPublisher
+from shared.publishers.balance_publisher import BalancePublisher
 from shared.enums import ControlKeyEnum
 from shared.enums import PackageNameEnum
 
@@ -27,7 +28,7 @@ class JoystickWidget(BaseWidget):
     def __init__(self, stack=None, node=None):
         super(JoystickWidget, self).__init__(stack, PackageNameEnum.Joystick, node=node)
 
-        self.balancePublisher = BoolPublisher(self.balanceCheckBoxUI, self.node)
+        self.balancePublisher = BalancePublisher(self.balanceCheckBoxUI, self.node, self)
         self.servoPublisher = BoolPublisher(self.servoCheckBoxUI, self.node)
 
         self.messageService = MessageService(self.messageTypeComboBoxUI, self.node)
@@ -57,7 +58,9 @@ class JoystickWidget(BaseWidget):
         self.keyPressService = KeyPressService(self.controlKeys)
         self.enginesValueService = EnginesValueService(self.data.get("joystick", {}))
 
-        self.balancePublisher.setTopic(self.namespace, '/balance_mode')
+        pidData = self.data.get('pid', {})
+        self.balancePublisher.setup(self.namespace, '/balance_mode', pidData)
+
         self.servoPublisher.setTopic(self.namespace, '/servo_status')
         self.messageService.setup(self.namespace)
 
@@ -93,7 +96,7 @@ class JoystickWidget(BaseWidget):
         x = int(self.joystickWidget.width() * 0.5)
         y = int(self.joystickWidget.height() * 0.5)
         self.joystickPosition = QPoint(x, y)
-        self.updateRobot(x, y)
+        self.updateRobot(0, 0)
 
         self.update()
 

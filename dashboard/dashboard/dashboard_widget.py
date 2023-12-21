@@ -72,26 +72,26 @@ class DashboardWidget(BaseWidget):
         underVoltageWarning = event.undervoltage_warning
 
         if underVoltageError and not self.batteryUnderVoltageFlag:
-            self.previousStyleSheet = self.batteryGroupBox.styleSheet()
-            self.batteryGroupBox.setStyleSheet(
+            self.previousStyleSheet = self.batteryGroupBoxUI.styleSheet()
+            self.batteryGroupBoxUI.setStyleSheet(
                 self.previousStyleSheet + 'QGroupBox { background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 red, stop: 1 pink);}')
-            self.batteryGroupBox.setToolTip('<h2>ERROR</h2><div>Battery voltage is too low</div>')
-            self.batteryGroupBox.setToolTipDuration(5000)
+            self.batteryGroupBoxUI.setToolTip('<h2>ERROR</h2><div>Battery voltage is too low</div>')
+            self.batteryGroupBoxUI.setToolTipDuration(5000)
             self.batteryUnderVoltageFlag = True
 
         elif underVoltageWarning and not self.batteryUnderVoltageFlag:
-            self.previousStyleSheet = self.batteryGroupBox.styleSheet()
-            self.batteryGroupBox.setStyleSheet(
+            self.previousStyleSheet = self.batteryGroupBoxUI.styleSheet()
+            self.batteryGroupBoxUI.setStyleSheet(
                 self.previousStyleSheet + 'QGroupBox { background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 orange, stop: 1 yellow);}')
-            self.batteryGroupBox.setToolTip(
+            self.batteryGroupBoxUI.setToolTip(
                 '<h2>WARNING</h2><div>Battery voltage is too low</div>')
-            self.batteryGroupBox.setToolTipDuration(5000)
+            self.batteryGroupBoxUI.setToolTipDuration(5000)
             self.batteryUnderVoltageFlag = True
 
         elif self.batteryUnderVoltageFlag and not underVoltageError and not underVoltageWarning:
             self.batteryUnderVoltageFlag = False
-            self.batteryGroupBox.setToolTip('')
-            self.batteryGroupBox.setStyleSheet(self.previousStyleSheet)
+            self.batteryGroupBoxUI.setToolTip('')
+            self.batteryGroupBoxUI.setStyleSheet(self.previousStyleSheet)
 
     def temperatureCpuCallback(self, event):
         self.temperatureCpuLcdUI.display(event.data)
@@ -107,7 +107,6 @@ class DashboardWidget(BaseWidget):
         # 5 - left
 
     def topDistanceSensorCallback(self, event):
-        print(event)
         self.topDistanceLcdUI.display(event.range)
 
     def bottomDistanceSensorCallback(self, event):

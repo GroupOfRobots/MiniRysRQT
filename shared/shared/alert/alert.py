@@ -11,7 +11,7 @@ class Alert:
         self.commandThread = threading.Thread(target=self.run, args=(self.alertTitle, self.alertText))
         self.commandThread.start()
 
-    def run(self,alertTitle,alertText):
+    def run(self, alertTitle, alertText):
         msg = QMessageBox()
         msg.setWindowTitle(alertTitle)
         msg.setText(alertText)

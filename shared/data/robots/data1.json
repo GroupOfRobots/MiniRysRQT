@@ -102,16 +102,12 @@
     }
   },
   "pid": {
-    "pidSpeed": {
-      "Kp": 1,
-      "Ki": 2,
-      "Kd": 3
-    },
-    "pidAngle": {
-      "Kp": 4,
-      "Ki": 5,
-      "Kd": 6
-    }
+    "pidSpeedKp": 1,
+    "pidSpeedTi": 2,
+    "pidSpeedTd": 3,
+    "pidAngleKp": 11,
+    "pidAngleTi": 12,
+    "pidAngleTd": 13
   },
   "ssh": {
     "host": "192.168.102.11",

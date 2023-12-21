@@ -10,11 +10,12 @@ setup(
     packages=[package_name,
               package_name + '/alert',
               package_name + '/spinner',
-              package_name + '/bool_publisher',
+              package_name + '/publishers',
               package_name + '/deleted_robot_screen',
               package_name + '/no_robot_configuration_screen',
               package_name + '/utils',
               package_name + '/stack_widget',
+              package_name + '/services',
               package_name + '/base_widget'],
     data_files=[
         ('share/ament_index/resource_index/packages',

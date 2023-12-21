@@ -144,12 +144,39 @@ QGroupBox:title {
             </property>
            </widget>
           </item>
+          <item>
+           <spacer name="horizontalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
           <item alignment="Qt::AlignRight">
            <widget class="QLCDNumber" name="frontDistanceLcdUI">
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>50</width>
+              <height>16777215</height>
+             </size>
+            </property>
             <property name="font">
              <font>
-              <weight>75</weight>
-              <bold>true</bold>
+              <family>Ubuntu Mono</family>
+              <weight>50</weight>
+              <italic>false</italic>
+              <bold>false</bold>
              </font>
             </property>
             <property name="digitCount">
@@ -173,7 +200,7 @@ QGroupBox:title {
          </widget>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="backSensor" stretch="1,0">
+         <layout class="QHBoxLayout" name="backSensor" stretch="1,0,0">
           <item>
            <widget class="QLabel" name="backSensorLabel">
             <property name="text">
@@ -182,11 +209,36 @@ QGroupBox:title {
            </widget>
           </item>
           <item>
+           <spacer name="horizontalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
            <widget class="QLCDNumber" name="backDistanceLcdUI">
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>50</width>
+              <height>16777215</height>
+             </size>
+            </property>
             <property name="font">
              <font>
-              <weight>75</weight>
-              <bold>true</bold>
+              <weight>50</weight>
+              <bold>false</bold>
              </font>
             </property>
             <property name="digitCount">
@@ -210,7 +262,7 @@ QGroupBox:title {
          </widget>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="topSensorProgressBar" stretch="1,0">
+         <layout class="QHBoxLayout" name="topSensorProgressBar" stretch="1,0,0">
           <item>
            <widget class="QLabel" name="topSensorLabel">
             <property name="text">
@@ -219,12 +271,41 @@ QGroupBox:title {
            </widget>
           </item>
           <item>
+           <spacer name="horizontalSpacer_4">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
            <widget class="QLCDNumber" name="topDistanceLcdUI">
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>50</width>
+              <height>16777215</height>
+             </size>
+            </property>
             <property name="font">
              <font>
+              <pointsize>11</pointsize>
               <weight>75</weight>
               <bold>true</bold>
              </font>
+            </property>
+            <property name="digitCount">
+             <number>4</number>
             </property>
             <property name="segmentStyle">
              <enum>QLCDNumber::Flat</enum>
@@ -244,7 +325,7 @@ QGroupBox:title {
          </widget>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="leftSensor" stretch="1,0">
+         <layout class="QHBoxLayout" name="leftSensor" stretch="1,0,0">
           <item>
            <widget class="QLabel" name="leftSensorLabel">
             <property name="text">
@@ -253,12 +334,40 @@ QGroupBox:title {
            </widget>
           </item>
           <item>
+           <spacer name="horizontalSpacer_5">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
            <widget class="QLCDNumber" name="leftDistanceLcdUI">
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>50</width>
+              <height>16777215</height>
+             </size>
+            </property>
             <property name="font">
              <font>
               <weight>75</weight>
               <bold>true</bold>
              </font>
+            </property>
+            <property name="digitCount">
+             <number>4</number>
             </property>
             <property name="segmentStyle">
              <enum>QLCDNumber::Flat</enum>
@@ -278,7 +387,7 @@ QGroupBox:title {
          </widget>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="rightSensor" stretch="0,0">
+         <layout class="QHBoxLayout" name="rightSensor" stretch="0,0,0">
           <item>
            <widget class="QLabel" name="rightSensorLabel">
             <property name="text">
@@ -286,13 +395,41 @@ QGroupBox:title {
             </property>
            </widget>
           </item>
+          <item>
+           <spacer name="horizontalSpacer_6">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
           <item alignment="Qt::AlignRight">
            <widget class="QLCDNumber" name="rightDistanceLcdUI">
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>50</width>
+              <height>16777215</height>
+             </size>
+            </property>
             <property name="font">
              <font>
               <weight>75</weight>
               <bold>true</bold>
              </font>
+            </property>
+            <property name="digitCount">
+             <number>4</number>
             </property>
             <property name="segmentStyle">
              <enum>QLCDNumber::Flat</enum>
@@ -326,13 +463,41 @@ QGroupBox:title {
             </property>
            </widget>
           </item>
+          <item>
+           <spacer name="horizontalSpacer_7">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
           <item alignment="Qt::AlignRight">
            <widget class="QLCDNumber" name="bottomDistanceLcdUI">
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>25</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>50</width>
+              <height>16777215</height>
+             </size>
+            </property>
             <property name="font">
              <font>
               <weight>75</weight>
               <bold>true</bold>
              </font>
+            </property>
+            <property name="digitCount">
+             <number>4</number>
             </property>
             <property name="segmentStyle">
              <enum>QLCDNumber::Flat</enum>
@@ -353,7 +518,7 @@ QGroupBox:title {
         <number>0</number>
        </property>
        <item>
-        <widget class="QGroupBox" name="batteryGroupBox">
+        <widget class="QGroupBox" name="batteryGroupBoxUI">
          <property name="font">
           <font>
            <weight>75</weight>
@@ -485,7 +650,9 @@ QGroupBox:title {
               <property name="font">
                <font>
                 <weight>75</weight>
+                <italic>false</italic>
                 <bold>true</bold>
+                <underline>false</underline>
                </font>
               </property>
               <property name="styleSheet">
@@ -502,7 +669,7 @@ QGroupBox:title {
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox_7">
+        <widget class="QGroupBox" name="temperatureGroupBoxUI">
          <property name="font">
           <font>
            <weight>75</weight>

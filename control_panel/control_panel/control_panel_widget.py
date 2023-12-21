@@ -2,8 +2,9 @@
 
 from python_qt_binding.QtCore import Qt
 from shared.base_widget.base_widget import BaseWidget
-from shared.bool_publisher.bool_publisher import BoolPublisher
 from shared.enums import ControlKeyEnum, PackageNameEnum
+from shared.publishers.balance_publisher import BalancePublisher
+from shared.publishers.bool_publisher import BoolPublisher
 
 from .elements.button import Button
 from .elements.key_state import getKeyState
@@ -14,7 +15,7 @@ class ControlPanelWidget(BaseWidget):
     def __init__(self, stack=None, node=None):
         super(ControlPanelWidget, self).__init__(stack, PackageNameEnum.ControlPanel, node=node)
 
-        self.balancePublisher = BoolPublisher(self.balanceCheckBoxUI, self.node)
+        self.balancePublisher = BalancePublisher(self.balanceCheckBoxUI, self.node, self)
         self.servoPublisher = BoolPublisher(self.servoCheckBoxUI, self.node)
         self.messageService = MessageService(self.messageTypeComboBoxUI, self.node)
 
@@ -35,7 +36,9 @@ class ControlPanelWidget(BaseWidget):
     def initializeRobotSettings(self):
         self.controlKeys = self.data.get('controlKeys', {})
 
-        self.balancePublisher.setTopic(self.namespace, '/balance_mode')
+        pidData = self.data.get('pid', {})
+        self.balancePublisher.setup(self.namespace, '/balance_mode', pidData)
+
         self.servoPublisher.setTopic(self.namespace, '/servo_status')
         self.messageService.setup(self.namespace, self.data)
 

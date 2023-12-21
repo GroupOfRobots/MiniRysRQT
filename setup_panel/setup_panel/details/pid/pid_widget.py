@@ -16,17 +16,20 @@ class PidWidget(QWidget):
         self.widget = widget
         self.setData(self.widget.data)
         self.parametersServerService = ParametersServerService(widget)
+        pidData = self.data.get('pid', {})
+        namespace=self.data.get("namespace")
+        self.parametersServerService.setup(pidData, namespace)
 
-        self.robotNode = self.findRobotNode()
-        if self.robotNode:
-            self.setParamsClients()
+        # self.robotNode = self.findRobotNode()
+        if self.parametersServerService.robotNode:
+            # self.setParamsClients()
             self.initialParams = self.getCurrentParams()
-            self.widget.testParamsButtonUI.clicked.connect(self.setParameters)
+            self.widget.testParamsButtonUI.clicked.connect(self.parametersServerService.setParameters)
             self.widget.testParamsButtonUI.setToolTip("Tests PID params for previously set namespace\n"
                                                       " GUI will make best effort to restore previous params on BACK click")
 
             self.widget.backButton.clicked.connect(self.restoreInitialParameters)
-            self.widget.saveButton.clicked.connect(self.setParameters)
+            self.widget.saveButton.clicked.connect(self.parametersServerService.setParameters)
 
         else:
             self.widget.testParamsButtonUI.setEnabled(False)
@@ -64,49 +67,49 @@ class PidWidget(QWidget):
         self.widget.data['pid']["pidAngleTi"] = self.widget.pidAngleTiUI.value()
         self.widget.data['pid']["pidAngleTd"] = self.widget.pidAngleTdUI.value()
 
-    def findRobotNode(self):
-        namesAndNamespaces = self.widget.node.get_node_names_and_namespaces()
-        if len(namesAndNamespaces) == 0:
-            return
-
-        robotNamespace = self.data.get("namespace")
-
-        correctNamespacesElement = [(name, namespace) for name, namespace in namesAndNamespaces if
-                                    robotNamespace in namespace]
-
-        if len(correctNamespacesElement) == 0:
-            return
-
-        nodes = [(name, namespace) for name, namespace in namesAndNamespaces if 'motors_controller_cs' in name]
-        if len(nodes) == 0:
-            return
-        node = nodes[0]
-        return node
-
-    def setParamsClients(self):
-        nodeName = self.robotNode[0]
-        nodeNamespace = self.robotNode[1]
-        if nodeNamespace == '/':
-            self.getParamsClient = self.widget.node.create_client(
-                GetParameters, f'{nodeName}/get_parameters'.format_map(locals())
-            )
-            self.setParamsClient = self.widget.node.create_client(
-                SetParameters, f'{nodeName}/set_parameters'.format_map(locals())
-            )
-        else:
-            self.getParamsClient = self.widget.node.create_client(
-                GetParameters, f'{nodeNamespace}/{nodeName}/get_parameters'.format_map(locals())
-            )
-            self.setParamsClient = self.widget.node.create_client(
-                SetParameters, f'{nodeNamespace}/{nodeName}/set_parameters'.format_map(locals())
-            )
+    # def findRobotNode(self):
+    #     namesAndNamespaces = self.widget.node.get_node_names_and_namespaces()
+    #     if len(namesAndNamespaces) == 0:
+    #         return
+    #
+    #     robotNamespace = self.data.get("namespace")
+    #
+    #     correctNamespacesElement = [(name, namespace) for name, namespace in namesAndNamespaces if
+    #                                 robotNamespace in namespace]
+    #
+    #     if len(correctNamespacesElement) == 0:
+    #         return
+    #
+    #     nodes = [(name, namespace) for name, namespace in namesAndNamespaces if 'motors_controller_cs' in name]
+    #     if len(nodes) == 0:
+    #         return
+    #     node = nodes[0]
+    #     return node
+    #
+    # def setParamsClients(self):
+    #     nodeName = self.robotNode[0]
+    #     nodeNamespace = self.robotNode[1]
+    #     if nodeNamespace == '/':
+    #         self.getParamsClient = self.widget.node.create_client(
+    #             GetParameters, f'{nodeName}/get_parameters'.format_map(locals())
+    #         )
+    #         self.setParamsClient = self.widget.node.create_client(
+    #             SetParameters, f'{nodeName}/set_parameters'.format_map(locals())
+    #         )
+    #     else:
+    #         self.getParamsClient = self.widget.node.create_client(
+    #             GetParameters, f'{nodeNamespace}/{nodeName}/get_parameters'.format_map(locals())
+    #         )
+    #         self.setParamsClient = self.widget.node.create_client(
+    #             SetParameters, f'{nodeNamespace}/{nodeName}/set_parameters'.format_map(locals())
+    #         )
 
     def getCurrentParams(self):
         names = ["pidSpeedKp", "pidSpeedTi", "pidSpeedTd", "pidAngleKp", "pidAngleTi", "pidAngleTd"]
 
         getParametersRequest = GetParameters.Request()
         getParametersRequest.names = names
-        getParametersResponse = self.callService(self.getParamsClient, getParametersRequest)
+        getParametersResponse = self.parametersServerService.callService(self.parametersServerService.getParamsClient, getParametersRequest)
 
         response = [
             Parameter.from_parameter_msg(ParameterMsg(name=name, value=value))
@@ -132,43 +135,43 @@ class PidWidget(QWidget):
             return
         setParametersRequest = SetParameters.Request()
         setParametersRequest.parameters = [p.to_parameter_msg() for p in self.initialParams]
-        response = self.callService(self.setParamsClient, setParametersRequest)
+        response = self.parametersServerService.callService(self.setParamsClient, setParametersRequest)
 
-    def setParameters(self):
-        pidSpeedKpParam = Parameter('pidSpeedKp', Parameter.Type.DOUBLE, self.widget.pidSpeedKpUI.value())
-        pidSpeedTiParam = Parameter('pidSpeedTi', Parameter.Type.DOUBLE, self.widget.pidSpeedTiUI.value())
-        pidSpeedTdParam = Parameter('pidSpeedTd', Parameter.Type.DOUBLE, self.widget.pidSpeedTdUI.value())
-
-        pidAngleKpParam = Parameter('pidAngleKp', Parameter.Type.DOUBLE, self.widget.pidAngleKpUI.value())
-        pidAngleTiParam = Parameter('pidAngleTi', Parameter.Type.DOUBLE, self.widget.pidAngleTiUI.value())
-        pidAngleTdParam = Parameter('pidAngleTd', Parameter.Type.DOUBLE, self.widget.pidAngleTdUI.value())
-
-        parameters = [pidSpeedKpParam, pidSpeedTiParam, pidSpeedTdParam, pidAngleKpParam, pidAngleTiParam,
-                      pidAngleTdParam]
-        setParametersRequest = SetParameters.Request()
-        setParametersRequest.parameters = [p.to_parameter_msg() for p in parameters]
-        response = self.callService(self.setParamsClient, setParametersRequest)
-        self.getCurrentParams()
-
-    def callService(self, client, request, timeout=1.0):
-        if not client.service_is_ready() and not client.wait_for_service(timeout):
-            print("wait for service")
-            exceptionToDisplay = "Service timeout"
-            Alert("Setup widget", exceptionToDisplay)
-            return
-
-        # It is possible that a node has the parameter services but is not
-        # spinning. In that is the case, the client call will time out.
-        event = Event()
-        future = client.call_async(request)
-        future.add_done_callback(lambda _: event.set())
-
-        event.wait(timeout)
-
-        result = future.result()
-        if result is None:
-            exceptionToDisplay = "Service result was None"
-            Alert("PID widget: ", exceptionToDisplay)
-            return
-
-        return future.result()
+    # def setParameters(self):
+    #     pidSpeedKpParam = Parameter('pidSpeedKp', Parameter.Type.DOUBLE, self.widget.pidSpeedKpUI.value())
+    #     pidSpeedTiParam = Parameter('pidSpeedTi', Parameter.Type.DOUBLE, self.widget.pidSpeedTiUI.value())
+    #     pidSpeedTdParam = Parameter('pidSpeedTd', Parameter.Type.DOUBLE, self.widget.pidSpeedTdUI.value())
+    #
+    #     pidAngleKpParam = Parameter('pidAngleKp', Parameter.Type.DOUBLE, self.widget.pidAngleKpUI.value())
+    #     pidAngleTiParam = Parameter('pidAngleTi', Parameter.Type.DOUBLE, self.widget.pidAngleTiUI.value())
+    #     pidAngleTdParam = Parameter('pidAngleTd', Parameter.Type.DOUBLE, self.widget.pidAngleTdUI.value())
+    #
+    #     parameters = [pidSpeedKpParam, pidSpeedTiParam, pidSpeedTdParam, pidAngleKpParam, pidAngleTiParam,
+    #                   pidAngleTdParam]
+    #     setParametersRequest = SetParameters.Request()
+    #     setParametersRequest.parameters = [p.to_parameter_msg() for p in parameters]
+    #     response = self.callService(self.setParamsClient, setParametersRequest)
+    #     self.getCurrentParams()
+    #
+    # def callService(self, client, request, timeout=1.0):
+    #     if not client.service_is_ready() and not client.wait_for_service(timeout):
+    #         print("wait for service")
+    #         exceptionToDisplay = "Service timeout"
+    #         Alert("Setup widget", exceptionToDisplay)
+    #         return
+    #
+    #     # It is possible that a node has the parameter services but is not
+    #     # spinning. In that is the case, the client call will time out.
+    #     event = Event()
+    #     future = client.call_async(request)
+    #     future.add_done_callback(lambda _: event.set())
+    #
+    #     event.wait(timeout)
+    #
+    #     result = future.result()
+    #     if result is None:
+    #         exceptionToDisplay = "Service result was None"
+    #         Alert("PID widget: ", exceptionToDisplay)
+    #         return
+    #
+    #     return future.result()

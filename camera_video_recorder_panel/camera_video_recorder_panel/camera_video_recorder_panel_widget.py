@@ -15,9 +15,7 @@ from .threads.stop_recording_thread import StopRecordingThread
 class CameraVideoRecorderPanelWidget(BaseWidget):
     def __init__(self, stack=None, node=None):
         super(CameraVideoRecorderPanelWidget, self).__init__(stack, PackageNameEnum.CameraVideoRecorderPanel, node=node)
-
         self.setRobotOnScreen()
-        self.settingsButtonUI.clicked.connect(self.settingsClicked)
 
         self.recordButtonUI.clicked.connect(self.onRecordButtonClicked)
         self.fileSizeWrapperWidgetUI.setVisible(False);
@@ -32,6 +30,7 @@ class CameraVideoRecorderPanelWidget(BaseWidget):
         self.recordVideoStopService = self.node.create_client(RecordVideoStop, 'stop_video_recording')
 
     def onRecordButtonClicked(self):
+        print("onRecordButtonClicked")
         if not self.isRecording:
             self.test = StartRecordingThread(self)
             self.test.startRecordingResponse.connect(self.startRecording)
@@ -42,7 +41,8 @@ class CameraVideoRecorderPanelWidget(BaseWidget):
             self.test1.start()
 
     def startRecording(self, response):
-        # print(response)
+        print("response", response)
+        self.recordButtonUI.setText("STOP RECORDING")
         self.recordingSpinner.start()
         self.isRecording = True
 
@@ -57,6 +57,7 @@ class CameraVideoRecorderPanelWidget(BaseWidget):
 
         if self.filePath == '':
             self.recordButtonUI.setText("START RECORDING")
+            self.recordButtonUI.setEnabled(True)
             Alert(self.displayName, "You canceled action hence video will not be fetched")
             return
 

@@ -13,12 +13,15 @@ class StartRecordingThread(QThread):
         self.recordVideoStartService = cameraVideoRecorderPanelWidget.recordVideoStartService
 
     def run(self):
+        print("run")
         self.recordButtonUI.setEnabled(False)
         while not self.recordVideoStartService.wait_for_service(timeout_sec=2.0):
+            print("here")
             self.recordButtonUI.setEnabled(True)
             Alert(self.cameraVideoRecorderPanelWidget.displayName, "Recording service not available")
             return
         self.recordButtonUI.setEnabled(True)
+        print("wwww")
 
         req = RecordVideoStart.Request()
         req.width = self.cameraVideoRecorderPanelWidget.width

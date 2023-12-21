@@ -44,7 +44,7 @@ class CommandsPanelWidget(BaseWidget):
         button = QPushButton("CLEAR")
         button.setCursor(QCursor(Qt.PointingHandCursor))
         button.clicked.connect(lambda: plainTextEdit.clear())
-        button.setStyleSheet("border: 1px solid black;\nborder-radius: 5px;\npadding: 5px;\nbackground: gray;")
+        button.setStyleSheet("font-weight: bold;\nborder: 1px solid black;\nborder-radius: 5px;\npadding: 5px;\nbackground: gray;")
         button.setMinimumWidth(150)
         button.setMaximumWidth(150)
 
@@ -97,4 +97,3 @@ class CommandsPanelWidget(BaseWidget):
         plainTextEdit = self.tabDictionary.get(commandName)
         plainTextEdit.setCurrentCharFormat(self.logFormat)
         plainTextEdit.insertPlainText(log + "\n")
-

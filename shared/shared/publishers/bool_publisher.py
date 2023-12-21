@@ -2,9 +2,10 @@ from python_qt_binding.QtWidgets import QWidget
 from std_msgs.msg import Bool
 
 
-class BoolPublisher(QWidget):
+# class BoolPublisher(QWidget):
+class BoolPublisher:
     def __init__(self, checkBoxUI, node):
-        super(QWidget, self).__init__()
+        # super(QWidget, self).__init__()
         self.checkBoxUI = checkBoxUI
         self.node = node
         self.checkBoxUI.stateChanged.connect(self.stateChanged)
