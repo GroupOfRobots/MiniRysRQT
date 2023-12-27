@@ -28,5 +28,8 @@ cd ../..
 source /opt/ros/humble/setup.bash
 # build
 colcon build
+# add new source  
+source install/setup.bash  
+# run rqt  
 rqt --force-discover  
 ```
