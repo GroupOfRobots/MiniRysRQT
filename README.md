@@ -25,7 +25,7 @@ git submodule update
 # go back to workspace
 cd ../..
 # add source
-source source /opt/ros/humble/setup.bash
+source /opt/ros/humble/setup.bash
 # build
 colcon build
 rqt --force-discover  
