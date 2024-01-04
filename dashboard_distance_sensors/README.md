@@ -1,2 +1,2 @@
-za kazym razem w workspace trzeba wpisac 
- . install/local_setup.bash
+# DASHBOARD DISTANCE SENSORS
+Displays data from distance sensors on the robot's background.

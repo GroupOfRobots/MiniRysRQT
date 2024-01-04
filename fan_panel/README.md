@@ -1,2 +1,3 @@
-za kazym razem w workspace trzeba wpisac 
- . install/local_setup.bash
+# FAN PANEL
+Allow to manually control fan on Mini Ryś.  
+When auto cooling is turn on, this panel is useless.

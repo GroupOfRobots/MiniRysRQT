@@ -3,12 +3,29 @@ Plugins for managing Mini Rys robot in RQT
 
 
 ## INSTALL
+Tested on:  
+* **UBUNTU 22.04**
+* **ROS2 HUMBLE**
+
+
 Before run install
+colcon
 ```
 sudo apt install python3-colcon-common-extensions   
+```
+git
+```
+sudo apt install git-all
+```
+pip3
+```
 sudo apt install python3-pip   
+```
+setuptools
+```
 pip3 install setuptools==58.2.0  
 ```
+
 Then  
 ```
 # create directory

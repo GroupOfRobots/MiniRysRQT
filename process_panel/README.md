@@ -1,2 +1,2 @@
-za kazym razem w workspace trzeba wpisac 
- . install/local_setup.bash
+# PROCESS PANEL
+Displays processes on current machine or on machine connected via SSH.

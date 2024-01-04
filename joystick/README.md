@@ -1,2 +1,2 @@
-za kazym razem w workspace trzeba wpisac 
- . install/local_setup.bash
+# JOYSTICK
+Allows to drive a robot
