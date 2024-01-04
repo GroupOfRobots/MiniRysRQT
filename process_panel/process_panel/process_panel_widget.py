@@ -97,7 +97,7 @@ class ProcessPanelWidget(BaseWidget):
             return True
         except BaseException as exception:
             exceptionToDisplay = "SSH connection: " + str(exception)
-            Alert(self.displayName, exceptionToDisplay)
+            Alert(self,self.displayName, exceptionToDisplay)
             return False
 
     def getCommand(self):

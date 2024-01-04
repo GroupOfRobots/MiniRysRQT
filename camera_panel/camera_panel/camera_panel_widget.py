@@ -31,8 +31,7 @@ class CameraPanelWidget(BaseWidget):
         # print(self.firstInitialization)
         if self.host is None or self.host == '' and self.firstInitialization:
             self.firstInitialization = False
-            self.alert = Alert(self,self.displayName, "Host was not defined")
-            # self.a.start()
+            Alert(self,self.displayName, "Host was not defined")
 
         try:
             # if self.cameraConnectionThread is not None:

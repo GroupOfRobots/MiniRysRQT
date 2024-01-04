@@ -59,7 +59,7 @@ class ParametersServerService:
         if not client.service_is_ready() and not client.wait_for_service(timeout):
             print("wait for service")
             exceptionToDisplay = "Service timeout"
-            Alert("Setup widget", exceptionToDisplay)
+            Alert(self,"Setup widget", exceptionToDisplay)
             return
 
         # It is possible that a node has the parameter services but is not
@@ -73,7 +73,7 @@ class ParametersServerService:
         result = future.result()
         if result is None:
             exceptionToDisplay = "Service result was None"
-            Alert("PID widget: ", exceptionToDisplay)
+            Alert(self,"PID widget: ", exceptionToDisplay)
             return
 
         return future.result()
@@ -83,7 +83,7 @@ class ParametersServerService:
             isSet = self.setup(self.pidData, self.namespace)
             if isSet is False:
                 exceptionToDisplay = "Robot params setup is not available"
-                Alert("Parameters server", exceptionToDisplay)
+                Alert(self,"Parameters server", exceptionToDisplay)
             return
 
         pidSpeedKpParam = Parameter('pidSpeedKp', Parameter.Type.DOUBLE, self.pidData.get('pidAngleKp', 0))
