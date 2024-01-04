@@ -9,6 +9,8 @@ from python_qt_binding.QtWidgets import QHeaderView, QAbstractItemView
 from shared.alert.alert import Alert
 from shared.base_widget.base_widget import BaseWidget
 from shared.enums import PackageNameEnum
+from shared.services.kill_local_process_service import KillLocalProcessService
+from shared.utils.ssh_data import getSSHPassword, getSSHData
 
 from .services.display_process_service import DisplayProcessService
 from .services.kill_local_process_service import KillLocalProcessService
