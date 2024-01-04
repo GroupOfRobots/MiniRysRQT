@@ -30,9 +30,8 @@ class CameraPanelWidget(BaseWidget):
 
     def initializeRobotSettings(self):
         self.host = getSSHHost(self.data)
-        if self.host is None or self.host == '' and self.firstInitialization:
-            self.firstInitialization = False
-            Alert(self,self.displayName, "Host was not defined")
+        if self.host is None or self.host == '':
+            Alert(self, self.displayName, "Host was not defined")
 
         try:
             self.setCameraConnectionThreadData()
@@ -127,6 +126,7 @@ class CameraPanelWidget(BaseWidget):
 
     def captureScreenshot(self):
         try:
+            self.screenshotButtonUI.setEnabled(False)
             url = self.getRequestUrl()
             jsonBody = {'width': self.imageWidthSliderUI.value(), 'height': self.imageHeightSliderUI.value()}
             contents = requests.post(url, json=jsonBody, timeout=2.50)
@@ -145,8 +145,9 @@ class CameraPanelWidget(BaseWidget):
             if fileName:
                 image.save(fileName)
         except Exception as exception:
-            print(exception)
-            pass
+            Alert(self, self.displayName, exception)
+
+        self.screenshotButtonUI.setEnabled(True)
 
     def cleanup(self):
         self.cameraConnectionThread.terminate()

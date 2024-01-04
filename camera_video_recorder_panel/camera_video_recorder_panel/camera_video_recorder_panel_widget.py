@@ -114,3 +114,8 @@ class CameraVideoRecorderPanelWidget(BaseWidget):
         self.heightLabelUI.setText(str(self.height))
         self.outputLabelUI.setText(self.output)
         self.qualityLabelUI.setText(self.quality)
+
+    def cleanup(self):
+        if self.isRecording:
+            req = RecordVideoStop.Request()
+            return self.recordVideoStopService.call(req)
