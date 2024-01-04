@@ -9,6 +9,7 @@ class InnerCommunication(QObject):
     closeApp = pyqtSignal()
 
     updateFanValueSignal = pyqtSignal(object, name="updateFanValue")
+    lastFanValues = {}
 
     def test(self):
         print("InnerCommunication")

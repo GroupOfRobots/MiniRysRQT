@@ -15,6 +15,8 @@ class FanPanelWidget(BaseWidget):
         self.fanPanel = mainPanel
         self.id = None
         self.setRobotOnScreen()
+        self.updatedByValueSignal = False
+        self.setInitialValue()
 
         self.publisher = node.create_publisher(Float32, '/internal/fan_output', 10)
         self.msg = Float32()
@@ -24,7 +26,6 @@ class FanPanelWidget(BaseWidget):
 
         self.spinBox.valueChanged.connect(self.fanSpinBoxValueChanged)
         self.movedBySlider = False
-        self.movedBySpinBox = False
 
         self.fanPanel.closePanelSignal.connect(self.onClosePanelSignal)
 
@@ -40,6 +41,13 @@ class FanPanelWidget(BaseWidget):
         else:
             FanPanelWidget.activeRobotsMap[self.id] += 1
 
+    def setInitialValue(self):
+        initValue = innerCommunication.lastFanValues.get(self.id, None)
+        if initValue is not None:
+            self.updatedByValueSignal = True
+            value = initValue.get("value")
+            self.setValue(value)
+
     def onDeleteRobotSignal(self, signalData):
         self.checkIfRobotExists()
         super().onDeleteRobotSignal(signalData)
@@ -52,43 +60,41 @@ class FanPanelWidget(BaseWidget):
 
     def setupFanSlider(self):
         self.fanSlider.sliderReleased.connect(self.sliderReleased)
-        self.fanSlider.valueChanged.connect(self.sliderValueChanged)
 
     def sliderReleased(self):
+        sliderValue=self.fanSlider.value()
+
+        self.movedBySlider = True
+        self.spinBox.setValue(sliderValue)
+        self.value = sliderValue / 100
         self.sendFanValue()
         self.updateFans()
 
     def updateFans(self):
         fanData = {
             "panelName": self.fanPanel.name,
-            "id": self.data.get('id'),
+            "id": self.id,
             "value": self.value
         }
 
         innerCommunication.updateFanValueSignal.emit(fanData)
+        innerCommunication.lastFanValues[self.id] = fanData
 
     def sendFanValue(self):
         self.msg.data = float(self.value)
         self.publisher.publish(self.msg)
 
     def fanSpinBoxValueChanged(self, event):
-        self.movedBySpinBox = True
-
-        if self.movedBySlider:
-            self.movedBySlider = False
+        if not self.updatedByValueSignal:
+            if self.movedBySlider:
+                self.movedBySlider = False
+            else:
+                self.fanSlider.setValue(event)
+                self.value = event / 100
+                self.sendFanValue()
+                self.updateFans()
         else:
-            self.fanSlider.setValue(event)
-            self.value = event / 100
-            self.sendFanValue()
-            self.updateFans()
-
-    def sliderValueChanged(self, event):
-        self.movedBySlider = True
-        if self.movedBySpinBox:
-            self.movedBySpinBox = False
-        else:
-            self.spinBox.setValue(event)
-            self.value = event / 100
+            self.updatedByValueSignal = False
 
     def turnOffFan(self):
         self.value = 0
@@ -97,7 +103,6 @@ class FanPanelWidget(BaseWidget):
 
     def onClosePanelSignal(self):
         self.checkIfRobotExists()
-        self.turnOffFan()
 
     def onUpdateValueSignal(self, event):
         panelName = event.get('panelName')
@@ -105,7 +110,11 @@ class FanPanelWidget(BaseWidget):
         currentId = self.data.get('id')
         if panelName != self.fanPanel.name and eventId == currentId:
             newValue = event.get('value')
-            self.value = newValue
-            valueToDisplay = int(newValue * 100)
-            self.spinBox.setValue(valueToDisplay)
-            self.fanSlider.setValue(valueToDisplay)
+            self.updatedByValueSignal = True
+            self.setValue(newValue)
+
+    def setValue(self, newValue):
+        self.value = newValue
+        valueToDisplay = int(newValue * 100)
+        self.spinBox.setValue(valueToDisplay)
+        self.fanSlider.setValue(valueToDisplay)
