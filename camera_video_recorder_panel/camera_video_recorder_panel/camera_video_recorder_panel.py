@@ -10,7 +10,3 @@ class CameraVideoRecorderPanel(BasePlugin):
 
         stack = CameraVideoRecorderPanelStack(node=context.node)
         self.setStackWidget(stack, 'Camera Video Recorder Panel')
-
-        setWidgetSerialNumber(context, self._stack)
-
-        context.add_widget(self._stack)
