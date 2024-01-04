@@ -11,6 +11,7 @@ setup(
               package_name + '/alert',
               package_name + '/spinner',
               package_name + '/publishers',
+              package_name + '/subscription_dispatcher',
               package_name + '/deleted_robot_screen',
               package_name + '/no_robot_configuration_screen',
               package_name + '/utils',
