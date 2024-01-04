@@ -57,7 +57,6 @@ class ParametersServerService:
 
     def callService(self, client, request, timeout=1.0):
         if not client.service_is_ready() and not client.wait_for_service(timeout):
-            print("wait for service")
             exceptionToDisplay = "Service timeout"
             Alert(self,"Setup widget", exceptionToDisplay)
             return
@@ -102,9 +101,6 @@ class ParametersServerService:
                       pidAngleTdParam]
 
         setParametersRequest = SetParameters.Request()
-        print("heeeeeeeeeeeeeeeeeeeeeeee")
         setParametersRequest.parameters = [p.to_parameter_msg() for p in parameters]
-        print("heeeeeeeeeeeeeeeeeeeeee2222222222ee")
 
         response = self.callService(self.setParamsClient, setParametersRequest)
-        # self.getCurrentParams()

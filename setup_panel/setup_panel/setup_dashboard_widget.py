@@ -37,7 +37,6 @@ class SetupDashboardWidget(QWidget):
         for fileName in (os.listdir(self.dataFilePath)):
             element = DashboardElementWidget(fileName=fileName, stack=self.stack)
             self.elementDictionary[self.dataFilePath + '/' + fileName] = element
-            # self.elements.addWidget(element)
             self.elementsBoxLayoutUI.addWidget(element)
 
     def onDeleteRobotSignal(self, data):
@@ -61,9 +60,3 @@ class SetupDashboardWidget(QWidget):
 
     def addNewRobot(self):
         self.stack.goToSettings(addMode=True)
-
-    def cleanup(self):
-        pass
-
-    def restoreFunctionalities(self):
-        pass

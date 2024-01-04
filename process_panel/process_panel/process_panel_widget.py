@@ -13,7 +13,6 @@ from shared.services.kill_local_process_service import KillLocalProcessService
 from shared.utils.ssh_data import getSSHPassword, getSSHData
 
 from .services.display_process_service import DisplayProcessService
-from .services.kill_local_process_service import KillLocalProcessService
 
 PID_PROCESS_PATTERN = r"\b(\d+)\b"
 TIMER_INTERVAL = 5000

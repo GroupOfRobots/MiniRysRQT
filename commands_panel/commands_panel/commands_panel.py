@@ -3,7 +3,6 @@ from shared.base_plugin.base_plugin import BasePlugin
 
 from .commands_panel_stack import CommandsPanelStack
 
-class CommandsPanel(Plugin):
 
 class CommandsPanel(BasePlugin):
     def __init__(self, context):

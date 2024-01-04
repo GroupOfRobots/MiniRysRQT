@@ -15,7 +15,6 @@ class FetchFileThread(QThread):
         self.fileSizeLabelUI = fileSizeLabelUI
 
     def run(self):
-        # time.sleep(5)
         self.fetchRecording()
 
     def fetchRecording(self):
@@ -23,14 +22,11 @@ class FetchFileThread(QThread):
         with paramiko.Transport((self.host, self.port)) as transport:
             transport.connect(username=self.username, password=self.password)
             with paramiko.SFTPClient.from_transport(transport) as sftp:
-                print("222", sftp)
                 # Check if the remote file exists
                 try:
                     remote_file_size = sftp.stat(self.remoteVideoFilePath).st_size
-                    print("remote_file_size", remote_file_size)
                     self.fileSizeLabelUI.setText(str(remote_file_size))
 
                     sftp.get(self.remoteVideoFilePath, self.filePath)
-                    print(f"File downloaded to: {self.filePath}")
                 except FileNotFoundError:
                     print(f"Remote file not found: {self.remoteVideoFilePath}")

@@ -28,17 +28,14 @@ class CameraPanelWidget(BaseWidget):
 
     def initializeRobotSettings(self):
         self.host = getSSHHost(self.data)
-        # print(self.firstInitialization)
         if self.host is None or self.host == '' and self.firstInitialization:
             self.firstInitialization = False
             Alert(self,self.displayName, "Host was not defined")
 
         try:
-            # if self.cameraConnectionThread is not None:
             self.setCameraConnectionThreadData()
         except AttributeError:
             pass
-
 
     def initCameraConnectionThread(self):
         self.cameraConnectionThread = CameraConnectionThread(url=self.getRequestUrl(),
@@ -148,9 +145,6 @@ class CameraPanelWidget(BaseWidget):
         except Exception as exception:
             print(exception)
             pass
-
-    def onShtudownPlugin(self):
-        self.cameraConnectionThread.terminate()
 
     def cleanup(self):
         self.cameraConnectionThread.terminate()

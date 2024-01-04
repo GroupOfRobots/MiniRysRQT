@@ -31,25 +31,22 @@ class CameraVideoRecorderPanelWidget(BaseWidget):
         self.recordVideoStopService = self.node.create_client(RecordVideoStop, 'stop_video_recording')
 
     def onRecordButtonClicked(self):
-        print("onRecordButtonClicked")
         if not self.isRecording:
-            self.test = StartRecordingThread(self)
-            self.test.startRecordingResponse.connect(self.startRecording)
-            self.test.start()
+            self.startRecordingThread = StartRecordingThread(self)
+            self.startRecordingThread.startRecordingResponse.connect(self.startRecording)
+            self.startRecordingThread.start()
         else:
-            self.test1 = StopRecordingThread(self)
-            self.test1.stopRecordingResponse.connect(self.stopRecording)
-            self.test1.start()
+            self.stopRecordingThread = StopRecordingThread(self)
+            self.stopRecordingThread.stopRecordingResponse.connect(self.stopRecording)
+            self.stopRecordingThread.start()
 
     def startRecording(self, response):
-        print("response", response)
         self.recordButtonUI.setText("STOP RECORDING")
         self.recordingSpinner.start()
         self.isRecording = True
 
     def stopRecording(self, response):
         self.isRecording = False
-        print(response, "response")
         remoteVideoFilePath = response.video_file_path
 
         self.recordingSpinner.stop()
@@ -108,7 +105,7 @@ class CameraVideoRecorderPanelWidget(BaseWidget):
 
         if self.host is None or self.host == '':
             exceptionToDisplay = "SSH host was not defined"
-            Alert(self.displayName, exceptionToDisplay)
+            Alert(self, self.displayName, exceptionToDisplay)
 
         self.displayReecordingData()
 
