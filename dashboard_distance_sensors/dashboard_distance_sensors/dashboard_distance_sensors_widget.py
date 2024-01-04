@@ -10,6 +10,7 @@ from rclpy.node import Node
 from sensor_msgs.msg import Range
 from shared.base_widget.base_widget import BaseWidget
 from shared.enums import PackageNameEnum
+from shared.subscription_dispatcher.subscription_dispatcher import SubscriptionDispatcher
 
 
 class DashboardDistanceSensorsWidget(BaseWidget):

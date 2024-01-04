@@ -8,6 +8,7 @@ from python_qt_binding.QtWidgets import QFileDialog
 from shared.alert.alert import Alert
 from shared.base_widget.base_widget import BaseWidget
 from shared.enums import PackageNameEnum
+from shared.utils.ssh_data import getSSHHost
 
 from .threads.camera_connection_thread import CameraConnectionThread
 
@@ -126,7 +127,7 @@ class CameraPanelWidget(BaseWidget):
 
     def captureScreenshot(self):
         try:
-            url = 'http://' + self.host + ':8000/stream.mjpg'
+            url = self.getRequestUrl()
             jsonBody = {'width': self.imageWidthSliderUI.value(), 'height': self.imageHeightSliderUI.value()}
             contents = requests.post(url, json=jsonBody, timeout=2.50)
             image = QImage()
