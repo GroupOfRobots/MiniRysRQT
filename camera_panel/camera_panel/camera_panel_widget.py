@@ -28,11 +28,12 @@ class CameraPanelWidget(BaseWidget):
         self.imageHeightSpinBoxUI.valueChanged.connect(self.spinBoxSetImageHeight)
 
     def initializeRobotSettings(self):
-        sshData = self.data.get('ssh', {})
-        self.host = sshData.get('host')
-
-        if self.host is None or self.host == '':
-            self.showAlertThatHostIsNotDefined()
+        self.host = getSSHHost(self.data)
+        # print(self.firstInitialization)
+        if self.host is None or self.host == '' and self.firstInitialization:
+            self.firstInitialization = False
+            self.alert = Alert(self,self.displayName, "Host was not defined")
+            # self.a.start()
 
         try:
             # if self.cameraConnectionThread is not None:

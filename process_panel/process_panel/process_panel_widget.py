@@ -87,12 +87,7 @@ class ProcessPanelWidget(BaseWidget):
             self.setupLocalExecution()
 
     def createSshChannel(self):
-        sshData = self.data.get('ssh', {})
-
-        host = sshData.get('host')
-        port = sshData.get('port')
-        username = sshData.get('username')
-        password = sshData.get('password')
+        host, port, username, password = getSSHData(self.data)
 
         self.ssh = paramiko.SSHClient()
         self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -152,7 +147,10 @@ class ProcessPanelWidget(BaseWidget):
             killCommand = f"sudo kill -9 {pid}"
 
             stdin, stdout, stderr = self.ssh.exec_command(killCommand)
-            stdin.write('minirys\n')
+
+            password = getSSHPassword(self.data)
+
+            stdin.write(password + '\n')
             stdin.flush()
             self.executeSshCommand()
 

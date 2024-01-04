@@ -94,8 +94,7 @@ class CommandExecuteElementWidget(QWidget):
     def killProcessWithPid(self, pid):
         command = f'sudo kill -9 {pid}'
         try:
-            sshData = self.data.get('ssh', {})
-            password = sshData.get('password')
+            password = getSSHPassword(self.data)
             stdin, stdout, stderr = self.ssh.exec_command(command)
             stdin.write(password + '\n')
             stdin.flush()

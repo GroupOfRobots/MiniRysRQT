@@ -4,6 +4,7 @@ from python_qt_binding.QtWidgets import QFileDialog
 from shared.alert.alert import Alert
 from shared.base_widget.base_widget import BaseWidget
 from shared.enums import PackageNameEnum
+from shared.utils.ssh_data import getSSHData
 
 from .elements.fetch_recording_spinner import FetchRecordingSpinner
 from .elements.recording_spinner import RecordingSpinner
@@ -96,11 +97,7 @@ class CameraVideoRecorderPanelWidget(BaseWidget):
         return filePath
 
     def initializeRobotSettings(self):
-        sshData = self.data.get('ssh', {})
-        self.host = sshData.get('host')
-        self.username = sshData.get('username')
-        self.password = sshData.get('password')
-        self.port = int(sshData.get('port'))
+        self.host, self.username, self.password, self.port = getSSHData(self.data)
 
         videoRecorder = self.data.get("videoRecorder", {})
         self.output = videoRecorder.get("output", None)
