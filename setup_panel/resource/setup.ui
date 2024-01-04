@@ -112,7 +112,7 @@
       </size>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="controls">
       <attribute name="title">
@@ -132,7 +132,7 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>740</width>
+            <width>604</width>
             <height>1456</height>
            </rect>
           </property>
@@ -1031,6 +1031,19 @@ border-radius: 75px;
             </widget>
            </item>
            <item>
+            <spacer name="horizontalSpacer_18">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
             <widget class="QLabel" name="label_4">
              <property name="text">
               <string>COMMAND BODY</string>
@@ -1038,7 +1051,29 @@ border-radius: 75px;
             </widget>
            </item>
            <item>
+            <spacer name="horizontalSpacer_17">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Expanding</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
             <widget class="QGroupBox" name="groupBox_2">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
              <property name="maximumSize">
               <size>
                <width>200</width>
@@ -1049,16 +1084,22 @@ border-radius: 75px;
               <string/>
              </property>
              <layout class="QHBoxLayout" name="horizontalLayout_11">
+              <property name="spacing">
+               <number>15</number>
+              </property>
+              <property name="rightMargin">
+               <number>20</number>
+              </property>
               <item>
                <widget class="QLabel" name="label_9">
                 <property name="maximumSize">
                  <size>
-                  <width>130</width>
+                  <width>50</width>
                   <height>16777215</height>
                  </size>
                 </property>
                 <property name="text">
-                 <string>EXECUTE VIA SSH</string>
+                 <string>SSH</string>
                 </property>
                </widget>
               </item>

@@ -322,6 +322,9 @@ background-color:none;</string>
         <layout class="QHBoxLayout" name="horizontalLayout_7">
          <item alignment="Qt::AlignHCenter">
           <widget class="QPushButton" name="screenshotButtonUI">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="cursor">
             <cursorShape>PointingHandCursor</cursorShape>
            </property>
