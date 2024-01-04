@@ -2,8 +2,8 @@
 
 from shared.stack_widget.stack_widget import StackWidget
 
-from .details.setup_widget import SetupWidget
 from .setup_dashboard_widget import SetupDashboardWidget
+from setup_panel.details.setup_widget import SetupWidget
 
 
 class SetupDashboardStackWidget(StackWidget):
@@ -11,12 +11,12 @@ class SetupDashboardStackWidget(StackWidget):
         super(SetupDashboardStackWidget, self).__init__(node=node, constructor=SetupDashboardWidget, mainPanel=panel)
         self.node = node
 
-    # def goToSettings(self, dataFilePath=None, addMode=False):
-    #     if hasattr(self, 'setupWidget'):
-    #         self.stack.removeWidget(self.setupWidget)
-    #     self.setupWidget = SetupWidget(dataFilePath=dataFilePath, stack=self, addMode=addMode, node=self.node)
-    #     self.stack.addWidget(self.setupWidget)
-    #     self.stack.setCurrentIndex(1)
+    def goToSettings(self, dataFilePath=None, addMode=False):
+        if hasattr(self, 'setupWidget'):
+            self.stack.removeWidget(self.setupWidget)
+        self.setupWidget = SetupWidget(dataFilePath=dataFilePath, stack=self, addMode=addMode, node=self.node)
+        self.stack.addWidget(self.setupWidget)
+        self.stack.setCurrentIndex(1)
 
 
     def initWidget(self):
