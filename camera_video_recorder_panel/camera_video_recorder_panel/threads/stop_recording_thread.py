@@ -15,7 +15,7 @@ class StopRecordingThread(QThread):
     def run(self):
         self.recordButtonUI.setEnabled(False)
         while not self.recordVideoStopService.wait_for_service(timeout_sec=2.0):
-            Alert(self.cameraVideoRecorderPanelWidget.displayName, "Stop recording service not available")
+            Alert(self.cameraVideoRecorderPanelWidget,self.cameraVideoRecorderPanelWidget.displayName, "Stop recording service not available")
             return
 
         req = RecordVideoStop.Request()

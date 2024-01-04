@@ -5,6 +5,7 @@ import requests
 from python_qt_binding.QtCore import pyqtSlot, Qt
 from python_qt_binding.QtGui import QPixmap, QImage
 from python_qt_binding.QtWidgets import QFileDialog
+from shared.alert.alert import Alert
 from shared.base_widget.base_widget import BaseWidget
 from shared.enums import PackageNameEnum
 

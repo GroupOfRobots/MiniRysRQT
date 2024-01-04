@@ -56,7 +56,7 @@ class CameraVideoRecorderPanelWidget(BaseWidget):
         if self.filePath == '':
             self.recordButtonUI.setText("START RECORDING")
             self.recordButtonUI.setEnabled(True)
-            Alert(self.displayName, "You canceled action hence video will not be fetched")
+            Alert(self, self.displayName, "You canceled action hence video will not be fetched")
             return
 
         self.recordButtonUI.setText("FETCHING FILE")

@@ -1,6 +1,6 @@
 from minirys_msgs.srv import RecordVideoStart
 from python_qt_binding.QtCore import QThread, pyqtSignal
-from shared.alert.alert import Alert
+from shared.inner_communication import innerCommunication
 
 
 class StartRecordingThread(QThread):
