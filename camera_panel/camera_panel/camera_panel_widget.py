@@ -9,7 +9,6 @@ from shared.base_widget.base_widget import BaseWidget
 from shared.enums import PackageNameEnum
 
 from .threads.camera_connection_thread import CameraConnectionThread
-from .threads.host_not_defined_alert_thread import HostNotDefinedAlertThread
 
 
 class CameraPanelWidget(BaseWidget):
@@ -127,10 +126,6 @@ class CameraPanelWidget(BaseWidget):
         self.cameraConnectionThread.setFrameHeight(height)
 
         self.widthAspectRatio(height)
-
-    def showAlertThatHostIsNotDefined(self):
-        self.hostNotDefinedAlertThread = HostNotDefinedAlertThread()
-        self.hostNotDefinedAlertThread.start()
 
     def captureScreenshot(self):
         try:
