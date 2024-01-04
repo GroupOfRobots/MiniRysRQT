@@ -16,6 +16,7 @@ setup(
               package_name + '/utils',
               package_name + '/stack_widget',
               package_name + '/services',
+              package_name + '/base_plugin',
               package_name + '/base_widget'],
     data_files=[
         ('share/ament_index/resource_index/packages',

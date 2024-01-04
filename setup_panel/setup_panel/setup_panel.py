@@ -1,14 +1,12 @@
-from rqt_gui_py.plugin import Plugin
-from .setup_dashboard_stack import SetupDashboardStackWidget
-from shared.utils.serial_number import setWidgetSerialNumber
+from shared.base_plugin.base_plugin import BasePlugin
 
-class SetupPanel(Plugin):
+from .setup_dashboard_stack import SetupDashboardStackWidget
+
+
+class SetupPanel(BasePlugin):
     def __init__(self, context):
         super(SetupPanel, self).__init__(context)
-        self._stack = SetupDashboardStackWidget(node=context.node, panel=self)
-        self._stack.setObjectName('SetupPanel')
-        self._stack.setWindowTitle('Setup Panel')
+        self.setObjectName('SetupPanel')
 
-        setWidgetSerialNumber(context, self._stack)
-
-        context.add_widget(self._stack)
+        stack = SetupDashboardStackWidget(node=context.node, panel=self)
+        self.setStackWidget(stack, 'Setup Panel')

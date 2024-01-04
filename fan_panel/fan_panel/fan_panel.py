@@ -1,11 +1,10 @@
-from rqt_gui_py.plugin import Plugin
-from .fan_panel_stack import FanPanelStack
-from .fan_panel_widget import FanPanelWidget
 from python_qt_binding.QtCore import pyqtSignal
+from shared.base_plugin.base_plugin import BasePlugin
 
-from shared.utils.serial_number import setWidgetSerialNumber
+from .fan_panel_stack import FanPanelStack
 
-class FanPanel(Plugin):
+
+class FanPanel(BasePlugin):
     closePanelSignal = pyqtSignal(bool, name="closePanelSignal")
 
     def __init__(self, context):
@@ -13,12 +12,9 @@ class FanPanel(Plugin):
         self.name = 'FanPanel' + str(context.serial_number())
         self.setObjectName(self.name)
 
-        self._stack = FanPanelStack(node=context.node, fanPanel=self)
-        self._stack.setWindowTitle('Fan Panel')
-
-        setWidgetSerialNumber(context, self._stack)
-
-        context.add_widget(self._stack)
+        stack = FanPanelStack(node=context.node, fanPanel=self)
+        self.setStackWidget(stack, 'Fan Panel')
 
     def shutdown_plugin(self):
         self.closePanelSignal.emit(True)
+        super().shutdown_plugin()

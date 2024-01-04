@@ -1,7 +1,8 @@
+import sip
 from rqt_gui_py.plugin import Plugin
+from shared.utils.serial_number import setWidgetSerialNumber
 
 from .joystick_stack import JoystickStack
-from shared.utils.serial_number import setWidgetSerialNumber
 
 
 class Joystick(Plugin):
@@ -17,3 +18,7 @@ class Joystick(Plugin):
         setWidgetSerialNumber(context, self._stack)
 
         context.add_widget(self._stack)
+
+    def shutdown_plugin(self):
+        self._stack.mainChildWidget.cleanup()
+        sip.delete(self._stack.stack)

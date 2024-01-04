@@ -1,14 +1,15 @@
-from rqt_gui_py.plugin import Plugin
-from .camera_video_recorder_panel_stack import CameraVideoRecorderPanelStack
-from shared.utils.serial_number import setWidgetSerialNumber
+from shared.base_plugin.base_plugin import BasePlugin
 
-class CameraVideoRecorderPanel(Plugin):
+from .camera_video_recorder_panel_stack import CameraVideoRecorderPanelStack
+
+
+class CameraVideoRecorderPanel(BasePlugin):
     def __init__(self, context):
         super(CameraVideoRecorderPanel, self).__init__(context)
         self.setObjectName('CameraVideoRecorderPanel')
 
-        self._stack = CameraVideoRecorderPanelStack(node=context.node)
-        self._stack.setWindowTitle('Camera Video Recorder Panel')
+        stack = CameraVideoRecorderPanelStack(node=context.node)
+        self.setStackWidget(stack, 'Camera Video Recorder Panel')
 
         setWidgetSerialNumber(context, self._stack)
 

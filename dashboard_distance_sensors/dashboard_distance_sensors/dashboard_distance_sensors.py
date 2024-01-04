@@ -1,21 +1,12 @@
-from rqt_gui_py.plugin import Plugin
-from .dashboard_distance_sensors_stack import DashboardStack
-from shared.utils.serial_number import setWidgetSerialNumber
+from shared.base_plugin.base_plugin import BasePlugin
 
-class DashboardDistanceSensors(Plugin):
+from .dashboard_distance_sensors_stack import DashboardStack
+
+
+class DashboardDistanceSensors(BasePlugin):
     def __init__(self, context):
         super(DashboardDistanceSensors, self).__init__(context)
-        self._node = context.node
-        self.context= context
-        self.setObjectName('Test')
+        self.setObjectName('DashboardDistanceSensors')
 
-        self._stack = DashboardStack(context.node)
-
-        setWidgetSerialNumber(context, self._stack)
-
-        context.add_widget(self._stack)
-
-    def shutdown_plugin(self):
-        pass
-        # print("aaaaaaaaaaaa")
-        # DashboardDistanceSensorsWidget.onDestroyed()
+        stack = DashboardStack(node=context.node)
+        self.setStackWidget(stack, 'Dashboard Distance Sensors')

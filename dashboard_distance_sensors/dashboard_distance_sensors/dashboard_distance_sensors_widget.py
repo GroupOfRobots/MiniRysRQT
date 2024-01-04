@@ -100,11 +100,12 @@ class DashboardDistanceSensorsWidget(BaseWidget):
 
     def initializeSubscribers(self):
         self.resetSubscribers()
+
         for index, subscriberParam in enumerate(self.subscriberParams):
-            subscriberInstance = self.node.create_subscription(subscriberParam.messageType,
-                                                               self.namespace + subscriberParam.topic,
-                                                               subscriberParam.callback
-                                                               , 10)
+            subscriptionDispatcher = SubscriptionDispatcher(self.node)
+            topic = self.namespace + subscriberParam.topic
+            subscriberInstance = subscriptionDispatcher.getSubscription(subscriberParam.messageType, topic)
+            subscriptionDispatcher.valueSignal.connect(subscriberParam.callback)
 
             subscriberParam = subscriberParam._replace(subscriber=subscriberInstance)
             self.subscriberParams[index] = subscriberParam
@@ -167,6 +168,9 @@ class DashboardDistanceSensorsWidget(BaseWidget):
             textNewPoint = QPoint(newX, newY)
             subscriberParam.text.setPos(textNewPoint)
             subscriberParam.line.setTransform(transform)
+
+    def cleanup(self):
+        self.resetSubscribers()
 
 
 SubscriberParam = namedtuple('SubscriberParam',
