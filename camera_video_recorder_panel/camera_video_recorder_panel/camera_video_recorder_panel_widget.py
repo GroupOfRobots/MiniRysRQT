@@ -94,7 +94,7 @@ class CameraVideoRecorderPanelWidget(BaseWidget):
         return filePath
 
     def initializeRobotSettings(self):
-        self.host, self.username, self.password, self.port = getSSHData(self.data)
+        self.host, self.port, self.username, self.password = getSSHData(self.data)
 
         videoRecorder = self.data.get("videoRecorder", {})
         self.output = videoRecorder.get("output", None)
@@ -117,5 +117,11 @@ class CameraVideoRecorderPanelWidget(BaseWidget):
 
     def cleanup(self):
         if self.isRecording:
+            exceptionToDisplay = "Recording is stopped and video will stay on robot\nbut will not be fetched"
+            Alert(self, self.displayName, exceptionToDisplay)
             req = RecordVideoStop.Request()
-            return self.recordVideoStopService.call(req)
+            self.recordVideoStopService.call(req)
+            self.recordingSpinner.stop()
+            self.recordButtonUI.setText("START RECORDING")
+            self.isRecording = False
+

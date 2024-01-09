@@ -16,11 +16,11 @@ class StartRecordingThread(QThread):
         self.recordButtonUI.setEnabled(False)
         while not self.recordVideoStartService.wait_for_service(timeout_sec=2.0):
             self.recordButtonUI.setEnabled(True)
-            itemData = {
+            alertData = {
                 "widgetName": self.cameraVideoRecorderPanelWidget.displayName,
                 "alertText": "Recording service not available"
             }
-            innerCommunication.showAlert.emit(itemData)
+            innerCommunication.showAlert.emit(alertData)
             return
         self.recordButtonUI.setEnabled(True)
 
