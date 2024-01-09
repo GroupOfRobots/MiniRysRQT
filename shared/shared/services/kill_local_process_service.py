@@ -23,9 +23,6 @@ class KillLocalProcessService:
 
     @staticmethod
     def killProcessCommand(pid):
-        # return subprocess.Popen(['sudo', '-S', 'kill', '-9', str(pid)], stdin=subprocess.PIPE,
-        #                         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
         process = subprocess.Popen(['sudo', '-S', 'kill', '-9', str(pid)], stdin=subprocess.PIPE,
                                 stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         process.communicate()
