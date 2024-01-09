@@ -4,7 +4,7 @@ import threading
 import time
 
 from python_qt_binding import QtCore
-from python_qt_binding.QtCore import Qt, QPoint
+from python_qt_binding.QtCore import Qt, QPoint, QEvent
 from python_qt_binding.QtGui import QPainter, QBrush, QPen
 from shared.base_widget.base_widget import BaseWidget
 from shared.publishers.bool_publisher import BoolPublisher
@@ -41,6 +41,7 @@ class JoystickWidget(BaseWidget):
 
         self.comboBox.currentIndexChanged.connect(self.setRobotOnScreen)
         self.joystickWidget.mouseMoveEvent = self.joystickWidgetMouseMove
+        self.installEventFilter(self)  # Install event filter to catch focus events
 
 
     def joystickWidgetMouseMove(self, event):
@@ -96,14 +97,41 @@ class JoystickWidget(BaseWidget):
         x = int(self.joystickWidget.width() * 0.5)
         y = int(self.joystickWidget.height() * 0.5)
         self.joystickPosition = QPoint(x, y)
-        self.updateRobot(0, 0)
-
+        self.stopRobot()
         self.update()
+
+    def stopRobot(self):
+        if self.messageTypeComboBoxUI.currentIndex() == 0:
+            self.messageService.publishTwist(0.0, 0.0)
+        else:
+            self.messageService.publishMotorCommand(0.0, 0.0)
+
+    def eventFilter(self, obj, event):
+        if event.type() == 9:
+            # print("eventFilter", obj, event.type())
+            if self.keyPressedThread.is_alive():
+                self.keyPressedFlag = False
+                self.keyPressedThread.join()
+            self.keyPressService.pressedKeys = []
+            self.returnToCenter()
+
+        # if obj == self.joystickWidget and event.type() == QEvent.FocusOut:
+        #     # This block is executed when the line edit loses focus
+        #     print("Line Edit lost focus")
+
+        return super().eventFilter(obj, event)
 
     def mouseReleaseEvent(self, event):
         self.returnToCenter()
 
     def resizeEvent(self, event):
+        # stop robot when resizing
+        if self.keyPressedThread.is_alive():
+            self.keyPressedFlag = False
+            self.keyPressedThread.join()
+        self.keyPressService.pressedKeys = []
+        self.stopRobot()
+
         x = int(self.joystickWidget.width() * 0.5)
         y = int(self.joystickWidget.height() * 0.5)
         self.joystickPosition = QPoint(x, y)
@@ -214,3 +242,9 @@ class JoystickWidget(BaseWidget):
             self.returnToCenter()
 
         event.accept()
+
+    def cleanup(self):
+        if self.keyPressedThread.is_alive():
+            self.keyPressedFlag = False
+            self.keyPressedThread.join()
+        self.stopRobot()
