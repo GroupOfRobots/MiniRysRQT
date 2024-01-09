@@ -97,17 +97,17 @@
       }
     },
     "twist": {
-      "linear": 100,
-      "angular": 100
+      "linear": -10,
+      "angular": -3
     }
   },
   "pid": {
-    "pidSpeedKp": 1,
-    "pidSpeedTi": 2,
-    "pidSpeedTd": 3,
-    "pidAngleKp": 11,
-    "pidAngleTi": 12,
-    "pidAngleTd": 13
+    "pidSpeedKp": 0.0013,
+    "pidSpeedTi": 0.05,
+    "pidSpeedTd": 0.0016,
+    "pidAngleKp": 43.3,
+    "pidAngleTi": 0.5,
+    "pidAngleTd": 0.09
   },
   "ssh": {
     "host": "192.168.102.11",
