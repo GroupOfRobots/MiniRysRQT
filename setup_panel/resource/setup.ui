@@ -112,7 +112,7 @@
       </size>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="controls">
       <attribute name="title">
@@ -132,7 +132,7 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>604</width>
+            <width>740</width>
             <height>1456</height>
            </rect>
           </property>
@@ -1427,7 +1427,7 @@ background: gray;</string>
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="currentpidSpeedTiUI">
+             <widget class="QLabel" name="currentPidSpeedTiUI">
               <property name="minimumSize">
                <size>
                 <width>100</width>

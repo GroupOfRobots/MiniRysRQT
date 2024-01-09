@@ -148,4 +148,3 @@ class SetupWidget(QWidget):
         dataFile = open(dataFilePath)
         self.data = json.loads(dataFile.read())
         dataFile.close()
-
