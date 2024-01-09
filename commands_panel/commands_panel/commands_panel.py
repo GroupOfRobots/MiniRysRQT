@@ -1,4 +1,3 @@
-from rqt_gui_py.plugin import Plugin
 from shared.base_plugin.base_plugin import BasePlugin
 
 from .commands_panel_stack import CommandsPanelStack
