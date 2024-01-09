@@ -12,13 +12,16 @@ class ParametersServerService:
         self.setParamsClient = None
 
     def setup(self, pidData, namespace):
-        self.pidData = pidData
-        self.namespace =namespace
+        self.setPidData(pidData)
+        self.namespace = namespace
         self.robotNode = self.findRobotNode(namespace)
         if self.robotNode:
             self.setParamsClients()
             return True
         return False
+
+    def setPidData(self, pidData):
+        self.pidData = pidData
 
     def findRobotNode(self, robotNamespace):
         namesAndNamespaces = self.widget.node.get_node_names_and_namespaces()
@@ -58,7 +61,7 @@ class ParametersServerService:
     def callService(self, client, request, timeout=1.0):
         if not client.service_is_ready() and not client.wait_for_service(timeout):
             exceptionToDisplay = "Service timeout"
-            Alert(self,"Setup widget", exceptionToDisplay)
+            Alert(self.widget, "Setup widget", exceptionToDisplay)
             return
 
         # It is possible that a node has the parameter services but is not
@@ -72,7 +75,7 @@ class ParametersServerService:
         result = future.result()
         if result is None:
             exceptionToDisplay = "Service result was None"
-            Alert(self,"PID widget: ", exceptionToDisplay)
+            Alert(self.widget, "PID widget: ", exceptionToDisplay)
             return
 
         return future.result()
@@ -82,16 +85,16 @@ class ParametersServerService:
             isSet = self.setup(self.pidData, self.namespace)
             if isSet is False:
                 exceptionToDisplay = "Robot params setup is not available"
-                Alert(self,"Parameters server", exceptionToDisplay)
+                Alert(self.widget, "Parameters server", exceptionToDisplay)
             return
+        print(self.pidData)
+        pidSpeedKpParam = Parameter('pidSpeedKp', Parameter.Type.DOUBLE, self.pidData.get('pidSpeedKp', 0))
+        pidSpeedTiParam = Parameter('pidSpeedTi', Parameter.Type.DOUBLE, self.pidData.get('pidSpeedTi', 0))
+        pidSpeedTdParam = Parameter('pidSpeedTd', Parameter.Type.DOUBLE, self.pidData.get('pidSpeedTd', 0))
 
-        pidSpeedKpParam = Parameter('pidSpeedKp', Parameter.Type.DOUBLE, self.pidData.get('pidAngleKp', 0))
-        pidSpeedTiParam = Parameter('pidSpeedTi', Parameter.Type.DOUBLE, self.pidData.get('pidAngleTi', 0))
-        pidSpeedTdParam = Parameter('pidSpeedTd', Parameter.Type.DOUBLE, self.pidData.get('pidAngleTd', 0))
-
-        pidAngleKpParam = Parameter('pidAngleKp', Parameter.Type.DOUBLE, self.pidData.get('pidSpeedKp', 0))
-        pidAngleTiParam = Parameter('pidAngleTi', Parameter.Type.DOUBLE, self.pidData.get('pidSpeedTi', 0))
-        pidAngleTdParam = Parameter('pidAngleTd', Parameter.Type.DOUBLE, self.pidData.get('pidSpeedTd', 0))
+        pidAngleKpParam = Parameter('pidAngleKp', Parameter.Type.DOUBLE, self.pidData.get('pidAngleKp', 0))
+        pidAngleTiParam = Parameter('pidAngleTi', Parameter.Type.DOUBLE, self.pidData.get('pidAngleTi', 0))
+        pidAngleTdParam = Parameter('pidAngleTd', Parameter.Type.DOUBLE, self.pidData.get('pidAngleTd', 0))
 
         parameters = [pidSpeedKpParam,
                       pidSpeedTiParam,
