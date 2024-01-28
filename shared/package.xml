@@ -4,7 +4,7 @@
   <name>shared</name>
   <version>0.0.0</version>
   <description>Shared utilities for robot plugins</description>
-  <maintainer email="pablo@todo.todo">pablo</maintainer>
+  <maintainer email="pawel.rawicki@gmail.com">pablo</maintainer>
   <license>Apache License 2.0</license>
 
   <test_depend>ament_copyright</test_depend>
