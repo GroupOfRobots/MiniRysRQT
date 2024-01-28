@@ -6,7 +6,6 @@ from python_qt_binding.QtCore import QThread
 
 from .local_privileges_service import LocalPrivilegesService
 
-CHECK_PRIVILEGES_COMMAND = "sudo -n true 2>/dev/null && echo Privileges active || echo Privileges inactive"
 INCORRECT_PASSWORD_PATTERN = r'sudo: (\d+) incorrect password attempt'
 
 

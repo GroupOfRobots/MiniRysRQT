@@ -1,9 +1,9 @@
 # This Python file uses the following encoding: utf-8
 
+from setup_panel.details.setup_widget import SetupWidget
 from shared.stack_widget.stack_widget import StackWidget
 
 from .setup_dashboard_widget import SetupDashboardWidget
-from setup_panel.details.setup_widget import SetupWidget
 
 
 class SetupDashboardStackWidget(StackWidget):
@@ -17,7 +17,6 @@ class SetupDashboardStackWidget(StackWidget):
         self.setupWidget = SetupWidget(dataFilePath=dataFilePath, stack=self, addMode=addMode, node=self.node)
         self.stack.addWidget(self.setupWidget)
         self.stack.setCurrentIndex(1)
-
 
     def initWidget(self):
         self.createWidget()

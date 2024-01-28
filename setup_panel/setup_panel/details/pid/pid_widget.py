@@ -1,5 +1,5 @@
 # from python_qt_binding.QtWidgets import QWidget
-
+from python_qt_binding.QtCore import QThread
 from python_qt_binding.QtWidgets import QWidget
 from rcl_interfaces.msg import Parameter as ParameterMsg
 from rcl_interfaces.srv import GetParameters
@@ -11,6 +11,7 @@ from shared.services.parameters_server_service import ParametersServerService
 class PidWidget(QWidget):
     def __init__(self, widget):
         super(PidWidget, self).__init__()
+        self.initialParams = None
         self.widget = widget
         self.setData(self.widget.data)
         self.parametersServerService = ParametersServerService(widget)
@@ -19,7 +20,10 @@ class PidWidget(QWidget):
         self.parametersServerService.setup(pidData, namespace)
 
         if self.parametersServerService.robotNode:
-            self.initialParams = self.getCurrentParams()
+            # self.initialParams = self.getCurrentParams()
+            self.getParamsThread = GetParams(self)
+            self.getParamsThread.start()
+
             self.widget.testParamsButtonUI.clicked.connect(self.setParams)
             self.widget.testParamsButtonUI.setToolTip("Tests PID params for previously set namespace\n"
                                                       " GUI will make best effort to restore previous params on BACK click")
@@ -28,8 +32,11 @@ class PidWidget(QWidget):
             self.widget.saveButton.clicked.connect(self.setParams)
 
         else:
-            self.widget.testParamsButtonUI.setEnabled(False)
-            self.widget.testParamsButtonUI.setToolTip("Node which uses PID params is currently unavailable")
+           self.disableTestParamsButton()
+
+    def disableTestParamsButton(self):
+        self.widget.testParamsButtonUI.setEnabled(False)
+        self.widget.testParamsButtonUI.setToolTip("Node which uses PID params is currently unavailable")
 
     def setData(self, data):
         self.data = data
@@ -75,6 +82,10 @@ class PidWidget(QWidget):
         getParametersResponse = self.parametersServerService.callService(self.parametersServerService.getParamsClient,
                                                                          getParametersRequest)
 
+        if getParametersResponse is None:
+            self.disableTestParamsButton()
+            return
+
         response = [
             Parameter.from_parameter_msg(ParameterMsg(name=name, value=value))
             for name, value in zip(names, getParametersResponse.values)
@@ -85,11 +96,11 @@ class PidWidget(QWidget):
 
         for responseElement in response:
             name = responseElement.name
-            value = responseElement.value
+            value = str(responseElement.value)
             if name == "pidSpeedKp":
                 self.widget.currentPidSpeedKpUI.setText(value)
             if name == "pidSpeedTi":
-                self.widget.currentpidSpeedTiUI.setText(value)
+                self.widget.currentPidSpeedTiUI.setText(value)
             if name == "pidSpeedTd":
                 self.widget.currentpidSpeedTdUI.setText(value)
             if name == "pidAngleKp":
@@ -108,3 +119,13 @@ class PidWidget(QWidget):
         setParametersRequest.parameters = [p.to_parameter_msg() for p in self.initialParams]
         response = self.parametersServerService.callService(self.parametersServerService.setParamsClient,
                                                             setParametersRequest)
+
+
+class GetParams(QThread):
+    pid=None
+    def __init__(self, widget):
+        super(QThread, self).__init__()
+        self.widget=widget
+
+    def run(self):
+        self.widget.initialParams = self.widget.getCurrentParams()

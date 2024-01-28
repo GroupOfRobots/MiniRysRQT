@@ -1,4 +1,3 @@
-# from PyQt5.QtCore import pyqtSignal, QObject
 from python_qt_binding.QtCore import pyqtSignal, QObject
 
 
@@ -12,7 +11,5 @@ class InnerCommunication(QObject):
     updateFanValueSignal = pyqtSignal(object, name="updateFanValue")
     lastFanValues = {}
 
-    def test(self):
-        print("InnerCommunication")
 
 innerCommunication = InnerCommunication()

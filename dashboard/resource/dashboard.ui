@@ -641,7 +641,7 @@ QGroupBox:title {
                </size>
               </property>
               <property name="text">
-               <string>CELL_3</string>
+               <string>CELL 3</string>
               </property>
              </widget>
             </item>

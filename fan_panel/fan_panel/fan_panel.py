@@ -5,8 +5,6 @@ from .fan_panel_stack import FanPanelStack
 
 
 class FanPanel(BasePlugin):
-    closePanelSignal = pyqtSignal(bool, name="closePanelSignal")
-
     def __init__(self, context):
         super(FanPanel, self).__init__(context)
         self.name = 'FanPanel' + str(context.serial_number())
@@ -14,7 +12,3 @@ class FanPanel(BasePlugin):
 
         stack = FanPanelStack(node=context.node, fanPanel=self)
         self.setStackWidget(stack, 'Fan Panel')
-
-    def shutdown_plugin(self):
-        self.closePanelSignal.emit(True)
-        super().shutdown_plugin()

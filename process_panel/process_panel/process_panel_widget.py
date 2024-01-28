@@ -14,7 +14,6 @@ from shared.utils.ssh_data import getSSHPassword, getSSHData
 
 from .services.display_process_service import DisplayProcessService
 
-PID_PROCESS_PATTERN = r"\b(\d+)\b"
 TIMER_INTERVAL = 5000
 
 
@@ -37,7 +36,6 @@ class ProcessPanelWidget(BaseWidget):
 
         self.timer = QTimer()
 
-        self.processPanel.closePanelSignal.connect(self.onDestroy)
         self.displayProcessService = DisplayProcessService(self.processTableWidgetUI, self.packagePath,
                                                            self.killProcess)
 
@@ -94,11 +92,11 @@ class ProcessPanelWidget(BaseWidget):
         self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
         try:
-            self.ssh.connect(host, port, username, password, timeout=1)
+            self.ssh.connect(host, int(port), username, password, timeout=1)
             return True
         except BaseException as exception:
             exceptionToDisplay = "SSH connection: " + str(exception)
-            Alert(self,self.displayName, exceptionToDisplay)
+            Alert(self, self.displayName, exceptionToDisplay)
             return False
 
     def getCommand(self):
@@ -163,7 +161,7 @@ class ProcessPanelWidget(BaseWidget):
         if self.ssh:
             self.ssh.close()
 
-    def onDestroy(self):
+    def cleanup(self):
         if self.timer:
             self.timer.stop()
         self.closeSshConnection()

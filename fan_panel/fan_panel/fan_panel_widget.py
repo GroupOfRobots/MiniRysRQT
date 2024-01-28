@@ -27,8 +27,6 @@ class FanPanelWidget(BaseWidget):
         self.spinBox.valueChanged.connect(self.fanSpinBoxValueChanged)
         self.movedBySlider = False
 
-        self.fanPanel.closePanelSignal.connect(self.onClosePanelSignal)
-
         innerCommunication.updateFanValueSignal.connect(self.onUpdateValueSignal)
 
     def setRobotOnScreen(self):
@@ -62,7 +60,7 @@ class FanPanelWidget(BaseWidget):
         self.fanSlider.sliderReleased.connect(self.sliderReleased)
 
     def sliderReleased(self):
-        sliderValue=self.fanSlider.value()
+        sliderValue = self.fanSlider.value()
 
         self.movedBySlider = True
         self.spinBox.setValue(sliderValue)
@@ -101,9 +99,6 @@ class FanPanelWidget(BaseWidget):
         self.msg.data = float(self.value)
         self.publisher.publish(self.msg)
 
-    def onClosePanelSignal(self):
-        self.checkIfRobotExists()
-
     def onUpdateValueSignal(self, event):
         panelName = event.get('panelName')
         eventId = event.get('id')
@@ -118,3 +113,6 @@ class FanPanelWidget(BaseWidget):
         valueToDisplay = int(newValue * 100)
         self.spinBox.setValue(valueToDisplay)
         self.fanSlider.setValue(valueToDisplay)
+
+    def cleanup(self):
+        self.checkIfRobotExists()

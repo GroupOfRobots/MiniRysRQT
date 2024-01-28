@@ -5,8 +5,6 @@ from .process_panel_stack import ProcessPanelStack
 
 
 class ProcessPanel(BasePlugin):
-    closePanelSignal = pyqtSignal(bool, name="closePanelSignal")
-
     def __init__(self, context):
         super(ProcessPanel, self).__init__(context)
         self.name = 'ProcessPanel' + str(context.serial_number())
@@ -14,7 +12,3 @@ class ProcessPanel(BasePlugin):
 
         stack = ProcessPanelStack(node=context.node, processPanel=self)
         self.setStackWidget(stack, 'Process Panel')
-
-    def shutdown_plugin(self):
-        self.closePanelSignal.emit(True)
-        super().shutdown_plugin()
