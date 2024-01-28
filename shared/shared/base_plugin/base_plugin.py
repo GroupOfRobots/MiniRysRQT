@@ -1,7 +1,6 @@
 import gc
 
 from rqt_gui_py.plugin import Plugin
-from shared.utils.serial_number import setWidgetSerialNumber
 
 
 class BasePlugin(Plugin):
@@ -13,14 +12,23 @@ class BasePlugin(Plugin):
         self._stack = stackWidget
         self._stack.setWindowTitle(title)
 
-        setWidgetSerialNumber(self.context, self._stack)
+        self.setWidgetSerialNumber(self._stack)
 
         self.context.add_widget(self._stack)
+        print(self.context._handler._widgets)
+        print(self._stack)
 
     def shutdown_plugin(self):
+        print("RYS","shutdown_plugin")
+        print(self.context._handler._widgets)
         self._stack.stack.removeWidget(self._stack.mainChildWidget)
         self._stack.mainChildWidget.cleanup()
         self._stack.mainChildWidget.deleteLater()
         self._stack.mainChildWidget = None
 
         gc.collect()
+
+    def setWidgetSerialNumber(self, widget):
+        if self.context.serial_number() > 1:
+            widget.setWindowTitle(
+                widget.windowTitle() + (' (%d)' % self.context.serial_number()))
