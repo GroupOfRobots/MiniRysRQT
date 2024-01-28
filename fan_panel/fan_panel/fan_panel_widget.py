@@ -18,6 +18,7 @@ class FanPanelWidget(BaseWidget):
         self.updatedByValueSignal = False
         self.setInitialValue()
 
+        # NAMESPACE IS MISSING BECAUSE USUALLY IT IS CONTROLLED DIRECTLY
         self.publisher = node.create_publisher(Float32, '/internal/fan_output', 10)
         self.msg = Float32()
         self.value = 0

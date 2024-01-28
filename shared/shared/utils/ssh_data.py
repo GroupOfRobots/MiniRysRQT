@@ -4,7 +4,7 @@ def getSSHData(data):
     username = sshData.get('username')
     password = sshData.get('password')
     port = _parsePort(sshData)
-    return host, username, password, port
+    return host, port, username, password
 
 
 def getSSHHost(data):

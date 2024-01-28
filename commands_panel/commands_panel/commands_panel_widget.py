@@ -16,6 +16,7 @@ class CommandsPanelWidget(BaseWidget):
 
     def __init__(self, stack=None, node=None):
         super(CommandsPanelWidget, self).__init__(stack=stack, packageName=PackageNameEnum.CommandsPanel, node=node)
+        self.tabDictionary = {}
 
         self.commandOutputSignal.connect(self.onCommandOutputSignal)
 
@@ -28,7 +29,6 @@ class CommandsPanelWidget(BaseWidget):
         self.logsTabWidgetUI.setTabsClosable(True)
         self.logsTabWidgetUI.tabCloseRequested.connect(self.tabCloseRequested)
 
-        self.tabDictionary = {}
 
     def clearAllTabs(self):
         for plainTextEdit in self.tabDictionary.values():
@@ -71,6 +71,8 @@ class CommandsPanelWidget(BaseWidget):
         for command in commands:
             element = CommandExecuteElementWidget(command, self.data, self.commandOutputSignal)
             self.commandsBoxLayoutUI.addWidget(element)
+
+        self.closeAllTabs()
 
     def onCommandOutputSignal(self, commandOutput):
         [commandName, command, output, errors, firstLog] = commandOutput

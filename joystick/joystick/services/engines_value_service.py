@@ -13,7 +13,7 @@ class EnginesValueService:
         self.joystickForwardData = joystickMotorCommandData.get("forward", {})
         self.joystickRightData = joystickMotorCommandData.get("right", {})
         self.joystickBackwartdData = joystickMotorCommandData.get("backward", {})
-        self.joystickLeftData = joystickMotorCommandData.get("right", {})
+        self.joystickLeftData = joystickMotorCommandData.get("left", {})
 
     def getValue(self, data, fieldName):
         return int(data.get(fieldName, 0))
