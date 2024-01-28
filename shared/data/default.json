@@ -10,36 +10,36 @@
   },
   "dynamic": {
     "forward": {
-      "leftEngine": 100,
-      "rightEngine": 100
+      "leftEngine": -5,
+      "rightEngine": 5
     },
     "forwardLeft": {
-      "leftEngine": 100,
-      "rightEngine": 100
+      "leftEngine": -3,
+      "rightEngine": 5
     },
     "forwardRight": {
-      "leftEngine": 100,
-      "rightEngine": 100
+      "leftEngine": -5,
+      "rightEngine": 3
     },
     "right": {
-      "leftEngine": 100,
-      "rightEngine": 100
+      "leftEngine": -5,
+      "rightEngine": -5
     },
     "backward": {
-      "leftEngine": 100,
-      "rightEngine": 100
+      "leftEngine": 5,
+      "rightEngine": -5
     },
     "backwardLeft": {
-      "leftEngine": 100,
-      "rightEngine": 100
+      "leftEngine": 3,
+      "rightEngine": -5
     },
     "backwardRight": {
-      "leftEngine": 100,
-      "rightEngine": 100
+      "leftEngine": 5,
+      "rightEngine": -3
     },
     "left": {
-      "leftEngine": 100,
-      "rightEngine": 100
+      "leftEngine": 5,
+      "rightEngine": 5
     }
   },
   "dynamicTwist": {
@@ -79,30 +79,30 @@
   "joystick": {
     "motorCommand": {
       "forward": {
-        "leftEngine": 90,
-        "rightEngine": 90
+        "leftEngine": -10,
+        "rightEngine": 10
       },
       "right": {
-        "leftEngine": 90,
-        "rightEngine": 90
+        "leftEngine": -10,
+        "rightEngine": -10
       },
       "backward": {
-        "leftEngine": 90,
-        "rightEngine": 90
+        "leftEngine": 10,
+        "rightEngine": -10
       },
       "left": {
-        "leftEngine": 90,
-        "rightEngine": 90
+        "leftEngine": 10,
+        "rightEngine": 10
       }
     },
     "twist": {
-      "linear": -5,
+      "linear": -10,
       "angular": -3
     }
   },
   "pid": {
     "pidSpeedKp": 0.0013,
-    "pidSpeedTi": 0.0016,
+    "pidSpeedTi": 0.05,
     "pidSpeedTd": 0.0016,
     "pidAngleKp": 43.3,
     "pidAngleTi": 0.5,
