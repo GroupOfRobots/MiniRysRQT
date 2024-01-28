@@ -26,9 +26,9 @@ class CameraVideoRecorderPanelWidget(BaseWidget):
         self.recordingSpinner = RecordingSpinner(self.widgetUI)
 
         self.fetchRecordingSpinner = FetchRecordingSpinner(self.widgetUI)
-
-        self.recordVideoStartService = self.node.create_client(RecordVideoStart, 'start_video_recording')
-        self.recordVideoStopService = self.node.create_client(RecordVideoStop, 'stop_video_recording')
+        self.recordVideoStartService = self.node.create_client(RecordVideoStart,
+                                                               self.namespace + '/start_video_recording')
+        self.recordVideoStopService = self.node.create_client(RecordVideoStop, self.namespace + '/stop_video_recording')
 
     def onRecordButtonClicked(self):
         if not self.isRecording:
@@ -124,4 +124,3 @@ class CameraVideoRecorderPanelWidget(BaseWidget):
             self.recordingSpinner.stop()
             self.recordButtonUI.setText("START RECORDING")
             self.isRecording = False
-
