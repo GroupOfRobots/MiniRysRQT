@@ -1,6 +1,5 @@
 import threading
 
-from python_qt_binding import QtCore
 from shared.enums import ControlKeyEnum
 
 

@@ -7,10 +7,9 @@ from python_qt_binding import QtCore
 from python_qt_binding.QtCore import Qt, QPoint, QEvent
 from python_qt_binding.QtGui import QPainter, QBrush, QPen
 from shared.base_widget.base_widget import BaseWidget
-from shared.publishers.bool_publisher import BoolPublisher
+from shared.enums import PackageNameEnum, ControlKeyEnum
 from shared.publishers.balance_publisher import BalancePublisher
-from shared.enums import ControlKeyEnum
-from shared.enums import PackageNameEnum
+from shared.publishers.bool_publisher import BoolPublisher
 
 from .services.engines_value_service import EnginesValueService
 from .services.key_press_service import KeyPressService
@@ -41,18 +40,31 @@ class JoystickWidget(BaseWidget):
 
         self.comboBox.currentIndexChanged.connect(self.setRobotOnScreen)
         self.joystickWidget.mouseMoveEvent = self.joystickWidgetMouseMove
-        self.installEventFilter(self)  # Install event filter to catch focus events
+        self.debounceTimestamp = time.time()
 
+        self.previousAngle = 0
+        self.previousPreviousAngle = 0
 
     def joystickWidgetMouseMove(self, event):
         self.joystickPosition = event.pos()
         x = self.joystickPosition.x()
         y = self.joystickPosition.y()
 
+        timestamp = time.time()
+
         if self.checkIfPointIsInEllipse(x, y):
             self.updateJoystickPosition(x, y)
-            self.updateRobot(x, y)
-            self.update()
+            if timestamp - self.debounceTimestamp > 0.01:
+                self.debounceTimestamp = time.time()
+                self.updateRobot(x, y)
+                self.update()
+        else:
+            newX, newY, _ = self.findNearestPoint(x, y)
+            self.updateJoystickPosition(newX, newY)
+            if timestamp - self.debounceTimestamp > 0.01:
+                self.debounceTimestamp = time.time()
+                self.updateRobot(x, y)
+                self.update()
 
     def initializeRobotSettings(self):
         self.controlKeys = self.data.get('controlKeys')
@@ -97,6 +109,7 @@ class JoystickWidget(BaseWidget):
         x = int(self.joystickWidget.width() * 0.5)
         y = int(self.joystickWidget.height() * 0.5)
         self.joystickPosition = QPoint(x, y)
+
         self.stopRobot()
         self.update()
 
@@ -107,18 +120,12 @@ class JoystickWidget(BaseWidget):
             self.messageService.publishMotorCommand(0.0, 0.0)
 
     def eventFilter(self, obj, event):
-        if event.type() == 9:
-            # print("eventFilter", obj, event.type())
+        if event.type() == QEvent.FocusOut:
             if self.keyPressedThread.is_alive():
                 self.keyPressedFlag = False
                 self.keyPressedThread.join()
             self.keyPressService.pressedKeys = []
             self.returnToCenter()
-
-        # if obj == self.joystickWidget and event.type() == QEvent.FocusOut:
-        #     # This block is executed when the line edit loses focus
-        #     print("Line Edit lost focus")
-
         return super().eventFilter(obj, event)
 
     def mouseReleaseEvent(self, event):
@@ -152,7 +159,6 @@ class JoystickWidget(BaseWidget):
     def calculateNewJoystickPosition(self):
         x = self.joystickPosition.x() + self.keyPressService.xMove
         y = self.joystickPosition.y() + self.keyPressService.yMove
-
         return x, y
 
     def updateJoystickPosition(self, x, y):
@@ -165,15 +171,29 @@ class JoystickWidget(BaseWidget):
                 ControlKeyEnum.STABLE in self.keyPressService.pressedKeys and len(
             self.keyPressService.pressedKeys) == 1)
 
+    def shouldCalculateNewJoystickPosition(self, x, y):
+        isStableAndAtLeastOneKeyIsPressed = (ControlKeyEnum.STABLE in self.keyPressService.pressedKeys and len(
+            self.keyPressService.pressedKeys) >= 2)
+        isNotStableAndAtLeastOneKeyIsPressed = (
+                (not (ControlKeyEnum.STABLE in self.keyPressService.pressedKeys)) and len(
+            self.keyPressService.pressedKeys) >= 1)
+        return isStableAndAtLeastOneKeyIsPressed or isNotStableAndAtLeastOneKeyIsPressed
+
     def calculateRadiusOfJoystickBoundary(self, angle):
         ellipseR = self.innerEllipseRx * self.innerEllipseRy * 0.25 / (math.sqrt(
             (self.innerEllipseRx * 0.5) ** 2 * math.sin(angle) ** 2 + (
                     self.innerEllipseRy * 0.5) ** 2 * math.cos(angle) ** 2))
         return ellipseR
 
-    def getAngle(self, cartesianPositionY, cartesianPositionX):
+    def getAngle(self, x, y):
+        cartesianPositionX, cartesianPositionY = self.getCartesianPosition(x, y)
         angle = math.radians(math.atan2(cartesianPositionY, cartesianPositionX) / math.pi * 180)
         return angle
+
+    def getCartesianPosition(self, x, y):
+        cartesianPositionX = x - self.joystickWidget.width() * 0.5
+        cartesianPositionY = self.joystickWidget.height() * 0.5 - y
+        return cartesianPositionX, cartesianPositionY
 
     def calculateKeyPressed(self):
         while self.keyPressedFlag:
@@ -182,16 +202,28 @@ class JoystickWidget(BaseWidget):
             if self.shouldUpdateJoystick(x, y):
                 self.updateRobot(x, y)
 
+                self.previousAngle = self.getAngle(x, y)
+
                 self.updateJoystickPosition(x, y)
-                time.sleep(0.001)
-            else:
-                time.sleep(0.1)
+                time.sleep(0.002)
+            elif self.shouldCalculateNewJoystickPosition(x, y):
+                newX, newY, newAngle = self.findNearestPoint(self.joystickPosition.x() + 2 * self.keyPressService.xMove,
+                                                             self.joystickPosition.y() + 2 * self.keyPressService.yMove)
+
+                if abs(abs(newAngle) - abs(self.previousAngle)) < 0.0001 or abs(abs(newAngle) - abs(self.previousPreviousAngle)) < 0.0001:
+                    time.sleep(0.1)
+
+                else:
+                    self.updateRobot(newX, newY)
+                    self.updateJoystickPosition(newX, newY)
+                    time.sleep(0.005)
+                self.previousPreviousAngle = self.previousAngle
+                self.previousAngle = newAngle
 
     def getJoystickSituation(self, x, y):
-        cartesianPositionX = x - self.joystickWidget.width() * 0.5
-        cartesianPositionY = self.joystickWidget.height() * 0.5 - y
+        cartesianPositionX, cartesianPositionY = self.getCartesianPosition(x, y)
 
-        angle = math.radians(math.atan2(cartesianPositionY, cartesianPositionX) / math.pi * 180)
+        angle = self.getAngle(x, y)
 
         elipseR = self.calculateRadiusOfJoystickBoundary(angle)
         joystickR = math.sqrt(cartesianPositionX ** 2 + cartesianPositionY ** 2)
@@ -218,6 +250,36 @@ class JoystickWidget(BaseWidget):
 
         return (x - h) ** 2 / rx ** 2 + (y - k) ** 2 / ry ** 2 <= 1
 
+    def findNearestPoint(self, x, y):
+        rx, ry = self.getEllipsisAxises()
+        h, k = self.getEllipseCenter()
+        R = math.sqrt(x ** 2 + y ** 2)
+        sinA = (y - k) / R
+        cosA = (x - h) / R
+
+        # https://math.stackexchange.com/questions/432902/how-to-get-the-radius-of-an-ellipse-at-a-specific-angle-by-knowing-its-semi-majo
+        ellipseRadius = rx * ry / math.sqrt(rx ** 2 * sinA ** 2 + ry ** 2 * cosA ** 2)
+
+        newXCandidate = cosA * ellipseRadius + h
+        newYCandidate = sinA * ellipseRadius + k
+
+        newX = math.ceil(newXCandidate) if newXCandidate < h else math.floor(newXCandidate)
+        newY = math.ceil(newYCandidate) if newYCandidate < k else math.floor(newYCandidate)
+
+        newAngle = self.getAngle(newXCandidate, newYCandidate)
+        return newX, newY, newAngle
+
+    def getEllipseCenter(self):
+        h = self.joystickWidget.width() * 0.5
+        k = self.joystickWidget.height() * 0.5
+        return h, k
+
+    def getEllipsisAxises(self):
+        rx = self.joystickWidget.width() * self.BOUNDARY_RADIUS - self.MARGIN_HORIZONTAL * self.joystickWidget.width()
+        ry = self.joystickWidget.height() * self.BOUNDARY_RADIUS - self.MARGIN_HORIZONTAL * self.joystickWidget.height()
+
+        return rx, ry
+
     def keyPressEvent(self, event):
         if event.isAutoRepeat():
             return
@@ -240,8 +302,6 @@ class JoystickWidget(BaseWidget):
             self.keyPressedFlag = False
             self.keyPressedThread.join()
             self.returnToCenter()
-
-        event.accept()
 
     def cleanup(self):
         if self.keyPressedThread.is_alive():
