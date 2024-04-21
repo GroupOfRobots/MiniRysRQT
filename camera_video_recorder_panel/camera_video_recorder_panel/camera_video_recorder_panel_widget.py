@@ -41,6 +41,9 @@ class CameraVideoRecorderPanelWidget(BaseWidget):
             self.stopRecordingThread.start()
 
     def startRecording(self, response):
+        if not response.started:
+            Alert(self, self.displayName, response.message)
+            return
         self.recordButtonUI.setText("STOP RECORDING")
         self.recordingSpinner.start()
         self.isRecording = True
