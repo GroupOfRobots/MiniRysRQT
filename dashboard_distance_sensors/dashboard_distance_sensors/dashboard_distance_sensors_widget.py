@@ -113,6 +113,9 @@ class DashboardDistanceSensorsWidget(BaseWidget):
 
     def initializeRobotSettings(self):
         self.initializeSubscribers()
+        
+    def restoreFunctionalities(self):
+        self.initializeSubscribers()
 
     def emitLabel(self, subscriberParam, event):
         self.displayDistanceSensorSignal.emit(

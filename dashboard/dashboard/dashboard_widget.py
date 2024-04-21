@@ -10,21 +10,21 @@ from rclpy.node import Node
 from sensor_msgs.msg import Range
 from shared.base_widget.base_widget import BaseWidget
 from shared.enums import PackageNameEnum
+from shared.subscription_dispatcher.subscription_dispatcher import SubscriptionDispatcher
 from std_msgs.msg import Float32
 
-from shared.subscription_dispatcher.subscription_dispatcher import SubscriptionDispatcher
 
 class DashboardWidget(BaseWidget):
     def __init__(self, stack=None, node=Node):
         super(DashboardWidget, self).__init__(stack, PackageNameEnum.Dashboard, node=node)
+
+        self.batteryUnderVoltageFlag = False
 
         self.predefineSubscribers()
 
         self.setRobotOnScreen()
 
         self.angularPosition = 0
-
-        self.batteryUnderVoltageFlag = False
 
         self.angleWidget.paintEvent = self.paintRobotAngle
 
@@ -49,6 +49,10 @@ class DashboardWidget(BaseWidget):
                 self.node.destroy_subscription(subscriber)
 
     def initializeRobotSettings(self):
+        self.cleanDisplay()
+        self.initializeSubscribers()
+
+    def restoreFunctionalities(self):
         self.initializeSubscribers()
 
     def initializeSubscribers(self):
@@ -163,7 +167,31 @@ class DashboardWidget(BaseWidget):
         self.yLinearVelcocityLcdUI.display(linear.y)
         self.zAngularVelcocityLcdUI.display(angular.z)
 
+    def cleanDisplay(self):
+        rangeEvent = Range()
+        rangeEvent.range = 0.0
+        self.topDistanceSensorCallback(rangeEvent)
+        self.backDistanceSensorCallback(rangeEvent)
+        self.frontDistanceSensorCallback(rangeEvent)
+        self.bottomDistanceSensorCallback(rangeEvent)
+        self.rightDistanceSensorCallback(rangeEvent)
+        self.leftDistanceSensorCallback(rangeEvent)
+
+        temparatureEvent = Float32()
+        self.temperatureCpuCallback(temparatureEvent)
+        self.temperatureMainCallback(temparatureEvent)
+
+        odometryVelocityEvent = Odometry()
+        self.odometryVelocityCallback(odometryVelocityEvent)
+
+        angularPoseEvent = AngularPose()
+        self.angularPoseCallback(angularPoseEvent)
+
+        batteryEvent = BatteryStatus()
+        self.batteryCallback(batteryEvent)
+
     def cleanup(self):
         self.resetSubscribers()
+
 
 SubscriberParam = namedtuple('SubscriberParam', ["subscriber", "messageType", "topic", "callback"])
