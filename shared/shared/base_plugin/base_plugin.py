@@ -15,12 +15,8 @@ class BasePlugin(Plugin):
         self.setWidgetSerialNumber(self._stack)
 
         self.context.add_widget(self._stack)
-        print(self.context._handler._widgets)
-        print(self._stack)
 
     def shutdown_plugin(self):
-        print("RYS","shutdown_plugin")
-        print(self.context._handler._widgets)
         self._stack.stack.removeWidget(self._stack.mainChildWidget)
         self._stack.mainChildWidget.cleanup()
         self._stack.mainChildWidget.deleteLater()
