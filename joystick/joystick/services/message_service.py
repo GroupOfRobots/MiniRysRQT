@@ -24,7 +24,7 @@ class MessageService(QWidget):
     def setupTwistMessage(self, linear, angular):
         msg = Twist()
 
-        msg.linear.y = linear
+        msg.linear.x = linear
         msg.angular.z = angular
 
         return msg
